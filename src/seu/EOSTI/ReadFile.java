@@ -32,7 +32,7 @@ public class ReadFile {
                             System.out.println("нд╪Ч╪п");
                             String[] filelist = file.list();
                             for (int i = 0; i < filelist.length; i++) {
-                                    File readfile = new File(filepath + "/" + filelist[i]);
+                                    File readfile = new File(filepath + "\\" + filelist[i]);
                                     if (!readfile.isDirectory()) {
                                             System.out.println("path=" + readfile.getPath());
                                             System.out.println("absolutepath="
@@ -40,7 +40,7 @@ public class ReadFile {
                                             System.out.println("name=" + readfile.getName());
 
                                     } else if (readfile.isDirectory()) {
-                                            readAllFile(filepath + "/" + filelist[i]);
+                                            readAllFile(filepath + "\\" + filelist[i]);
                                     }
                             }
 
@@ -62,9 +62,9 @@ public class ReadFile {
 
 		        int index = 0;
 		        for (int i = 0; i < file.list().length; i++) {
-		                File readfile = new File(filepath + "/" + file.list()[i]);
+		                File readfile = new File(filepath + "\\" + file.list()[i]);
 		                if (readfile.isDirectory()) {		                	
-		                	filelist.add(filepath + "/" + file.list()[i]);		                	
+		                	filelist.add(filepath + "\\" + file.list()[i]);		                	
 		                }
 		        }
 
