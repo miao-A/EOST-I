@@ -1,4 +1,4 @@
-package seu.EOSTI;
+package seu.EOSTI.fileParser;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,7 +9,10 @@ import java.util.List;
 
 public class ReadFile {
 	
-    private static List<String> filelist =new ArrayList<String>();
+    private List<String> fileList =new ArrayList<String>();
+    private static List<String> javaFileList =new ArrayList<String>();
+    private static List<String> jarFileList =new ArrayList<String>();
+    
     private String filepath;
     
     public ReadFile(String filepath){
@@ -18,7 +21,7 @@ public class ReadFile {
     /**
      * 读取某个文件夹下的所有文件
      */
-    public static boolean readAllFile(String filepath) throws FileNotFoundException, IOException {
+    public  boolean readAllFile(String filepath) throws FileNotFoundException, IOException {
             try {
 
                     File file = new File(filepath);
@@ -54,7 +57,7 @@ public class ReadFile {
 
     public List<String> readProjectFile() throws FileNotFoundException, IOException {
         
-    	File file = new File(filepath);
+    	File file= new File(filepath);
 		if (!file.isDirectory()) {
 		        System.out.println("Not directory!");
 		} else if (file.isDirectory()) {
@@ -64,61 +67,61 @@ public class ReadFile {
 		        for (int i = 0; i < file.list().length; i++) {
 		                File readfile = new File(filepath + "\\" + file.list()[i]);
 		                if (readfile.isDirectory()) {		                	
-		                	filelist.add(filepath + "\\" + file.list()[i]);		                	
+		                	fileList.add(filepath + "\\" + file.list()[i]);		                	
 		                }
 		        }
 
 		}
-        return filelist;
+        return fileList;
     }
-    
-    public static void main(String[] args) {
-        try {
-        	ReadFile readFile = new ReadFile("C:/Users/Administrator/Desktop/软件演化项目");
-        	readFile.readProjectFile();
-        	for (String string : filelist) {
-				System.out.println(string);
-			}
 
-        } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+    public List<String> readJavaFiles() {                                 
+		File file = new File(filepath);
+		javaFileList.clear();
+		if (file.isDirectory() == true) {
+		    	readFiles(file, ".java",javaFileList);
 		}
-        
-        System.out.println("ok");
-        }
+    	return javaFileList;		
+	}
     
-
-
-}
-
-/*public class FilePath {
-	private static void readFiles(File file, String suffix, ArrayList<String> filesList) {
-		if (file != null) {
+    public List<String> readJarFiles() {
+		File file = new File(filepath);
+		jarFileList.clear();
+		if (file.isDirectory() == true) {
+		    	readFiles(file, ".jar",jarFileList);
+		}
+    	return jarFileList;		
+	}
+    
+    private void readFiles(File file, String suffix, List<String> fList){
+    	if (file != null) {
 			if (file.isDirectory()) {
 				File f[] = file.listFiles();
 				if (f != null) {
 					for (int i = 0; i < f.length; i++) {
-						readFiles(f[i], suffix, filesList);
+						readFiles(f[i], suffix,fList);
 					}
 				}
 			} else if(file.getName().endsWith(suffix)){
-				filesList.add(file.toString());
+				fList.add(file.toString());
 			}
 		}
-	}
-	
-	public static String[] getAllFiles(String projectPath, String suffix) {
-		ArrayList<String> filesList = new ArrayList<String>();                                  
-		File file = new File(projectPath);
-		if (file.isDirectory() == true) {
-			readFiles(file, suffix, filesList);
+    }
+    
+/*    public static void main(String[] args) {
+    	ReadFile readFile = new ReadFile("D:/ProjectEOfHW/heritrix-3.0.0");
+    	System.out.println("begin:");
+    	for (String string : readFile.readJavaFiles()) {
+			System.out.println(string);
 		}
-		
-		int size=filesList.size();  
-        String[] array = (String[])filesList.toArray(new String[size]);  
-		return array;
-	}
-}
 
- * */
+    	System.out.println("ok");
+    	readFile = new ReadFile("D:/ProjectEOfHW/heritrix-3.1.0");
+    	System.out.println("begin:");
+    	for (String string : readFile.readJavaFiles()) {
+			System.out.println(string);
+		}  	 	
+
+    	System.out.println("ok");
+	}*/
+}

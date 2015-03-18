@@ -1,33 +1,27 @@
-package seu.EOSTI;
+package seu.EOSTI.UI;
 
-import java.io.File;
+
 import java.io.IOException;
-
-import javax.swing.JOptionPane;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.ui.internal.dnd.SwtUtil;
-import org.eclipse.ui.internal.handlers.WizardHandler.New;
+
+import seu.EOSTI.fileParser.ReadFile;
 
 public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 
@@ -41,7 +35,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 	private TableViewer dirViewer;
 	private StyledText resultText;
 	private Button AnalyzeBtn;
-	private String[] testStrings;
+
 
 	/**
 	* Auto-generated main method to display this 
@@ -94,7 +88,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			}
 			{
 				FormData dirViewerLData = new FormData();
-				dirViewerLData.left =  new FormAttachment(0, 1000, 86);
+				dirViewerLData.left =  new FormAttachment(0, 1000, 85);
 				dirViewerLData.top =  new FormAttachment(0, 1000, 87);
 				dirViewerLData.width = 418;
 				dirViewerLData.height = 75;
@@ -125,7 +119,16 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 							foldersNameString = readFile.readProjectFile();
 						} catch (Exception e2) {
 							// TODO: handle exception
+							MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(),//shell窗口
+									"请选择目录",
+									null,
+									"请选择目录！！！",
+									MessageDialog.WARNING,
+									new String[]{"OK"},
+									1);
+							dialog.open();		            
 						}
+						
 						
 						dirPathtext.setText(folderDialog.getFilterPath());
 						
@@ -179,7 +182,9 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 					public void widgetSelected(SelectionEvent e){
 						try {
 							TableItem item = dirViewer.getTable().getItem(dirViewer.getTable().getSelectionIndex());
+
 							resultText.setText(item.getText());
+
 						} catch (Exception e2) {
 							// TODO: handle exception
 							MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(),//shell窗口
@@ -189,7 +194,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 									MessageDialog.WARNING,
 									new String[]{"OK"},
 									1);
-						dialog.open();		            
+							dialog.open();		            
 						}
 						
 						
@@ -227,7 +232,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 									MessageDialog.WARNING,
 									new String[]{"OK"},
 									1);
-						dialog.open();		            
+							dialog.open();		            
 						}					
 						
 					}
