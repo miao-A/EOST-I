@@ -1,4 +1,4 @@
-package seu.EOSTI.fileParser;
+package seu.EOSTI.Parser;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

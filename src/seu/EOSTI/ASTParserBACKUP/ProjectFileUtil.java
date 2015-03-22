@@ -1,4 +1,4 @@
-package seu.EOSTI.ASTParser;
+package seu.EOSTI.ASTParserBACKUP;
 
 import java.util.List;
 import java.util.Map;
@@ -7,12 +7,9 @@ import java.util.Vector;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.omg.CORBA.Request;
 
 import seu.EOSTI.ASTVisitor.ExtensibilityRequestor;
-import seu.EOSTI.fileParser.ReadFile;
-
+import seu.EOSTI.Parser.ReadFile;
 
 
 public class ProjectFileUtil {
@@ -24,7 +21,6 @@ public class ProjectFileUtil {
 	
 	
 	public ProjectFileUtil(String pathOfProject){
-//		this.pathOfLib = pathOfLib;
 		this.pathOfProject = pathOfProject;
 	}
 	
@@ -47,15 +43,14 @@ public class ProjectFileUtil {
 		parser.setEnvironment(classpathEntries, sourcepathEntries, null, true);
 		
 		// set the compiler option
-		Map complierOptions= JavaCore.getOptions();
+		Map<String,String> complierOptions= JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, complierOptions);
 		parser.setCompilerOptions(complierOptions);
 	
 	}
 
 	public void getInfoOfExtensibility() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 		// obtain requestor
 		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
@@ -65,7 +60,7 @@ public class ProjectFileUtil {
 		ExtensibilityRequestor requestor = new ExtensibilityRequestor();
 		parser.createASTs(sourceFilePaths, null, new String[0], requestor, null);
 //		requestor.showInfoOfExitensibily();	
-		InfoOfExtensibility info = requestor.showInfoOfExitensibily();
+//		InfoOfExtensibility info = requestor.showInfoOfExitensibily();
 		vec.add(info);
 
 	}
