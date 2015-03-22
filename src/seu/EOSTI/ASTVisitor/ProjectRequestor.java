@@ -3,7 +3,7 @@ package seu.EOSTI.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import seu.EOSTI.ASTParserBACKUP.AstUnit;
+import seu.EOSTI.Parser.AstUnit;
 
 public class ProjectRequestor extends FileASTRequestor{
 	private ProjectVisitor visitor = new ProjectVisitor();

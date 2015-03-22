@@ -2,7 +2,7 @@ package seu.EOSTI.UI;
 
 import java.io.File;
 
-import seu.EOSTI.Parser.ProjcetParser;
+import seu.EOSTI.Parser.ProjectParser;
 
 
 
@@ -30,7 +30,7 @@ public class IntergrationMain {
 		}
 		
 		System.out.println("Project:\t"+pathOfProject);
-		ProjcetParser projectFileUtil = new ProjcetParser(pathOfProject);
+		ProjectParser projectFileUtil = new ProjectParser(pathOfProject);
 		projectFileUtil.parser();
 		projectFileUtil.getInfoOfProject();
 		projectFileUtil.getExtensibilityInfo();

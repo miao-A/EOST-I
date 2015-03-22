@@ -1,27 +1,34 @@
-package seu.EOSTI.ASTParserBACKUP;
+package seu.EOSTI.Parser;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.text.html.HTMLEditorKit.Parser;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.eclipse.ui.internal.model.*;
 
 import seu.EOSTI.ASTVisitor.ExtensibilityRequestor;
-import seu.EOSTI.Parser.ReadFile;
+import seu.EOSTI.ASTVisitor.ProjectRequestor;
 
 
-public class ProjectFileUtil {
-	private  String pathOfProject;
+public class ProjectParser {
+
+	private String pathOfProject;
 	private  String pathOfLib;
 	private  ASTParser parser;
-	private static Vector<InfoOfExtensibility> vec = new Vector<>();
-
+//	private static Vector<InfoOfExtensibility> vec = new Vector<>();
 	
-	
-	public ProjectFileUtil(String pathOfProject){
-		this.pathOfProject = pathOfProject;
+	public  ProjectParser(String str) {
+		// TODO Auto-generated constructor stub
+		this.pathOfProject = str;
+		
 	}
 	
 	public void parser()  {
@@ -46,27 +53,33 @@ public class ProjectFileUtil {
 		Map<String,String> complierOptions= JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, complierOptions);
 		parser.setCompilerOptions(complierOptions);
-	
-	}
 
-	public void getInfoOfExtensibility() {
-		// TODO Auto-generated method stub		
-		// obtain requestor
-		ReadFile readFile = new ReadFile(pathOfProject);
+	}
+	
+	public void getInfoOfProject() {
+		System.out.println("InfoOfProject"+pathOfProject);				
+	}
+	
+	public List<String> getExtensibilityInfo(){
+		
+		Extensibility extensibility = new Extensibility(parser, pathOfProject);
+		extensibility.showInfo();
+		return extensibility.getInfo();
+/*		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
+		ExtensibilityRequestor extensibilityRequestor = new ExtensibilityRequestor();
+		parser.createASTs(sourceFilePaths,  null, new String[0], extensibilityRequestor, null);
+		extensibilityRequestor.ShowInfoOfExitensibily();*/
 		
-		ExtensibilityRequestor requestor = new ExtensibilityRequestor();
-		parser.createASTs(sourceFilePaths, null, new String[0], requestor, null);
-//		requestor.showInfoOfExitensibily();	
-//		InfoOfExtensibility info = requestor.showInfoOfExitensibily();
-		vec.add(info);
+	}
+	
 
-	}
-	public void showChart() {
-		String[] strings={"",""};
-		CreateChartServiceImpl cr = new CreateChartServiceImpl(strings,strings,vec);
-		System.out.println("\nEND.");
-	}
+	
 }
+
+
+
+
+

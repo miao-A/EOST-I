@@ -7,8 +7,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jface.bindings.Trigger;
 
-import seu.EOSTI.ASTParserBACKUP.AstUnit;
-import seu.EOSTI.ASTParserBACKUP.InfoOfExtensibility;
+import seu.EOSTI.Parser.AstUnit;
+
 
 public class ExtensibilityRequestor extends FileASTRequestor {
 
@@ -37,6 +37,8 @@ public class ExtensibilityRequestor extends FileASTRequestor {
 		
 		
 	}
+	
+	
 	
 	public int getNumOfInter(){
 		return visitor.getNumOfInter();

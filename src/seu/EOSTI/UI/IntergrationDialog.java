@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import seu.EOSTI.Parser.ProjectParser;
 import seu.EOSTI.Parser.ReadFile;
 
 public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
@@ -64,7 +65,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			dialogShell.setLayout(new FormLayout());
 			dialogShell.layout();
 			dialogShell.pack();			
-			dialogShell.setSize(615, 391);
+			dialogShell.setSize(615, 397);
 			dialogShell.setText("\u96c6\u6210\u6027\u8bc4\u4f30\u5e73\u53f0");
 			{
 				label1 = new Label(dialogShell, SWT.NONE);
@@ -109,7 +110,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 					public void widgetSelected(SelectionEvent e){
 						DirectoryDialog folderDialog = new DirectoryDialog(dialogShell);
 						folderDialog.setText("chooser project");	
-						folderDialog.setFilterPath("SystemDrive");
+						folderDialog.setFilterPath("D:/ProjectEOfHW");
 						folderDialog.open();
 						String folderPathString;
 						java.util.List<String> foldersNameString = null;
@@ -130,8 +131,10 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 						}
 						
 						
-						dirPathtext.setText(folderDialog.getFilterPath());
 						
+						dirPathtext.setText(folderDialog.getFilterPath());
+
+						dirViewer.refresh();
 						for (String  i : foldersNameString) {
 							dirViewer.add(i);
 						}
@@ -182,8 +185,17 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 					public void widgetSelected(SelectionEvent e){
 						try {
 							TableItem item = dirViewer.getTable().getItem(dirViewer.getTable().getSelectionIndex());
-
-							resultText.setText(item.getText());
+							
+							ProjectParser projectParser = new ProjectParser(item.getText());
+							projectParser.parser();
+							List<String> infoList =projectParser.getExtensibilityInfo();
+							
+							resultText.setText("");
+							for (String info : infoList) {
+								resultText.append(info+"\n");
+							}
+							
+//    						resultText.setText(item.getText());
 
 						} catch (Exception e2) {
 							// TODO: handle exception
