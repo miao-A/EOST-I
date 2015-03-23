@@ -27,7 +27,7 @@ public class AstUnit {
 		ASTParser astParser = ASTParser.newParser(AST.JLS4);
 		astParser.setSource(new String(input).toCharArray());
 		astParser.setKind(ASTParser.K_COMPILATION_UNIT);
-		
+		//test
 		CompilationUnit resultCompilationUnit = (CompilationUnit) (astParser.createAST(null));
 		return resultCompilationUnit;
 	}	

@@ -231,8 +231,24 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 								throw new IOException("error");
 							}
 							resultText.setText("");
+							
+							
+							
+							
 							for (TableItem tableItem : item) {
 								resultText.append(tableItem.getText()+"\n");
+								
+								ProjectParser projectParser = new ProjectParser(tableItem.getText());
+								projectParser.parser();
+								List<String> infoList =projectParser.getExtensibilityInfo();
+								
+								
+								for (String info : infoList) {
+									resultText.append(info+"\n");
+								}
+								
+								
+								
 							}
 							
 						} catch (Exception e2) {
