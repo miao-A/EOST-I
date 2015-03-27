@@ -15,6 +15,7 @@ public class Extensibility {
 	private int numOfInterface;
 	private int numOfAbstract;
 	private int numOfClass;
+	private double ratioOfInterface;
 	
 	
 	
@@ -32,7 +33,10 @@ public class Extensibility {
 		numOfAbstract = extensibilityRequestor.getNumOfAbstract();
 		numOfInterface = extensibilityRequestor.getNumOfInter();
 		numOfClass = extensibilityRequestor.getNumOfClass();	
+		ratioOfInterface = 100.0*(numOfInterface+numOfAbstract)/numOfClass;
 	}
+	
+	
 	
 	public void showInfo(){
 		System.out.print("NumOfInter: "+numOfInterface);
@@ -46,13 +50,20 @@ public class Extensibility {
 
 	public List<String> getInfo(){
 		List<String> infoList = new ArrayList<String>();
-		infoList.add("NumOfInter: "+numOfInterface);
-		infoList.add("\tNumOfAbstract: "+numOfAbstract);
-		infoList.add("\tNumOfClass: "+ numOfClass);
+		
+		String string = "Interface Class:\t"+numOfInterface+"Abstract Class:\t"+numOfAbstract+"\ttotal Class:\t"+ numOfClass;
+		infoList.add(string);
+/*		infoList.add("Interface Class:\t"+numOfInterface);
+		infoList.add("Abstract Class:\t"+numOfAbstract);
+		infoList.add("total Class:\t"+ numOfClass);*/
 		double ratioOfInterface = 100.0*(numOfInterface+numOfAbstract)/numOfClass;
 		DecimalFormat df = new DecimalFormat("#.00");
-		infoList.add("  RatioOfInter: "+df.format(ratioOfInterface));
+		infoList.add("Extensibility:\t"+df.format(ratioOfInterface));
 		return infoList;
+	}
+	
+	public double getExtensibility(){
+		return ratioOfInterface;
 	}
 	
 	

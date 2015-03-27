@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
-import org.eclipse.jface.bindings.Trigger;
 
 import seu.EOSTI.Parser.AstUnit;
 

@@ -7,6 +7,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+* @author   Yam
+
+*@version   1.1
+
+*@see     文件读取类
+
+
+*/
 public class ReadFile {
 	
     private List<String> fileList =new ArrayList<String>();
@@ -15,6 +25,18 @@ public class ReadFile {
     
     private String filepath;
     
+    /**
+    * @author   Yam
+
+    *@version  1.1
+
+    *@see     文件读取类
+
+    *@param    项目文件名
+
+    *@return   空
+
+    */    
     public ReadFile(String filepath){
     	this.filepath = filepath;
     }

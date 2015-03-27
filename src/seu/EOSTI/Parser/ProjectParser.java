@@ -75,6 +75,12 @@ public class ProjectParser {
 		
 	}
 	
+	public void getChangeabilityInfo(){
+		
+	Changeability changeability = new Changeability(parser, pathOfProject);
+	changeability.showInfo();
+	}
+	
 
 	
 }

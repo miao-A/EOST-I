@@ -2,10 +2,14 @@ package seu.EOSTI.UI;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressIndicator;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.internal.mozilla.nsDynamicFunctionLoad;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -13,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -21,8 +26,16 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import seu.EOSTI.Parser.CreateChartServiceImpl;
 import seu.EOSTI.Parser.ProjectParser;
 import seu.EOSTI.Parser.ReadFile;
+
+/**
+* @author   Yam
+*@version   对类的说明 标明该类模块的版本
+*@see     窗口main类
+*/
+
 
 public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 
@@ -65,7 +78,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			dialogShell.setLayout(new FormLayout());
 			dialogShell.layout();
 			dialogShell.pack();			
-			dialogShell.setSize(615, 397);
+			dialogShell.setSize(615, 433);
 			dialogShell.setText("\u96c6\u6210\u6027\u8bc4\u4f30\u5e73\u53f0");
 			{
 				label1 = new Label(dialogShell, SWT.NONE);
@@ -92,7 +105,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				dirViewerLData.left =  new FormAttachment(0, 1000, 85);
 				dirViewerLData.top =  new FormAttachment(0, 1000, 87);
 				dirViewerLData.width = 418;
-				dirViewerLData.height = 75;
+				dirViewerLData.height = 28;
 				dirViewer = new TableViewer(dialogShell, SWT.NONE);
 				dirViewer.getControl().setLayoutData(dirViewerLData);
 			}
@@ -147,9 +160,9 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				resultText = new StyledText(dialogShell, SWT.HORIZONTAL|SWT.V_SCROLL|SWT.H_SCROLL);
 				FormData resultTextLData = new FormData();
 				resultTextLData.left =  new FormAttachment(0, 1000, 86);
-				resultTextLData.top =  new FormAttachment(0, 1000, 243);
+				resultTextLData.top =  new FormAttachment(0, 1000, 210);
 				resultTextLData.width = 419;
-				resultTextLData.height = 79;
+				resultTextLData.height = 137;
 				resultText.setLayoutData(resultTextLData);
 				resultText.setText("styledText1-result");
 			}
@@ -178,12 +191,13 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				FormData AnalyzeBtnLData = new FormData();
 				AnalyzeBtnLData.width = 144;
 				AnalyzeBtnLData.height = 34;
-				AnalyzeBtnLData.left =  new FormAttachment(0, 1000, 86);
-				AnalyzeBtnLData.top =  new FormAttachment(0, 1000, 197);
+				AnalyzeBtnLData.left =  new FormAttachment(0, 1000, 85);
+				AnalyzeBtnLData.top =  new FormAttachment(0, 1000, 151);
 				AnalyzeBtn.setLayoutData(AnalyzeBtnLData);
 				AnalyzeBtn.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e){
 						try {
+							
 							TableItem item = dirViewer.getTable().getItem(dirViewer.getTable().getSelectionIndex());
 							
 							ProjectParser projectParser = new ProjectParser(item.getText());
@@ -194,7 +208,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 							for (String info : infoList) {
 								resultText.append(info+"\n");
 							}
-							
+		
 //    						resultText.setText(item.getText());
 
 						} catch (Exception e2) {
@@ -220,20 +234,20 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				FormData analyzeAllBtnLData = new FormData();
 				analyzeAllBtnLData.width = 122;
 				analyzeAllBtnLData.height = 34;
-				analyzeAllBtnLData.left =  new FormAttachment(0, 1000, 368);
-				analyzeAllBtnLData.top =  new FormAttachment(0, 1000, 197);
+				analyzeAllBtnLData.left =  new FormAttachment(0, 1000, 364);
+				analyzeAllBtnLData.top =  new FormAttachment(0, 1000, 151);
 				analyzeAllBtn.setLayoutData(analyzeAllBtnLData);
 				analyzeAllBtn.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e){
 						try {
+
+
 							TableItem[] item = dirViewer.getTable().getItems();
 							if (item.length==0) {
 								throw new IOException("error");
 							}
+						
 							resultText.setText("");
-							
-							
-							
 							
 							for (TableItem tableItem : item) {
 								resultText.append(tableItem.getText()+"\n");
@@ -246,10 +260,9 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 								for (String info : infoList) {
 									resultText.append(info+"\n");
 								}
-								
-								
-								
 							}
+							
+							
 							
 						} catch (Exception e2) {
 							// TODO: handle exception

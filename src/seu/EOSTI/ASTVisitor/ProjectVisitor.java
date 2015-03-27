@@ -7,6 +7,14 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+/**
+* @author   Yam
+
+*@version   1.1	
+
+*@see     项目访问器
+
+*/
 public class ProjectVisitor extends ASTVisitor {
 	
 	private String packageString;
@@ -30,7 +38,18 @@ public class ProjectVisitor extends ASTVisitor {
 		
 		return true;
 	}
+	/**
+	* @author   Yam
 
+	*@version   1.1
+
+	*@see     结束访问后输出包与类信息
+	*
+	*@param    编译单元
+
+	*@return   空
+
+	*/
 	
 	public void endVisit(CompilationUnit node){
 		System.out.println("package "+ packageString + " have class "+classString);
