@@ -44,6 +44,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 	private Label dirLable;
 	private Button fileBtn;
 	private Label label1;
+	private Button ExtensibilityBtn;
 	private Label label;
 	private Button analyzeAllBtn;
 	private TableViewer dirViewer;
@@ -80,6 +81,28 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			dialogShell.pack();			
 			dialogShell.setSize(615, 433);
 			dialogShell.setText("\u96c6\u6210\u6027\u8bc4\u4f30\u5e73\u53f0");
+			{
+				ExtensibilityBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
+				FormData ExtensibilityBtnLData = new FormData();
+				ExtensibilityBtnLData.left =  new FormAttachment(0, 1000, 468);
+				ExtensibilityBtnLData.top =  new FormAttachment(0, 1000, 144);
+				ExtensibilityBtnLData.width = 102;
+				ExtensibilityBtnLData.height = 27;
+				ExtensibilityBtn.setLayoutData(ExtensibilityBtnLData);
+				ExtensibilityBtn.setText("ExtensibilityInfo");
+				ExtensibilityBtn.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e){
+						try {
+							Display display = Display.getDefault();
+							Shell shell = new Shell(display);
+							ExtensibilityDialog inst = new ExtensibilityDialog(shell, SWT.NULL);
+							inst.open();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+				});
+			}
 			{
 				label1 = new Label(dialogShell, SWT.NONE);
 				FormData label1LData = new FormData();
@@ -234,7 +257,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				FormData analyzeAllBtnLData = new FormData();
 				analyzeAllBtnLData.width = 122;
 				analyzeAllBtnLData.height = 34;
-				analyzeAllBtnLData.left =  new FormAttachment(0, 1000, 364);
+				analyzeAllBtnLData.left =  new FormAttachment(0, 1000, 250);
 				analyzeAllBtnLData.top =  new FormAttachment(0, 1000, 151);
 				analyzeAllBtn.setLayoutData(analyzeAllBtnLData);
 				analyzeAllBtn.addSelectionListener(new SelectionAdapter() {
