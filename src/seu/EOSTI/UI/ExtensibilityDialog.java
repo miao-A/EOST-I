@@ -53,7 +53,7 @@ public class ExtensibilityDialog extends org.eclipse.swt.widgets.Dialog {
 	public void open() {
 		try {
 			Shell parent = getParent();
-			dialogShell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+			dialogShell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL|SWT.RESIZE);
 
 			dialogShell.setLayout(new FormLayout());
 			dialogShell.layout();
@@ -64,12 +64,15 @@ public class ExtensibilityDialog extends org.eclipse.swt.widgets.Dialog {
 				FormData table1LData = new FormData();
 				table1LData.left =  new FormAttachment(0, 1000, 0);
 				table1LData.top =  new FormAttachment(0, 1000, 0);
-				table1LData.width = 431;
-				table1LData.height = 117;
+				table1LData.width = 388;
+				table1LData.height = 141;
+				table1LData.right =  new FormAttachment(1000, 1000, -64);
+				table1LData.bottom =  new FormAttachment(1000, 1000, -12);
 				table1 = new Table(dialogShell, SWT.NONE);
 				table1.setLayoutData(table1LData);
 				table1.setLinesVisible(true);
 				table1.setHeaderVisible(true);
+				table1.setOrientation(SWT.HORIZONTAL);
 
 				String[] tableHeader = {"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 				
@@ -83,14 +86,18 @@ public class ExtensibilityDialog extends org.eclipse.swt.widgets.Dialog {
 		        }  
 
 				DBConnector dbConnector = new DBConnector();
-				ArrayList<String> nameList= dbConnector.getpackageName();
+				ArrayList<String> packageNameList= dbConnector.getpackageName();
 				// 添加三行数据  		        
 		        
-		        for (String string : nameList) {
+		        for (String string : packageNameList) {
 		        	TableItem item = new TableItem(table1, SWT.NONE);
-		        	ArrayList<String> al = dbConnector.packageExtensibilityRatio(null, string);
+		        	ArrayList<String> al = dbConnector.packageExtensibilityRatio(null, string,null,null);
 		        	item.setText((String[])al.toArray(new String[al.size()]));
-				}      
+				}
+		        TableItem item = new TableItem(table1, SWT.NONE);
+		        ArrayList<String> al = dbConnector.projectExtensibilityRatio(null, null,"0.2");
+	        	item.setText((String[])al.toArray(new String[al.size()]));
+		        
 		       
 			}
 			dialogShell.setLocation(getParent().toDisplay(100, 100));

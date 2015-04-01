@@ -23,11 +23,16 @@ public class ProjectParser {
 	private String pathOfProject;
 	private  String pathOfLib;
 	private  ASTParser parser;
+	private String projectName;
+	private String version;
+	
 //	private static Vector<InfoOfExtensibility> vec = new Vector<>();
 	
-	public  ProjectParser(String str) {
+	public  ProjectParser(String pathOfProject,String projectName,String version) {
 		// TODO Auto-generated constructor stub
-		this.pathOfProject = str;
+		this.pathOfProject = pathOfProject;
+		this.projectName = projectName;
+		this.version = version;	
 		
 	}
 	
@@ -62,7 +67,7 @@ public class ProjectParser {
 	
 	public List<String> getExtensibilityInfo(){
 		
-		Extensibility extensibility = new Extensibility(parser, pathOfProject);
+		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);
 		extensibility.showInfo();
 		return extensibility.getInfo();
 /*		ReadFile readFile = new ReadFile(pathOfProject);
@@ -75,8 +80,7 @@ public class ProjectParser {
 		
 	}
 	
-	public void getChangeabilityInfo(){
-		
+	public void getChangeabilityInfo(){		
 	Changeability changeability = new Changeability(parser, pathOfProject);
 	changeability.showInfo();
 	}

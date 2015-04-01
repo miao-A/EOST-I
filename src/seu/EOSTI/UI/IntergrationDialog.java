@@ -45,11 +45,15 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 	private Button fileBtn;
 	private Label label1;
 	private Button ExtensibilityBtn;
+	private Button CompatibilityBtn;
+	private Button ChangeabilityBtn;
 	private Label label;
-	private Button analyzeAllBtn;
 	private TableViewer dirViewer;
 	private StyledText resultText;
 	private Button AnalyzeBtn;
+	
+	String projectName;
+	String version;
 
 
 	/**
@@ -82,12 +86,32 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			dialogShell.setSize(615, 433);
 			dialogShell.setText("\u96c6\u6210\u6027\u8bc4\u4f30\u5e73\u53f0");
 			{
+				CompatibilityBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
+				FormData compatibilityLData = new FormData();
+				compatibilityLData.left =  new FormAttachment(0, 1000, 420);
+				compatibilityLData.top =  new FormAttachment(0, 1000, 235);
+				compatibilityLData.width = 111;
+				compatibilityLData.height = 27;
+				CompatibilityBtn.setLayoutData(compatibilityLData);
+				CompatibilityBtn.setText("CompatibilityInfo");
+			}
+			{
+				ChangeabilityBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
+				FormData ChangeabilitybtnLData = new FormData();
+				ChangeabilitybtnLData.left =  new FormAttachment(0, 1000, 420);
+				ChangeabilitybtnLData.top =  new FormAttachment(0, 1000, 202);
+				ChangeabilitybtnLData.width = 113;
+				ChangeabilitybtnLData.height = 27;
+				ChangeabilityBtn.setLayoutData(ChangeabilitybtnLData);
+				ChangeabilityBtn.setText("ChangeabilityInfo");
+			}
+			{
 				ExtensibilityBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
 				FormData ExtensibilityBtnLData = new FormData();
-				ExtensibilityBtnLData.left =  new FormAttachment(0, 1000, 468);
-				ExtensibilityBtnLData.top =  new FormAttachment(0, 1000, 144);
-				ExtensibilityBtnLData.width = 102;
-				ExtensibilityBtnLData.height = 27;
+				ExtensibilityBtnLData.left =  new FormAttachment(0, 1000, 420);
+				ExtensibilityBtnLData.top =  new FormAttachment(0, 1000, 166);
+				ExtensibilityBtnLData.width = 113;
+				ExtensibilityBtnLData.height = 24;
 				ExtensibilityBtn.setLayoutData(ExtensibilityBtnLData);
 				ExtensibilityBtn.setText("ExtensibilityInfo");
 				ExtensibilityBtn.addSelectionListener(new SelectionAdapter() {
@@ -184,7 +208,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				FormData resultTextLData = new FormData();
 				resultTextLData.left =  new FormAttachment(0, 1000, 86);
 				resultTextLData.top =  new FormAttachment(0, 1000, 210);
-				resultTextLData.width = 419;
+				resultTextLData.width = 206;
 				resultTextLData.height = 137;
 				resultText.setLayoutData(resultTextLData);
 				resultText.setText("styledText1-result");
@@ -210,7 +234,7 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 			}
 			{
 				AnalyzeBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
-				AnalyzeBtn.setText(" analyzeaproject");
+				AnalyzeBtn.setText(" analyzeAproject");
 				FormData AnalyzeBtnLData = new FormData();
 				AnalyzeBtnLData.width = 144;
 				AnalyzeBtnLData.height = 34;
@@ -219,11 +243,25 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 				AnalyzeBtn.setLayoutData(AnalyzeBtnLData);
 				AnalyzeBtn.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e){
-						try {
+						try {							
+							try {
+								Display display = Display.getDefault();
+								Shell shell = new Shell(display);
+								ProjectInfoDialog inst = new ProjectInfoDialog(shell, SWT.NULL);
+								inst.open();
+								
+								projectName = inst.getProjectName();
+								version = inst.getVersion();
+
+								
+								
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
 							
 							TableItem item = dirViewer.getTable().getItem(dirViewer.getTable().getSelectionIndex());
 							
-							ProjectParser projectParser = new ProjectParser(item.getText());
+							ProjectParser projectParser = new ProjectParser(item.getText(),projectName,version);
 							projectParser.parser();
 							List<String> infoList =projectParser.getExtensibilityInfo();
 							
@@ -249,57 +287,6 @@ public class IntergrationDialog extends org.eclipse.swt.widgets.Dialog {
 						
 					}
 					
-				});
-			}
-			{
-				analyzeAllBtn = new Button(dialogShell, SWT.PUSH | SWT.CENTER);
-				analyzeAllBtn.setText("analyzeAllProject");
-				FormData analyzeAllBtnLData = new FormData();
-				analyzeAllBtnLData.width = 122;
-				analyzeAllBtnLData.height = 34;
-				analyzeAllBtnLData.left =  new FormAttachment(0, 1000, 250);
-				analyzeAllBtnLData.top =  new FormAttachment(0, 1000, 151);
-				analyzeAllBtn.setLayoutData(analyzeAllBtnLData);
-				analyzeAllBtn.addSelectionListener(new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e){
-						try {
-
-
-							TableItem[] item = dirViewer.getTable().getItems();
-							if (item.length==0) {
-								throw new IOException("error");
-							}
-						
-							resultText.setText("");
-							
-							for (TableItem tableItem : item) {
-								resultText.append(tableItem.getText()+"\n");
-								
-								ProjectParser projectParser = new ProjectParser(tableItem.getText());
-								projectParser.parser();
-								List<String> infoList =projectParser.getExtensibilityInfo();
-								
-								
-								for (String info : infoList) {
-									resultText.append(info+"\n");
-								}
-							}
-							
-							
-							
-						} catch (Exception e2) {
-							// TODO: handle exception
-							MessageDialog dialog = new MessageDialog(Display.getCurrent().getActiveShell(),//shell窗口
-									"请选择项目目录",
-									null,
-									"请选择项目目录后分析",
-									MessageDialog.WARNING,
-									new String[]{"OK"},
-									1);
-							dialog.open();		            
-						}					
-						
-					}
 				});
 			}
 			dialogShell.setLocation(getParent().toDisplay(100, 100));

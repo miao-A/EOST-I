@@ -11,18 +11,24 @@ import seu.EOSTI.Parser.AstUnit;
 
 public class ExtensibilityRequestor extends FileASTRequestor {
 
-	private ExtensibilityVisitor visitor = new ExtensibilityVisitor();
+	private String projectName;
+	private String version;
+	
+	public ExtensibilityRequestor(String projectName,String version){
+		this.projectName = projectName;
+		this.version = version;
+	}
+	
 
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-	
+		ExtensibilityVisitor visitor = new ExtensibilityVisitor(projectName,version);
 		CompilationUnit compilationUnit = AstUnit.getCompilationUnit(sourceFilePath);
 		compilationUnit.accept(visitor);
-
 		super.acceptAST(sourceFilePath, ast);
 	}
 
-	public void ShowInfoOfExitensibily() {
+	/*public void ShowInfoOfExitensibily() {
 		// TODO Auto-generated method stub
 		
 		System.out.print("NumOfInter: "+getNumOfInter());
@@ -50,6 +56,6 @@ public class ExtensibilityRequestor extends FileASTRequestor {
 	public int getNumOfAbstract(){
 		return visitor.getNumOfAbstract();
 	}
-	
+	*/
 
 }
