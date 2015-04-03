@@ -14,9 +14,10 @@ public class ChangeabilityRequestor extends FileASTRequestor {
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
 	
-		CompilationUnit compilationUnit = AstUnit.getCompilationUnit(sourceFilePath);
+/*		CompilationUnit compilationUnit = AstUnit.getCompilationUnit(sourceFilePath);
 		compilationUnit.accept(visitor);
-
+		System.out.println("******************************************************");*/
+		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
 	}
 

@@ -17,14 +17,14 @@ public class ExtensibilityRequestor extends FileASTRequestor {
 	public ExtensibilityRequestor(String projectName,String version){
 		this.projectName = projectName;
 		this.version = version;
-	}
-	
+	}	
 
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
 		ExtensibilityVisitor visitor = new ExtensibilityVisitor(projectName,version);
-		CompilationUnit compilationUnit = AstUnit.getCompilationUnit(sourceFilePath);
-		compilationUnit.accept(visitor);
+/*		CompilationUnit compilationUnit = AstUnit.getCompilationUnit(sourceFilePath);
+		compilationUnit.accept(visitor);*/
+		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
 	}
 
@@ -37,13 +37,8 @@ public class ExtensibilityRequestor extends FileASTRequestor {
 		double ratioOfInterface = 100.0*(getNumOfInter()+getNumOfAbstract())/getNumOfClass();
 		DecimalFormat df = new DecimalFormat("#.00");
 		System.out.printf("  RatioOfInter: "+df.format(ratioOfInterface));
-		System.out.println();
-		
-		
-		
+		System.out.println();		
 	}
-	
-	
 	
 	public int getNumOfInter(){
 		return visitor.getNumOfInter();

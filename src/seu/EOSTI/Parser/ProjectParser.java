@@ -1,5 +1,9 @@
 package seu.EOSTI.Parser;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -10,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.ui.internal.model.*;
@@ -58,8 +63,14 @@ public class ProjectParser {
 		Map<String,String> complierOptions= JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, complierOptions);
 		parser.setCompilerOptions(complierOptions);
+		parser.setUnitName(pathOfProject);
+		
+		
+		
 
 	}
+	
+	
 	
 	public void getInfoOfProject() {
 		System.out.println("InfoOfProject"+pathOfProject);				

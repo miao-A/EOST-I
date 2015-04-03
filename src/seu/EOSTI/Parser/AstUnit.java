@@ -26,7 +26,12 @@ public class AstUnit {
 		
 		ASTParser astParser = ASTParser.newParser(AST.JLS4);
 		astParser.setSource(new String(input).toCharArray());
-		astParser.setKind(ASTParser.K_COMPILATION_UNIT);
+		astParser.setKind(ASTParser.K_COMPILATION_UNIT);		
+		
+		astParser.setResolveBindings(true);
+		astParser.setStatementsRecovery(true);
+		
+		
 		//test
 		CompilationUnit resultCompilationUnit = (CompilationUnit) (astParser.createAST(null));
 		return resultCompilationUnit;
