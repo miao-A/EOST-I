@@ -1,10 +1,9 @@
 package seu.EOSTI.ASTVisitor;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -24,7 +23,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
 
 
-public class ChangeabilityVisitor extends ASTVisitor{
+public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	
 
 	private String packageString;
@@ -32,28 +31,31 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	private String methodDeclaString;
 	private String methodInvoString;
 	private ArrayList<String> importDeclarationList;
-	private HashSet<String> importPackageStrings;
+	private Collection<String> importPackageStrings;
 	
 	
-	public ChangeabilityVisitor() {
+	public ChangeabilityOfClassVisitor() {
 		// TODO Auto-generated constructor stub
 		importDeclarationList = new ArrayList<String>();
-		importPackageStrings = new HashSet<String>();
-
 	}
-	
 	
 
 	public boolean visit(ImportDeclaration node){
-/*		if (node.isOnDemand()) {
-			importPackageStrings.add(node.getName().toString());
-		}else{
-			ITypeBinding binding = node.getName().resolveTypeBinding();
-			String importString = binding.getPackage().getName();
-			importPackageStrings.add(importString);
-		}
-		*/
-//		importDeclarationList.add(importString);
+		
+		String importString = new String();
+		if (node.isOnDemand()) {
+			importString = node.getName().toString();
+		}else {
+			String[] string = node.getName().toString().split("\\.");			
+			for (int i=0;i<string.length-1; i++) {
+				importString += string[i];
+				if (i != string.length-2) {
+					importString +=".";
+				}
+			}
+		}	
+
+		importDeclarationList.add(importString);
 		return true;
 	}
 	
@@ -70,6 +72,8 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		return true;
 	}
 
+	
+	
 	public boolean visit(SimpleType node){
 
 		ITypeBinding binding = (ITypeBinding) node.getName().resolveBinding();
@@ -77,11 +81,8 @@ public class ChangeabilityVisitor extends ASTVisitor{
 /*		binding.getPackage();
 		binding.getQualifiedName();*/
 		String importpackageName = binding.getPackage().getName();
-		if (!importpackageName.equals(packageString)) {
-			importPackageStrings.add(importpackageName);
-		}
 
-
+		importDeclarationList.add(importpackageName);
 	/*
 		System.out.println("***********************************SimpleType's packageName:"+packageName);
 		importPackageStrings.add(packageName);*/
@@ -92,10 +93,13 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	public boolean visit(MethodInvocation node){
 		IMethodBinding binding =  (IMethodBinding) node.getName().resolveBinding();
 			String importpackageName = binding.getDeclaringClass().getPackage().getName();
-			
-			if (!importpackageName.equals(packageString)) {
-				importPackageStrings.add(importpackageName);
-			}
+
+		if (importpackageName.contains("java.io")) {
+			System.out.println("***********************************package's packageName:"+packageString
+					+" classname: "+ classString + " importpackage:"+importpackageName);
+
+		}			
+		importDeclarationList.add(importpackageName);
 		return true;
 	}
 
@@ -104,21 +108,17 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	
 		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageString );
+
 		ChangeabilityConnector connector = new ChangeabilityConnector();
-		for (String string : importPackageStrings) {
-			connector.importNameUpatedate(packageString, string, classString, "jEditor", "0.2");
-			System.out.println("package "+ packageString + " have package "+string);
-			System.out.println("Class "+ classString + " import package "+string);
+		for (String string : importDeclarationList) {
+			if (packageString.equals(string)) {
+				continue;
+			}
+			connector.importNameUpatedate(packageString, string, classString,"jEditor", "0.2.0");
+//			System.out.println("package "+ packageString + " have package "+string);
 		}
 		
-		
-		System.out.println("----------------------------------------------------------");
-
-/*		ChangeabilityConnector connector = new ChangeabilityConnector();
-		for (String string : importDeclarationList) {
-			
-		}*/
-		
-		importPackageStrings.clear();
+		System.out.println("----------------------------------------------------------");		
+		importDeclarationList.clear();
 	}
 }

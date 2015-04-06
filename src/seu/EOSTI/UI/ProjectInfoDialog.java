@@ -1,9 +1,7 @@
 package seu.EOSTI.UI;
 
-import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;

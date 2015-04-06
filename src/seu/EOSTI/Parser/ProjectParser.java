@@ -76,11 +76,11 @@ public class ProjectParser {
 		System.out.println("InfoOfProject"+pathOfProject);				
 	}
 	
-	public List<String> getExtensibilityInfo(){
+	public void getExtensibilityInfo(){
 		
 		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);
-		extensibility.showInfo();
-		return extensibility.getInfo();
+//		extensibility.showInfo();
+
 /*		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);

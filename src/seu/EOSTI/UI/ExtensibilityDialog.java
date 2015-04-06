@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
 
 import seu.EOSTI.DBConnect.DBConnector;
+import seu.EOSTI.DBConnect.ExtensibilityConnector;
 /**
 * @author   Yam
 *@version  1.1
@@ -85,7 +86,7 @@ public class ExtensibilityDialog extends org.eclipse.swt.widgets.Dialog {
 		            tableColumn.pack();
 		        }  
 
-				DBConnector dbConnector = new DBConnector();
+				ExtensibilityConnector dbConnector = new ExtensibilityConnector();
 				ArrayList<String> packageNameList= dbConnector.getpackageName();
 				// 添加三行数据  		        
 		        

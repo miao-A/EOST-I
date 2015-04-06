@@ -19,6 +19,14 @@ public class ProjectVisitor extends ASTVisitor {
 	
 	private String packageString;
 	private String classString;
+	private String projectString;
+	private String versionString;
+	
+	public ProjectVisitor(String projectString,String versionString){
+		this.projectString = projectString;
+		this.versionString = versionString;
+		
+	}
 		
 	public boolean visit(PackageDeclaration node) {		
 //		System.out.println("PackageName:" + node.getName());
