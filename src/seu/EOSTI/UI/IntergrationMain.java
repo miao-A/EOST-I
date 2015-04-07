@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableItem;
 
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
+import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.DBConnector;
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
 import seu.EOSTI.Parser.ProjectParser;
@@ -43,15 +44,29 @@ public class IntergrationMain {
 		projectFileUtil.getChangeabilityInfo();
 
 		
-		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
-		ArrayList<String> packageNameList= dbConnector.getpackageName();
+		
 		// 添加三行数据  		        
-        
+     
+		
+		//以包级别分析易替代性
+/*		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
+ 		ArrayList<String> packageNameList= dbConnector.getpackageName();
+
         for (String string : packageNameList) {
         
         	ArrayList<String> al = dbConnector.packageChangeabilityInfo(string, "jeditor", "0.2");
 //        	item.setText((String[])al.toArray(new String[al.size()]));
-		}
+        }*/
+		
+		//以类级别分析易替代性
+		ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector();
+		ArrayList<String> classNameList= dbConnector.getClassName("jEditor", "0.2.1");
+        for (String string : classNameList) {
+        	String[] pc = string.split("[$]"); 
+            
+        	dbConnector.ClassChangeabilityInfo(pc[0],pc[1], "jeditor", "0.2.1");
+//        	item.setText((String[])al.toArray(new String[al.size()]));
+        }
 
 		System.out.println("end!");
 	}

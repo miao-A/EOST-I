@@ -106,7 +106,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		System.out.println("package "+ packageString );
 		ChangeabilityConnector connector = new ChangeabilityConnector();
 		for (String string : importPackageStrings) {
-			connector.importNameUpatedate(packageString, string, classString, "jEditor", "0.2");
+			connector.importNameUpatedate(packageString, string, "jEditor", "0.2");
 			System.out.println("package "+ packageString + " have package "+string);
 			System.out.println("Class "+ classString + " import package "+string);
 		}

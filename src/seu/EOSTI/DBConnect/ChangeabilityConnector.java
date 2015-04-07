@@ -1,9 +1,8 @@
 package seu.EOSTI.DBConnect;
 
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,18 +16,16 @@ public class ChangeabilityConnector extends DBConnector{
 		connect = getConnection();
 	}
 
-	public void importNameUpatedate(String packageName, String importName,String className,
+	public void importNameUpatedate(String packageName, String importName,
 			String projectName, String version) {
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "insert into `eosti`.`class_package_info` (`packageName`, `projectName`,`className`, `version`, `importPackageName`) VALUES ('"
+			String sql = "insert into `eosti`.`packageinfo` (`packageName`, `projectName`, `version`, `importPackage`) VALUES ('"
 					+ packageName
 					+ "','"
 					+ projectName
-					+ "','"
-					+ className
-					+ "','"
+					+ "','"					
 					+ version
 					+ "','" 
 					+ importName + "')";
@@ -53,7 +50,7 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT packagename FROM eosti.class_package_info group by packagename";
+			String sql = "SELECT packagename FROM `eosti`.`packageinfo` group by packagename";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				list.add(rs.getString("packagename"));
@@ -66,16 +63,16 @@ public class ChangeabilityConnector extends DBConnector{
 		return list; 
 
 	}
-	
 
+	
 	public ArrayList<String> packageChangeabilityInfo(String packageName,String projectName,String version){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
 			Statement stmt = connect.createStatement();
 
-			// / couple efferent
-			String cestr = "Select  count(distinct importPackageName) as result FROM eosti.class_package_info where packagename = '"
+			// / efferent  couplings 被该包依赖的外部包数目
+			String cestr = "Select  count(distinct importPackage) as result FROM eosti.packageinfo where packagename = '"
 					+ packageName
 					+ "' and Version = '"
 					+ version
@@ -90,10 +87,10 @@ public class ChangeabilityConnector extends DBConnector{
 			rs = stmt.executeQuery(cestr);
 			while (rs.next()) {
 				ce = rs.getInt("result");
-				rStrings.add(ce + "");
+				rStrings.add("ce: " + ce);
 			}
 
-			cestr = "Select  distinct importPackageName as result FROM eosti.class_package_info where packagename = '"
+			cestr = "Select  distinct importPackage as result FROM eosti.packageinfo where packagename = '"
 					+ packageName
 					+ "' and Version = '"
 					+ version
@@ -104,7 +101,7 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add(str);
 			}
 
-			String castr = "Select  count(distinct PackageName) as result FROM eosti.class_package_info where importpackagename = '"
+			String castr = "Select  count(distinct PackageName) as result FROM eosti.packageinfo where importpackage = '"
 					+ packageName
 					+ "' and Version = '"
 					+ version
@@ -114,10 +111,10 @@ public class ChangeabilityConnector extends DBConnector{
 			rs = stmt.executeQuery(castr);
 			while (rs.next()) {
 				ca = rs.getInt("result");
-				rStrings.add(ca + "");
+				rStrings.add("ca: " + ca);
 			}
 
-			castr = "Select  distinct packageName as result FROM eosti.class_package_info where importpackagename = '"
+			castr = "Select  distinct packageName as result FROM eosti.packageinfo where importpackage = '"
 					+ packageName
 					+ "' and Version = '"
 					+ version
@@ -128,9 +125,9 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add(str);
 			}
 
-/*			double ratioOfInterface = 100.0;
-			DecimalFormat df = new DecimalFormat("#.00");
-			rStrings.add(df.format(ratioOfInterface));*/
+			double changeability = 1.0*ce/(ca+ce);
+			DecimalFormat df = new DecimalFormat("0.00");
+			rStrings.add("changeability:"+df.format(changeability));
 
 			System.out.println("-------------------------------------------------------------");
 			for (String string : rStrings) {
@@ -139,7 +136,7 @@ public class ChangeabilityConnector extends DBConnector{
 			System.out.println("-------------------------------------------------------------");
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("failed to run extensibility query!");
+			System.out.println("failed to run changeability query!");
 		}
 		
 		

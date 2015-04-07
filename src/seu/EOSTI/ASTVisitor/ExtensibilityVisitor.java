@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import seu.EOSTI.DBConnect.DBConnector;
+import seu.EOSTI.DBConnect.ExtensibilityConnector;
 
 public class ExtensibilityVisitor extends ASTVisitor {
 	private static int numOfInter=0;
@@ -93,7 +94,7 @@ public class ExtensibilityVisitor extends ASTVisitor {
 	public void endVisit(CompilationUnit node){
 		//可用于数据库插入，数据库建成后上述get方法可删除		
 		System.out.println("package "+ packageString + " have class "+classNameList.get(0));
-		DBConnector connector = new DBConnector();
+		ExtensibilityConnector connector = new ExtensibilityConnector();
 		connector.extendsibilityUpdateStatement(packageString, classNameList.get(0), projectName, version, classTypeList.get(0));
 		
 		for (int i=1; i<classNameList.size(); i++ ) {

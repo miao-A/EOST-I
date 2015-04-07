@@ -21,7 +21,7 @@ public class Changeability {
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityRequestor, null);
+		parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityOfClassRequestor, null);
 		
 //		extensibilityRequestor.ShowInfoOfExitensibily();
 	}
@@ -29,8 +29,7 @@ public class Changeability {
 	
 	
 	public void showInfo(){		
-		System.out.println();
-		
+		System.out.println();		
 	}
 
 

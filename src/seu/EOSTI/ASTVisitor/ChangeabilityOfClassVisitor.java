@@ -4,6 +4,7 @@ package seu.EOSTI.ASTVisitor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -21,6 +22,7 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
+import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 
 
 public class ChangeabilityOfClassVisitor extends ASTVisitor{
@@ -30,34 +32,16 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	private String classString;
 	private String methodDeclaString;
 	private String methodInvoString;
-	private ArrayList<String> importDeclarationList;
-	private Collection<String> importPackageStrings;
+
+	private HashSet<String> importStrings;
 	
 	
 	public ChangeabilityOfClassVisitor() {
 		// TODO Auto-generated constructor stub
-		importDeclarationList = new ArrayList<String>();
+		importStrings = new HashSet<String>();
 	}
 	
 
-	public boolean visit(ImportDeclaration node){
-		
-		String importString = new String();
-		if (node.isOnDemand()) {
-			importString = node.getName().toString();
-		}else {
-			String[] string = node.getName().toString().split("\\.");			
-			for (int i=0;i<string.length-1; i++) {
-				importString += string[i];
-				if (i != string.length-2) {
-					importString +=".";
-				}
-			}
-		}	
-
-		importDeclarationList.add(importString);
-		return true;
-	}
 	
 	public boolean visit(PackageDeclaration node) {		
 		System.out.println("PackageName:" + node.getName());
@@ -68,6 +52,7 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	
 	public boolean visit(TypeDeclaration node){
 		classString = node.getName().toString();
+
 //		System.out.println("class Declaration: "+ classString);		
 		return true;
 	}
@@ -80,9 +65,14 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 ////类级别耦合性检测
 /*		binding.getPackage();
 		binding.getQualifiedName();*/
+		String fullString = binding.getQualifiedName();
 		String importpackageName = binding.getPackage().getName();
-
-		importDeclarationList.add(importpackageName);
+		String importClassName = fullString.substring(importpackageName.length()+1);
+		if (importClassName.contains(".")) {
+			importClassName = importClassName.substring(0, importClassName.indexOf('.'));
+		}
+		
+		importStrings.add(importpackageName+"$"+importClassName);
 	/*
 		System.out.println("***********************************SimpleType's packageName:"+packageName);
 		importPackageStrings.add(packageName);*/
@@ -92,14 +82,15 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	
 	public boolean visit(MethodInvocation node){
 		IMethodBinding binding =  (IMethodBinding) node.getName().resolveBinding();
-			String importpackageName = binding.getDeclaringClass().getPackage().getName();
-
-		if (importpackageName.contains("java.io")) {
-			System.out.println("***********************************package's packageName:"+packageString
-					+" classname: "+ classString + " importpackage:"+importpackageName);
-
-		}			
-		importDeclarationList.add(importpackageName);
+		
+		String fullString = binding.getDeclaringClass().getQualifiedName();
+		String importpackageName = binding.getDeclaringClass().getPackage().getName();
+		String importClassName = fullString.substring(importpackageName.length()+1);
+		if (importClassName.contains(".")) {
+			importClassName = importClassName.substring(0, importClassName.indexOf('.'));
+		}
+		
+		importStrings.add(importpackageName+"$"+importClassName);
 		return true;
 	}
 
@@ -109,16 +100,21 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageString );
 
-		ChangeabilityConnector connector = new ChangeabilityConnector();
-		for (String string : importDeclarationList) {
-			if (packageString.equals(string)) {
+		ClassChangeabilityConnector connector = new ClassChangeabilityConnector();
+		for (String string : importStrings) {
+			
+			int index = string.indexOf('$');
+			String ipn = string.substring(0, index);
+			String icn = string.substring(index+1);
+			
+			if (packageString.equals(ipn)&&classString.equals(icn)) {
 				continue;
 			}
-			connector.importNameUpatedate(packageString, string, classString,"jEditor", "0.2.0");
-//			System.out.println("package "+ packageString + " have package "+string);
+			
+			connector.importNameUpatedate(packageString, classString, ipn, icn, "jEditor", "0.2.1");
 		}
 		
 		System.out.println("----------------------------------------------------------");		
-		importDeclarationList.clear();
+		importStrings.clear();
 	}
 }
