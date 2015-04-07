@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import seu.EOSTI.Parser.AstUnit;
+
 
 public class ChangeabilityOfClassRequestor extends FileASTRequestor {
 	

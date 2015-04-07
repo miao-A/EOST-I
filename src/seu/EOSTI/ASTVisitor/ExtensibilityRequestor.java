@@ -1,13 +1,8 @@
 package seu.EOSTI.ASTVisitor;
 
-import java.text.DecimalFormat;
-import java.util.Vector;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
-
-import seu.EOSTI.Parser.AstUnit;
-
 
 public class ExtensibilityRequestor extends FileASTRequestor {
 
