@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ChangeabilityOfClassRequestor;
 import seu.EOSTI.ASTVisitor.ChangeabilityRequestor;
-import seu.EOSTI.ASTVisitor.ExtensibilityRequestor;
+
 
 public class Changeability {
 
@@ -20,8 +20,7 @@ public class Changeability {
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityOfClassRequestor, null);
-		
+		parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityRequestor, null);
 //		extensibilityRequestor.ShowInfoOfExitensibily();
 	}
 	

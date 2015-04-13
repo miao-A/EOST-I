@@ -17,8 +17,11 @@ import seu.EOSTI.Parser.ProjectParser;
 public class IntergrationMain {
 
 	public static void main(String args[]) {
-
-	String [] arrayOfProjects = {"D:/ProjectEOfHW/jEditor/jEditor0.2"};	
+		
+		String [] arrayOfProjects = {"E:/GitHub/EOST-I"};
+		
+//		String [] arrayOfProjects = {"D:/ProjectEOfHW/junit/junit3.4"};	
+//		String [] arrayOfProjects = {"D:/ProjectEOfHW/jEditor/jeditor0.2"};	
 	
 /*	String [] arrayOfProjects = {"D:/ProjectEOfHW/junit3.4","D:/ProjectEOfHW/junit3.5","D:/ProjectEOfHW/junit3.6",
 			"D:/ProjectEOfHW/junit3.7","D:/ProjectEOfHW/junit3.8","D:/ProjectEOfHW/junit3.9","D:/ProjectEOfHW/junit4.0",
@@ -43,23 +46,19 @@ public class IntergrationMain {
 		projectFileUtil.parser();
 		projectFileUtil.getChangeabilityInfo();
 
-		
-		
-		// 添加三行数据  		        
-     
-		
+	
 		//以包级别分析易替代性
-/*		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
+		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
  		ArrayList<String> packageNameList= dbConnector.getpackageName();
 
-        for (String string : packageNameList) {
+        for (String string : packageNameList) { 
         
-        	ArrayList<String> al = dbConnector.packageChangeabilityInfo(string, "jeditor", "0.2");
+        	ArrayList<String> al = dbConnector.packageChangeabilityInfo(string, "EOSTI", "1.0");
 //        	item.setText((String[])al.toArray(new String[al.size()]));
-        }*/
+        }
 		
 		//以类级别分析易替代性
-		ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector();
+/*		ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector();
 		ArrayList<String> classNameList= dbConnector.getClassName("jEditor", "0.2.1");
         for (String string : classNameList) {
         	String[] pc = string.split("[$]"); 
@@ -67,7 +66,7 @@ public class IntergrationMain {
         	dbConnector.ClassChangeabilityInfo(pc[0],pc[1], "jeditor", "0.2.1");
 //        	item.setText((String[])al.toArray(new String[al.size()]));
         }
-
+*/
 		System.out.println("end!");
 	}
 	

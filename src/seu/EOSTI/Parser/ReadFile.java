@@ -106,6 +106,15 @@ public class ReadFile {
     	return javaFileList;		
 	}
     
+    public List<String> readClassFiles() {                                 
+		File file = new File(filepath);
+		javaFileList.clear();
+		if (file.isDirectory() == true) {
+		    	readFiles(file, ".class",javaFileList);
+		}
+    	return javaFileList;		
+	}
+    
     public List<String> readJarFiles() {
 		File file = new File(filepath);
 		jarFileList.clear();
@@ -125,25 +134,13 @@ public class ReadFile {
 					}
 				}
 			} else if(file.getName().endsWith(suffix)){
-				fList.add(file.toString());
+				try {
+					fList.add(file.getCanonicalPath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
     }
-    
-/*    public static void main(String[] args) {
-    	ReadFile readFile = new ReadFile("D:/ProjectEOfHW/heritrix-3.0.0");
-    	System.out.println("begin:");
-    	for (String string : readFile.readJavaFiles()) {
-			System.out.println(string);
-		}
-
-    	System.out.println("ok");
-    	readFile = new ReadFile("D:/ProjectEOfHW/heritrix-3.1.0");
-    	System.out.println("begin:");
-    	for (String string : readFile.readJavaFiles()) {
-			System.out.println(string);
-		}  	 	
-
-    	System.out.println("ok");
-	}*/
 }

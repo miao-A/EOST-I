@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -33,6 +34,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	private String methodInvoString;
 	private ArrayList<String> importDeclarationList;
 	private HashSet<String> importPackageStrings;
+	private static int count=0;
 	
 	
 	public ChangeabilityVisitor() {
@@ -40,21 +42,6 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		importDeclarationList = new ArrayList<String>();
 		importPackageStrings = new HashSet<String>();
 
-	}
-	
-	
-
-	public boolean visit(ImportDeclaration node){
-/*		if (node.isOnDemand()) {
-			importPackageStrings.add(node.getName().toString());
-		}else{
-			ITypeBinding binding = node.getName().resolveTypeBinding();
-			String importString = binding.getPackage().getName();
-			importPackageStrings.add(importString);
-		}
-		*/
-//		importDeclarationList.add(importString);
-		return true;
 	}
 	
 	public boolean visit(PackageDeclaration node) {		
@@ -65,39 +52,60 @@ public class ChangeabilityVisitor extends ASTVisitor{
 
 	
 	public boolean visit(TypeDeclaration node){
+		
 		classString = node.getName().toString();
+		
 //		System.out.println("class Declaration: "+ classString);		
 		return true;
 	}
 
 	public boolean visit(SimpleType node){
 
-		ITypeBinding binding = (ITypeBinding) node.getName().resolveBinding();
-////类级别耦合性检测
-/*		binding.getPackage();
-		binding.getQualifiedName();*/
+		ITypeBinding binding = node.resolveBinding();
+
+		if (binding == null) {
+			System.out.println("simpleType binding is null in class:" +classString );
+			return true;
+		}
 		String importpackageName = binding.getPackage().getName();
 		if (!importpackageName.equals(packageString)) {
 			importPackageStrings.add(importpackageName);
 		}
-
-
-	/*
-		System.out.println("***********************************SimpleType's packageName:"+packageName);
-		importPackageStrings.add(packageName);*/
 		
 		return true;
 	}
 	
-	public boolean visit(MethodInvocation node){
-		IMethodBinding binding =  (IMethodBinding) node.getName().resolveBinding();
-			String importpackageName = binding.getDeclaringClass().getPackage().getName();
-			
+
+	public boolean visit(MethodInvocation  node){
+		IMethodBinding binding = node.resolveMethodBinding();
+		if (binding == null) {
+				System.out.println("MethodInvocation binding is null in class:" +classString );
+				System.out.println(count++ );
+				return true;
+		}
+		
+		String importpackageName = binding.getDeclaringClass().getPackage().getName();
 			if (!importpackageName.equals(packageString)) {
 				importPackageStrings.add(importpackageName);
-			}
+		}
+				
 		return true;
 	}
+
+	
+	/*public boolean visit(MethodInvocation node){
+		IMethodBinding binding =  node.resolveMethodBinding();//node.getName().resolveBinding();
+		if (binding == null) {
+			System.out.println("method binding is null in class:" +classString );
+			return true;
+		}
+		String importpackageName = binding.getDeclaringClass().getPackage().getName();
+		if (!importpackageName.equals(packageString)) {
+			System.out.println(classString + " binding is in package:" + packageString );
+			importPackageStrings.add(importpackageName);
+		}
+		return true;
+	}*/
 
 	public void endVisit(CompilationUnit node){
 		//可用于数据库插入，数据库建成后上述get方法可删除
@@ -106,18 +114,12 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		System.out.println("package "+ packageString );
 		ChangeabilityConnector connector = new ChangeabilityConnector();
 		for (String string : importPackageStrings) {
-			connector.importNameUpatedate(packageString, string, "jEditor", "0.2");
+			connector.importNameUpatedate(packageString, string, "EOSTI", "1.0");
 			System.out.println("package "+ packageString + " have package "+string);
 			System.out.println("Class "+ classString + " import package "+string);
 		}
 		
-		
 		System.out.println("----------------------------------------------------------");
-
-/*		ChangeabilityConnector connector = new ChangeabilityConnector();
-		for (String string : importDeclarationList) {
-			
-		}*/
 		
 		importPackageStrings.clear();
 	}
