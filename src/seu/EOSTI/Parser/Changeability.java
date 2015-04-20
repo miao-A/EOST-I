@@ -15,7 +15,7 @@ public class Changeability {
 	private ChangeabilityOfClassRequestor changeabilityOfClassRequestor = new ChangeabilityOfClassRequestor();
 	
 	
-	public Changeability(ASTParser parser, String pathOfProject){
+	public Changeability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
 		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);

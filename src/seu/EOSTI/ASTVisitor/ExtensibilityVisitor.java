@@ -94,14 +94,14 @@ public class ExtensibilityVisitor extends ASTVisitor {
 	public void endVisit(CompilationUnit node){
 		//可用于数据库插入，数据库建成后上述get方法可删除		
 		System.out.println("package "+ packageString + " have class "+classNameList.get(0));
-		ExtensibilityConnector connector = new ExtensibilityConnector();
-		connector.extendsibilityUpdateStatement(packageString, classNameList.get(0), projectName, version, classTypeList.get(0));
+		ExtensibilityConnector connector = new ExtensibilityConnector(projectName, version);
+		connector.extendsibilityUpdateStatement(packageString, classNameList.get(0), classTypeList.get(0));
 		
 		for (int i=1; i<classNameList.size(); i++ ) {
 			classNameList.get(i);
 			classTypeList.get(i);
 			System.out.println("package "+ packageString + " have class "+classNameList.get(i));
-			connector.extendsibilityUpdateStatement(packageString, classNameList.get(0)+"$"+classNameList.get(i), projectName, version, classTypeList.get(i));
+			connector.extendsibilityUpdateStatement(packageString, classNameList.get(0)+"$"+classNameList.get(i), classTypeList.get(i));
 		}
 		
 		classNameList.clear();

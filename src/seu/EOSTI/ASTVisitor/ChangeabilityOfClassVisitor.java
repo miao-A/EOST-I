@@ -68,9 +68,6 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 		}
 		
 		importStrings.add(importpackageName+"$"+importClassName);
-	/*
-		System.out.println("***********************************SimpleType's packageName:"+packageName);
-		importPackageStrings.add(packageName);*/
 		
 		return true;
 	}
@@ -106,7 +103,7 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 				continue;
 			}
 			
-			connector.importNameUpatedate(packageString, classString, ipn, icn, "jEditor", "0.2.1");
+			connector.importNameUpatedate(packageString, classString, ipn, icn, "EOSTI", "1.0");
 		}
 		
 		System.out.println("----------------------------------------------------------");		

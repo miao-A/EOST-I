@@ -1,0 +1,168 @@
+package seu.EOSTI.old;
+
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.ui.internal.dnd.SwtUtil;
+
+import seu.EOSTI.UI.ChangeabilityComposite;
+import seu.EOSTI.UI.CompatibilityComposite;
+import seu.EOSTI.UI.ExtensibilityComposite;
+import seu.EOSTI.UI.NULLComposite;
+import seu.EOSTI.UI.ProjectInfoComposite;
+
+public class IntergrationDialog extends Dialog {
+
+	protected Object result;
+	protected Shell shell;
+	
+	private StackLayout rightCompositeSL = new StackLayout();
+	private ChangeabilityComposite changeabilityComposite;
+	private ExtensibilityComposite extensibilityComposite;
+	private CompatibilityComposite compatibilityComposite;
+	private ProjectInfoComposite projectInfoComposite;
+	private NULLComposite nullComposite;
+	
+	/**
+	 * Create the dialog.
+	 * @param parent
+	 * @param style
+	 */
+	public IntergrationDialog(Shell parent, int style) {
+		super(parent, style);
+		setText("SWT Dialog");
+	}
+
+	/**
+	 * Open the dialog.
+	 * @return the result
+	 */
+	public Object open() {
+		createContents();
+		shell.open();
+		shell.layout();
+		Display display = getParent().getDisplay();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Create contents of the dialog.
+	 */
+	private void createContents() {
+		shell = new Shell(getParent(), SWT.DIALOG_TRIM);
+		shell.setSize(680, 449);
+		shell.setText("\u8F6F\u4EF6\u6F14\u5316\u2014\u96C6\u6210\u6027");
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		Composite composite = new Composite(shell, SWT.NONE);
+		composite.setLayout(new FormLayout());
+		
+		Composite leftComposite = new Composite(composite, SWT.NONE);
+		FormData fd_leftComposite = new FormData();
+		fd_leftComposite.left = new FormAttachment(0, 5);
+		fd_leftComposite.bottom = new FormAttachment(100, -108);
+		fd_leftComposite.top = new FormAttachment(0, 5);
+		leftComposite.setLayoutData(fd_leftComposite);
+		leftComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		
+		final Composite rightComposite = new Composite(composite, SWT.NONE);
+		fd_leftComposite.right = new FormAttachment(100, -548);
+		FormData fd_rightComposite = new FormData();
+		fd_rightComposite.top = new FormAttachment(leftComposite, 5, SWT.TOP);
+		fd_rightComposite.left = new FormAttachment(leftComposite, 6);
+		fd_rightComposite.bottom = new FormAttachment(100, -10);
+		fd_rightComposite.right = new FormAttachment(100, -10);
+		rightComposite.setLayoutData(fd_rightComposite);
+		rightComposite.setLayout(rightCompositeSL);
+		
+		Button projectInfoButton = new Button(leftComposite, SWT.NONE);
+		projectInfoButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = projectInfoComposite;
+				rightComposite.layout();
+			}
+		});
+		projectInfoButton.setText("\u9879\u76EE\u4FE1\u606F");
+		
+		Button extensionButton = new Button(leftComposite, SWT.NONE);
+		extensionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = extensibilityComposite;
+				rightComposite.layout();
+				
+			}
+		});
+		extensionButton.setText("\u53EF\u6269\u5C55\u6027");
+		
+		Button changeButton = new Button(leftComposite, SWT.NONE);
+		changeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = changeabilityComposite;
+				rightComposite.layout();
+			}
+		});
+		changeButton.setText("\u53EF\u66FF\u4EE3\u6027");
+		
+		Button compatibilityButton = new Button(leftComposite, SWT.NONE);
+		compatibilityButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = compatibilityComposite;
+				rightComposite.layout();
+			}
+		});
+		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027");
+		
+		Button btnNewButton_1 = new Button(leftComposite, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = nullComposite;
+				rightComposite.layout();
+			}
+		});
+		btnNewButton_1.setText("New Button");		
+		
+		compatibilityComposite = new CompatibilityComposite(rightComposite, SWT.NONE);
+		extensibilityComposite = new ExtensibilityComposite(rightComposite, SWT.NONE);
+		changeabilityComposite = new ChangeabilityComposite(rightComposite, SWT.NONE);
+		projectInfoComposite = new ProjectInfoComposite(rightComposite, SWT.NONE);
+
+		nullComposite = new NULLComposite(rightComposite, SWT.NONE);
+		
+		rightCompositeSL.topControl = projectInfoComposite;
+
+	}
+	
+	
+	public static void main(String[] args) {
+		try {
+			Display display = Display.getDefault();
+			Shell shell = new Shell(display);
+			IntergrationDialog inst = new IntergrationDialog(shell, SWT.NULL);
+			inst.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

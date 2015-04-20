@@ -9,10 +9,14 @@ import java.util.ArrayList;
 public class ExtensibilityConnector extends DBConnector{
 
 private Connection connect = null;
+private String projectNameString;
+private String versionString;
 	
-	public ExtensibilityConnector(){
+	public ExtensibilityConnector(String projectName, String version){
 		super();
 		connect = getConnection();
+		this.projectNameString = projectName;
+		this.versionString = version;
 	}
 	
 	public ArrayList<String> getpackageName(){
@@ -20,7 +24,11 @@ private Connection connect = null;
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT packagename FROM eosti.classinfo group by packagename";
+			String sql = "SELECT packagename FROM eosti.classinfo where ProjectName = '"
+					+ projectNameString 
+					+ "' and version = '"
+					+ versionString 
+					+"' group by packagename";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				list.add(rs.getString("packagename"));
@@ -35,7 +43,7 @@ private Connection connect = null;
 	}
 	
 	
-	public void extendsibilityUpdateStatement(String packageName,String className,String projectName,String version,String classType ){
+	public void extendsibilityUpdateStatement(String packageName,String className,String classType ){
 		try {
 			
 
@@ -45,9 +53,9 @@ private Connection connect = null;
 					+"','"
 					+className
 					+"','"
-					+projectName
+					+projectNameString
 					+"','"
-					+version
+					+versionString
 					+"','"
 					+classType
 					+"')";
@@ -63,15 +71,19 @@ private Connection connect = null;
 	
 
 ///将来改造为接受外部分析输入来源，目前内部用字符串替代了选择	
-	public ArrayList<String> packageExtensibilityRatio(String str,String packageName,String projectName,String version){
+	public ArrayList<String> packageExtensibilityRatio(String packageName){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			str = "Select  count(classname) as result FROM eosti.classinfo where packagename = '"
-			+packageName+"' and Version = '0.2'";
+			String str = "Select  count(classname) as result FROM eosti.classinfo where packagename = '"
+			+ packageName 
+			+ "' and Version = '" 
+			+ versionString + "' and projectName = '"
+			+projectNameString +"'";
+			
 			String concretestr = str +" and classtype = 'concrete'";
 			String abstractstr = str +" and classtype = 'abstract'";
 			String interfacestr = str +" and classtype = 'interface'";
@@ -118,15 +130,16 @@ private Connection connect = null;
 	}
 	
 	
-public ArrayList<String> projectExtensibilityRatio(String str,String projectName,String Version){
+public ArrayList<String> projectExtensibilityRatio(){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			str = "Select  count(classname) as result FROM eosti.classinfo where Version = '"
-			+Version+"'";
+			String str = "Select  count(classname) as result FROM eosti.classinfo where Version = '"
+			+ versionString + "' and projectName = '"
+					+projectNameString +"'";
 			String concretestr = str +" and classtype = 'concrete'";
 			String abstractstr = str +" and classtype = 'abstract'";
 			String interfacestr = str +" and classtype = 'interface'";

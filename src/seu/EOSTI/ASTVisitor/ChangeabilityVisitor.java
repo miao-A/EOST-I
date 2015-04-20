@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.IPackageBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -83,7 +84,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 				System.out.println(count++ );
 				return true;
 		}
-		
+	
 		String importpackageName = binding.getDeclaringClass().getPackage().getName();
 			if (!importpackageName.equals(packageString)) {
 				importPackageStrings.add(importpackageName);
@@ -117,8 +118,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 			connector.importNameUpatedate(packageString, string, "EOSTI", "1.0");
 			System.out.println("package "+ packageString + " have package "+string);
 			System.out.println("Class "+ classString + " import package "+string);
-		}
-		
+		}		
 		System.out.println("----------------------------------------------------------");
 		
 		importPackageStrings.clear();

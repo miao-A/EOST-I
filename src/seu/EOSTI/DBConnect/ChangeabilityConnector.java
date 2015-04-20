@@ -9,11 +9,16 @@ import java.util.ArrayList;
 
 public class ChangeabilityConnector extends DBConnector{
 
+	private String projectName;
+	private String version;
+	
 	private Connection connect = null;
 	
 	public ChangeabilityConnector(){
 		super();
-		connect = getConnection();
+/*		this.projectName = projectName;
+		this.version = version;*/
+		connect = getConnection();		
 	}
 
 	public void importNameUpatedate(String packageName, String importName,
