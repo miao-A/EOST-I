@@ -24,18 +24,19 @@ private String versionString;
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT packagename FROM eosti.classinfo where ProjectName = '"
+			String sql = "SELECT pkgname FROM eosti.classinfo where ProjName = '"
 					+ projectNameString 
-					+ "' and version = '"
+					+ "' and verID = '"
 					+ versionString 
-					+"' group by packagename";
+					+"' group by pkgName";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				list.add(rs.getString("packagename"));
-				System.out.println(rs.getString("packagename"));
+				list.add(rs.getString("pkgName"));
+//				System.out.println(rs.getString("pkgname"));
 				}	
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println("extensibility Connector error");
 		}
 		
 		return list; 
@@ -48,7 +49,7 @@ private String versionString;
 			
 
 			Statement stmt = connect.createStatement();
-			String sql = "INSERT INTO eosti.classinfo (`PackageName`, `ClassName`, `ProjectName` , `Version`, `ClassType`) VALUES ('"
+			String sql = "INSERT INTO eosti.classinfo (`pkgName`, `ClassName`, `ProjName` , `VerID`, `ClassType`) VALUES ('"
 					+ packageName
 					+"','"
 					+className
@@ -78,10 +79,10 @@ private String versionString;
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classinfo where packagename = '"
+			String str = "Select  count(classname) as result FROM eosti.classinfo where pkgname = '"
 			+ packageName 
-			+ "' and Version = '" 
-			+ versionString + "' and projectName = '"
+			+ "' and VerID = '" 
+			+ versionString + "' and projName = '"
 			+projectNameString +"'";
 			
 			String concretestr = str +" and classtype = 'concrete'";
@@ -137,8 +138,8 @@ public ArrayList<String> projectExtensibilityRatio(){
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classinfo where Version = '"
-			+ versionString + "' and projectName = '"
+			String str = "Select  count(classname) as result FROM eosti.classinfo where VerID = '"
+			+ versionString + "' and projName = '"
 					+projectNameString +"'";
 			String concretestr = str +" and classtype = 'concrete'";
 			String abstractstr = str +" and classtype = 'abstract'";

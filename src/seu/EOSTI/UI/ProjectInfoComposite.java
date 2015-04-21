@@ -49,7 +49,7 @@ public class ProjectInfoComposite extends Composite {
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
 				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectEOfHW");
+				folderDialog.setFilterPath("D:/ProjectEOfHW/jEditor/jEditor0.2");
 				folderDialog.open();
 				
 				projectPathText.setText(folderDialog.getFilterPath());

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;
 
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
+import seu.EOSTI.DBConnect.ProjectConnector;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -58,22 +59,24 @@ public class ExtensibilityComposite extends Composite {
 		final Combo versionCombo = new Combo(this, SWT.NONE);
 		projectSelectCombo.setBounds(111, 0, 98, 25);
 		versionCombo.setBounds(340, 0, 88, 25);	
+		
+		final ProjectConnector pcConnector = new ProjectConnector();
+		ArrayList<String> rStrings = pcConnector.getProject();
+		for (String string : rStrings) {
+			projectSelectCombo.add(string);
+		}
+		
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = projectSelectCombo.getSelectionIndex();
-				if (projectSelectCombo.getItem(index).equals("junit")) {
-					versionCombo.removeAll();
-					versionCombo.add("3.4");
-
-				}else if (projectSelectCombo.getItem(index).equals("jeditor")) {
-					versionCombo.removeAll();
-					versionCombo.add("0.2");
-					versionCombo.add("0.3");
-					versionCombo.add("0.4");
-				} else {
-					versionCombo.removeAll();
+				
+				ArrayList<String> verList = pcConnector.getVersion(projectSelectCombo.getItem(index));
+				versionCombo.removeAll();
+				for (String string : verList) {
+					versionCombo.add(string);
 				}
+				
 				versionCombo.layout();
 			}
 		});
@@ -100,9 +103,6 @@ public class ExtensibilityComposite extends Composite {
 			}
 		});
 
-		projectSelectCombo.add("junit");
-		projectSelectCombo.add("project2");
-		projectSelectCombo.add("jeditor");
 		
 		Label lblProject = new Label(this, SWT.NONE);
 		lblProject.setBounds(47, 8, 61, 17);

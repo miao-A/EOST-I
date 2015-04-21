@@ -1,4 +1,4 @@
-package seu.EOSTI.old;
+package seu.EOSTI.UI;
 
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -15,12 +15,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.ui.internal.dnd.SwtUtil;
-
-import seu.EOSTI.UI.ChangeabilityComposite;
-import seu.EOSTI.UI.CompatibilityComposite;
-import seu.EOSTI.UI.ExtensibilityComposite;
-import seu.EOSTI.UI.NULLComposite;
-import seu.EOSTI.UI.ProjectInfoComposite;
 
 public class IntergrationDialog extends Dialog {
 
