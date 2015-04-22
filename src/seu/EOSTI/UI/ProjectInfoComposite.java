@@ -112,7 +112,7 @@ public class ProjectInfoComposite extends Composite {
 					System.out.println("put project information!");
 					
 					ProjectParser projectParser = new ProjectParser(projectPathString,projectNameString,versionString);
-					projectParser.parser();
+//					projectParser.parser();
 					projectParser.runDectors();
 				}			
 			}

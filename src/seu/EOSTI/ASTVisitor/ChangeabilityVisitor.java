@@ -36,12 +36,16 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	private ArrayList<String> importDeclarationList;
 	private HashSet<String> importPackageStrings;
 	private static int count=0;
+	private String projectName;
+	private String version;
 	
 	
-	public ChangeabilityVisitor() {
+	public ChangeabilityVisitor(String projectName, String version) {
 		// TODO Auto-generated constructor stub
 		importDeclarationList = new ArrayList<String>();
 		importPackageStrings = new HashSet<String>();
+		this.projectName = projectName;
+		this.version = version;
 
 	}
 	
@@ -113,9 +117,9 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	
 		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageString );
-		ChangeabilityConnector connector = new ChangeabilityConnector();
+		ChangeabilityConnector connector = new ChangeabilityConnector(projectName,version);
 		for (String string : importPackageStrings) {
-			connector.importNameUpatedate(packageString, string, "EOSTI", "1.0");
+			connector.importNameUpatedate(packageString, string);
 			System.out.println("package "+ packageString + " have package "+string);
 			System.out.println("Class "+ classString + " import package "+string);
 		}		

@@ -14,19 +14,18 @@ public class ChangeabilityConnector extends DBConnector{
 	
 	private Connection connect = null;
 	
-	public ChangeabilityConnector(){
+	public ChangeabilityConnector(String projectName, String version){
 		super();
-/*		this.projectName = projectName;
-		this.version = version;*/
+		this.projectName = projectName;
+		this.version = version;
 		connect = getConnection();		
 	}
 
-	public void importNameUpatedate(String packageName, String importName,
-			String projectName, String version) {
+	public void importNameUpatedate(String packageName, String importName) {
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "insert into `eosti`.`packageinfo` (`packageName`, `projectName`, `version`, `importPackage`) VALUES ('"
+			String sql = "insert into `eosti`.`packageinfo` (`pkgName`, `projName`, `verID`, `importPkgName`) VALUES ('"
 					+ packageName
 					+ "','"
 					+ projectName
@@ -55,15 +54,19 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT packagename FROM `eosti`.`packageinfo` group by packagename";
+			String sql = "SELECT pkgName FROM `eosti`.`packageinfo` where projName = '"
+					+ projectName
+					+ "' and verID = '"
+					+ version
+					+ "' group by pkgName ";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				list.add(rs.getString("packagename"));
-				System.out.println(rs.getString("packagename"));
+				list.add(rs.getString("pkgName"));
+				System.out.println(rs.getString("pkgName"));
 				}	
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("getpackageName ");
+			System.out.println("getpackageName error");
 		}
 		
 		return list; 
@@ -71,17 +74,17 @@ public class ChangeabilityConnector extends DBConnector{
 	}
 	
 	//传出耦合计数
-	public int packageEfferentCouplingsCount(String packageName,String projectName,String version){
+	public int packageEfferentCouplingsCount(String packageName){
 		int ce = 0;
 		try {
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPackage) as result FROM eosti.packageinfo where packagename = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.packageinfo where pkgname = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 
 			ResultSet rs;
 			rs = stmt.executeQuery(cestr);
@@ -96,18 +99,18 @@ public class ChangeabilityConnector extends DBConnector{
 		return ce;
 	}
 	
-	public ArrayList<String> packageEffernetCouplingslist(String packageName,String projectName,String version){
+	public ArrayList<String> packageEffernetCouplingslist(String packageName){
 
 		ArrayList<String> rStrings = new ArrayList<String>();
 		
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select  distinct importPackage as result FROM eosti.packageinfo where packagename = '"
+			String cestr = "Select  distinct importPkgName as result FROM eosti.packageinfo where pkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 			rs = stmt.executeQuery(cestr);
 			while (rs.next()) {
 				String str = rs.getString("result");
@@ -122,17 +125,17 @@ public class ChangeabilityConnector extends DBConnector{
 	}
 	
 	//传入耦合计数
-	public int packageAfferentCouplingsCount(String packageName,String projectName,String version){
+	public int packageAfferentCouplingsCount(String packageName){
 		int ca = 0;
 		try {
 			Statement stmt = connect.createStatement();
 
 			// / afferent  couplings 该包依赖的外部包数目
-			String castr = "Select  count(distinct PackageName) as result FROM eosti.packageinfo where importpackage = '"
+			String castr = "Select  count(distinct pkgName) as result FROM eosti.packageinfo where importPkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 
 
 			ResultSet rs;
@@ -149,18 +152,18 @@ public class ChangeabilityConnector extends DBConnector{
 	}
 	
 	
-	public ArrayList<String> packageAffernetCouplingslist(String packageName,String projectName,String version){
+	public ArrayList<String> packageAffernetCouplingslist(String packageName){
 
 		ArrayList<String> rStrings = new ArrayList<String>();
 		
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct packageName as result FROM eosti.packageinfo where importpackage = '"
+			String castr = "Select  distinct pkgName as result FROM eosti.packageinfo where importPkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 			rs = stmt.executeQuery(castr);
 			while (rs.next()) {
 				String str = rs.getString("result");
@@ -176,18 +179,18 @@ public class ChangeabilityConnector extends DBConnector{
 	
 	
 	
-	public ArrayList<String> packageChangeabilityInfo(String packageName,String projectName,String version){
+	public ArrayList<String> packageChangeabilityInfo(String packageName){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPackage) as result FROM eosti.packageinfo where packagename = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.packageinfo where pkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 
 			rStrings.add(packageName);
 
@@ -201,22 +204,22 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add("ce: " + ce);
 			}
 
-			cestr = "Select  distinct importPackage as result FROM eosti.packageinfo where packagename = '"
+			cestr = "Select  distinct importPkgName as result FROM eosti.packageinfo where pkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 			rs = stmt.executeQuery(cestr);
 			while (rs.next()) {
 				String str = rs.getString("result");
 				rStrings.add(str);
 			}
 
-			String castr = "Select  count(distinct PackageName) as result FROM eosti.packageinfo where importpackage = '"
+			String castr = "Select  count(distinct pkgName) as result FROM eosti.packageinfo where importPkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 
 
 			rs = stmt.executeQuery(castr);
@@ -225,11 +228,11 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add("ca: " + ca);
 			}
 
-			castr = "Select  distinct packageName as result FROM eosti.packageinfo where importpackage = '"
+			castr = "Select  distinct pkgName as result FROM eosti.packageinfo where importPkgName = '"
 					+ packageName
-					+ "' and Version = '"
+					+ "' and verID = '"
 					+ version
-					+ "' and projectName = '" + projectName + "'";
+					+ "' and projName = '" + projectName + "'";
 			rs = stmt.executeQuery(castr);
 			while (rs.next()) {
 				String str = rs.getString("result");

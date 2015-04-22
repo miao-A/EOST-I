@@ -44,9 +44,10 @@ public class ProjectParser {
 		
 		List<String> jarfilelist = readFile.readJarFiles();		
 		String[] jarpathEntries = jarfilelist.toArray(new String[jarfilelist.size()]);
+//		String[] jarpathEntries = {pathOfProject};
 		
 		List<String> javafilelist = readFile.readJavaFiles();		
-		//String[] sourcepathEntries = javafilelist.toArray(new String[javafilelist.size()]);
+//		String[] sourcepathEntries = javafilelist.toArray(new String[javafilelist.size()]);
 		String[] sourcepathEntries = {pathOfProject};
 		//jarpathEntries为项目依赖的jar包，sourcepathEntries为项目中java文件
 		parser.setEnvironment(jarpathEntries, sourcepathEntries, null, true);
@@ -60,8 +61,10 @@ public class ProjectParser {
 	}	
 	
 	public void runDectors(){
+		parser();
 		runExtensiblityDectector();
-//		runChangeabilityDector();		
+		parser(); 
+		runChangeabilityDector();		
 	}
 	
 	private void runExtensiblityDectector(){

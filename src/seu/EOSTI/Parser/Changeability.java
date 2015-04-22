@@ -11,11 +11,13 @@ import seu.EOSTI.ASTVisitor.ChangeabilityRequestor;
 
 public class Changeability {
 
-	private ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor();
-	private ChangeabilityOfClassRequestor changeabilityOfClassRequestor = new ChangeabilityOfClassRequestor();
-	
+	private String projectName;
+	private String version;	
 	
 	public Changeability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
+		
+		ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor(projectNameString,versionString);
+//		private ChangeabilityOfClassRequestor changeabilityOfClassRequestor = new ChangeabilityOfClassRequestor();
 		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);

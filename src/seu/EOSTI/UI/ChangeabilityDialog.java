@@ -68,18 +68,18 @@ public class ChangeabilityDialog extends org.eclipse.swt.widgets.Dialog {
 				packageEfferentTree.setLayoutData(packagetreeLData);
 				packageEfferentTree.setOrientation(SWT.HORIZONTAL);
 				{
-					ChangeabilityConnector dbConnector = new ChangeabilityConnector();
+					ChangeabilityConnector dbConnector = new ChangeabilityConnector("jeditor", "0.2");
 					ArrayList<String> packageList = dbConnector.getpackageName();
 					for (String string : packageList) {
 						TreeItem packageItem = new TreeItem(packageEfferentTree, SWT.NONE);
-						int ce = dbConnector.packageEfferentCouplingsCount(string, "jeditor", "0.2");
-						int ca = dbConnector.packageAfferentCouplingsCount(string, "jeditor", "0.2");
+						int ce = dbConnector.packageEfferentCouplingsCount(string);
+						int ca = dbConnector.packageAfferentCouplingsCount(string);
 
 						double c = 1.0*(ce)/(ca+ce);
 						DecimalFormat df = new DecimalFormat("0.00");
 						
 						packageItem.setText(string + " ce: " + ce + " ca: "+ ca + " c: "+df.format(c));
-						ArrayList<String> celList = dbConnector.packageEffernetCouplingslist(string, "jeditor", "0.2");
+						ArrayList<String> celList = dbConnector.packageEffernetCouplingslist(string);
 						for (String string2 : celList) {
 							TreeItem tItem = new TreeItem(packageItem, SWT.NULL);
 							tItem.setText(string2);
@@ -101,18 +101,18 @@ public class ChangeabilityDialog extends org.eclipse.swt.widgets.Dialog {
 					packageAfferentTree = new Tree(dialogShell, SWT.NONE);
 					packageAfferentTree.setLayoutData(packageAfferentTreeLData);
 					{
-						ChangeabilityConnector dbConnector = new ChangeabilityConnector();
+						ChangeabilityConnector dbConnector = new ChangeabilityConnector("jeditor", "0.2");
 						ArrayList<String> packageList = dbConnector.getpackageName();
 						for (String string : packageList) {
 							TreeItem packageItem = new TreeItem(packageAfferentTree, SWT.NONE);
-							int ce = dbConnector.packageEfferentCouplingsCount(string, "jeditor", "0.2");
-							int ca = dbConnector.packageAfferentCouplingsCount(string, "jeditor", "0.2");
+							int ce = dbConnector.packageEfferentCouplingsCount(string);
+							int ca = dbConnector.packageAfferentCouplingsCount(string);
 							
 							double c = 1.0*(ce)/(ca+ce);
 							DecimalFormat df = new DecimalFormat("0.00");
 							
 							packageItem.setText(string + " ce: " + ce + " ca: "+ ca + " c: "+df.format(c));
-							ArrayList<String> calList = dbConnector.packageAffernetCouplingslist(string, "jeditor", "0.2");
+							ArrayList<String> calList = dbConnector.packageAffernetCouplingslist(string);
 							for (String string2 : calList) {
 								TreeItem tItem = new TreeItem(packageItem, SWT.NULL);
 								tItem.setText(string2);
