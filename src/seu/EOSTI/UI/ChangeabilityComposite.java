@@ -24,6 +24,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
+import com.ibm.icu.text.DecimalFormat;
+
 public class ChangeabilityComposite extends Composite {
 
 	/**
@@ -118,7 +120,9 @@ public class ChangeabilityComposite extends Composite {
 				
 				for (PackageNode node : packageNodeList) {
 					TreeItem item = new TreeItem(packageEfferentTree, SWT.NONE);
-					item.setText(node.getName());
+					DecimalFormat df = new DecimalFormat("0.00");
+					item.setText(node.getName()+" Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
+							+ " C: " + df.format(node.getChangeabilityRatio()) );
 					ArrayList<String> list = node.getEfferents();
 					for (String string : list) {
 						TreeItem treeItem = new TreeItem(item, SWT.NONE);				
@@ -138,7 +142,9 @@ public class ChangeabilityComposite extends Composite {
 				
 				for (PackageNode node : packageNodeList) {
 					TreeItem item = new TreeItem(packageAfferentTree, SWT.NONE);
-					item.setText(node.getName());
+					DecimalFormat df = new DecimalFormat("0.00");
+					item.setText(node.getName() + " Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
+							+ " C: " + df.format(node.getChangeabilityRatio()));
 					ArrayList<String> list = node.getAfferents();
 					for (String string : list) {
 						TreeItem treeItem = new TreeItem(item, SWT.NONE);				
@@ -146,7 +152,7 @@ public class ChangeabilityComposite extends Composite {
 						if (packageNodeList.contains(new PackageNode(string))) {
 							int index = packageNodeList.indexOf(new PackageNode(string));
 							PackageNode pNode = packageNodeList.get(index);
-							ArrayList<String> nextList = pNode.getEfferents();
+							ArrayList<String> nextList = pNode.getAfferents();
 							for (String string2 : nextList) {
 								TreeItem nextItem = new TreeItem(treeItem, SWT.NONE);				
 								nextItem.setText(string2);

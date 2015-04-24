@@ -120,7 +120,7 @@ private String versionString;
 			totalNum = interfaceNum + abstractNum + concreteNum;
 			rStrings.add(totalNum+"");
 			
-			double ratioOfInterface = 100.0*(interfaceNum+abstractNum)/(interfaceNum+abstractNum+concreteNum);
+			double ratioOfInterface = 100.0*(interfaceNum)/(interfaceNum+abstractNum+concreteNum);
 			DecimalFormat df = new DecimalFormat("#.00");
 			rStrings.add(df.format(ratioOfInterface));	
 			} catch (Exception e) {
@@ -179,7 +179,7 @@ public ArrayList<String> projectExtensibilityRatio(){
 			totalNum = interfaceNum + abstractNum + concreteNum;
 			rStrings.add(totalNum+"");
 			
-			double ratioOfInterface = 100.0*(interfaceNum+abstractNum)/(interfaceNum+abstractNum+concreteNum);
+			double ratioOfInterface = 100.0*(interfaceNum)/(interfaceNum+abstractNum+concreteNum);
 			DecimalFormat df = new DecimalFormat("#.00");
 			rStrings.add(df.format(ratioOfInterface));	
 			

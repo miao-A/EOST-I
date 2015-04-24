@@ -52,6 +52,10 @@ public class PackageNode {
 		return false;		
 	}	
 	
+	public double getChangeabilityRatio(){
+		return 1.0*getAfferents().size()/(getAfferents().size() + getEfferents().size());
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof PackageNode) {
@@ -60,7 +64,6 @@ public class PackageNode {
 			}
 		}
 		
-		return false;
-		
+		return false;		
 	}
 }
