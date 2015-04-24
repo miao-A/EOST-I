@@ -35,11 +35,11 @@ public class ExtensibilityComposite extends Composite {
 		setLayout(null);
 		
 		Label lblExtensibilityComposite = new Label(this, SWT.NONE);
-		lblExtensibilityComposite.setBounds(10, 275, 165, 25);
+		lblExtensibilityComposite.setBounds(0, 395, 165, 25);
 		lblExtensibilityComposite.setText("Extensibility Composite");
 		
 		extensibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		extensibilityTable.setBounds(0, 31, 494, 199);
+		extensibilityTable.setBounds(0, 31, 655, 295);
 		extensibilityTable.setHeaderVisible(true);
 		extensibilityTable.setLinesVisible(true);
 		

@@ -76,18 +76,20 @@ public class ChangeabilityComposite extends Composite {
 		lblVersion.setText("Version:");
 		
 		TabFolder tabFolder = new TabFolder(this, SWT.NONE);
-		tabFolder.setBounds(0, 51, 450, 209);
+		tabFolder.setBounds(0, 51, 655, 383);
 		
 		TabItem efferent_tabItem = new TabItem(tabFolder, SWT.NONE);
 		efferent_tabItem.setText("\u5305\u4F9D\u8D56\u6811");
 		
 		final Tree packageEfferentTree = new Tree(tabFolder, SWT.BORDER);
+		packageEfferentTree.setLinesVisible(true);
 		efferent_tabItem.setControl(packageEfferentTree);
 		
 		TabItem afferent_tabItem = new TabItem(tabFolder, SWT.NONE);
 		afferent_tabItem.setText("\u5305\u88AB\u4F9D\u8D56\u6811");
 		
 		final Tree packageAfferentTree = new Tree(tabFolder, SWT.BORDER);
+		packageAfferentTree.setLinesVisible(true);
 		afferent_tabItem.setControl(packageAfferentTree);
 
 		
@@ -211,7 +213,7 @@ public class ChangeabilityComposite extends Composite {
 					}
 				});
 
-				
+				packageAfferentTree.layout();
 				packageEfferentTree.layout();
 	  
 			}
