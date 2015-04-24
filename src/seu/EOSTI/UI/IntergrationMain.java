@@ -1,7 +1,13 @@
 package seu.EOSTI.UI;
 
+import japicmp.cmp.JarArchiveComparator;
+import japicmp.cmp.JarArchiveComparatorOptions;
+import japicmp.model.JApiClass;
+import japicmp.model.JApiMethod;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableItem;
@@ -15,20 +21,72 @@ import seu.EOSTI.Parser.ProjectParser;
 
 
 public class IntergrationMain {
+	
+	
+	private static int count = 0;
+	private static int unchangedcount = 0;
+	private static int newcount = 0 ;
+	private static int removedcount = 0;
+	private static int modifiedcount = 0;
+	
+	public static void  main(String[] args) {
+		
+		File oldArchive = new File("D:/eclipse/plugins/org.eclipse.swt.win32.win32.x86_3.102.1.v20130827-2048.jar");
+		File newArchive = new File("D:/FTP/jdenpend2.9.1_fat.jar");
+		
+/*		File oldArchive = new File("D:/eclipse/dropins/lib/junit-4.11.jar");
+		File newArchive = new File("D:/eclipse/dropins/lib/junit-4.12.jar");*/
+		
+		JarArchiveComparatorOptions comparatorOptions = new JarArchiveComparatorOptions();
 
-	public static void main(String args[]) {
+
+		JarArchiveComparator jarArchiveComparator = new JarArchiveComparator(comparatorOptions);
+
+		//getChangeStatus : UNCHANGED NEW MODIFIED  REMOVED
+		List<JApiClass> jApiClasses = jarArchiveComparator.compare(oldArchive, newArchive);
+		for (JApiClass jApiClass : jApiClasses) {
+			if (jApiClass.getChangeStatus().toString().equals("UNCHANGED")) {
+				++unchangedcount;
+				
+			}else if (jApiClass.getChangeStatus().toString().equals("NEW")) {
+				++newcount;
+
+			}else if (jApiClass.getChangeStatus().toString().equals("MODIFIED")) {
+				++modifiedcount;	
+				List<JApiMethod> jApiMethods = jApiClass.getMethods();
+				for (JApiMethod jApiMethod : jApiMethods) {
+//					System.out.println(jApiMethod.getName());
+					System.out.println(jApiMethod.getChangeStatus());
+					jApiMethod.getModifiers();
+				}
+			}else if (jApiClass.getChangeStatus().toString().equals("REMOVED")) {
+				++removedcount;
+				
+			}
+		}
+		
+		System.out.println(unchangedcount);
+		System.out.println(newcount);
+		System.out.println(modifiedcount);
+		System.out.println(removedcount);
+		System.out.println("end");
+	
+	
+	
+
+/*
 		
 //		String [] arrayOfProjects = {"E:/GitHub/EOST-I"};
 		
 //		String [] arrayOfProjects = {"D:/ProjectEOfHW/junit/junit3.4"};	
 		String [] arrayOfProjects = {"D:/ProjectEOfHW/jEditor/jeditor0.2"};	
 	
-/*	String [] arrayOfProjects = {"D:/ProjectEOfHW/junit3.4","D:/ProjectEOfHW/junit3.5","D:/ProjectEOfHW/junit3.6",
+	String [] arrayOfProjects = {"D:/ProjectEOfHW/junit3.4","D:/ProjectEOfHW/junit3.5","D:/ProjectEOfHW/junit3.6",
 			"D:/ProjectEOfHW/junit3.7","D:/ProjectEOfHW/junit3.8","D:/ProjectEOfHW/junit3.9","D:/ProjectEOfHW/junit4.0",
 			"D:/ProjectEOfHW/junit4.1","D:/ProjectEOfHW/junit4.2","D:/ProjectEOfHW/junit4.3","D:/ProjectEOfHW/junit4.4",
 			"D:/ProjectEOfHW/junit4.5","D:/ProjectEOfHW/junit4.6","D:/ProjectEOfHW/junit4.7","D:/ProjectEOfHW/junit4.8",
 			"D:/ProjectEOfHW/junit4.9","D:/ProjectEOfHW/junit4.10","D:/ProjectEOfHW/junit4.11"};
-	*/
+	
 	String pathOfProject;
 	
 	
@@ -47,7 +105,7 @@ public class IntergrationMain {
 		projectFileUtil.getExtensibilityInfo();
 
 	
-/*		//以包级别分析易替代性 
+		//以包级别分析易替代性 
 		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
  		ArrayList<String> packageNameList= dbConnector.getpackageName();
 
@@ -55,9 +113,9 @@ public class IntergrationMain {
         
         	ArrayList<String> al = dbConnector.packageChangeabilityInfo(string, "EOSTI", "1.0");
 //        	item.setText((String[])al.toArray(new String[al.size()]));
-        }*/
+        }
 		
-/*		//以类级别分析易替代性
+		//以类级别分析易替代性
 		ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector();
 		ArrayList<String> classNameList= dbConnector.getClassName("EOSTI", "1.0");
         for (String string : classNameList) {
@@ -65,12 +123,12 @@ public class IntergrationMain {
             
         	dbConnector.ClassChangeabilityInfo(pc[0],pc[1], "EOSTI", "1.0");
 
-        }*/
+        }
 
 
 		System.out.println("end!");
 	}
-	
+	*/
 	}
 
 		
