@@ -3,6 +3,7 @@ package seu.EOSTI.UI;
 import japicmp.cmp.JarArchiveComparator;
 import japicmp.cmp.JarArchiveComparatorOptions;
 import japicmp.model.JApiClass;
+import japicmp.model.JApiField;
 import japicmp.model.JApiMethod;
 
 import java.io.File;
@@ -28,14 +29,24 @@ public class IntergrationMain {
 	private static int newcount = 0 ;
 	private static int removedcount = 0;
 	private static int modifiedcount = 0;
+	private static ArrayList<String> unchangeClassList;
+	private static ArrayList<String> newClassList;
+	private static ArrayList<String> removedClassList;
+	private static ArrayList<JApiClass> modifiedClassList;
+	
+	
 	
 	public static void  main(String[] args) {
 		
-		File oldArchive = new File("D:/eclipse/plugins/org.eclipse.swt.win32.win32.x86_3.102.1.v20130827-2048.jar");
-		File newArchive = new File("D:/FTP/jdenpend2.9.1_fat.jar");
+/*		File oldArchive = new File("D:/eclipse/plugins/org.eclipse.swt.win32.win32.x86_3.102.1.v20130827-2048.jar");
+		File newArchive = new File("");*/
+		unchangeClassList = new ArrayList<String>();
+		newClassList = new ArrayList<String>();
+		removedClassList = new ArrayList<String>();
+		modifiedClassList = new ArrayList<JApiClass>();
 		
-/*		File oldArchive = new File("D:/eclipse/dropins/lib/junit-4.11.jar");
-		File newArchive = new File("D:/eclipse/dropins/lib/junit-4.12.jar");*/
+		File oldArchive = new File("D:/eclipse/dropins/lib/junit-4.11.jar");
+		File newArchive = new File("D:/eclipse/dropins/lib/junit-4.12.jar");
 		
 		JarArchiveComparatorOptions comparatorOptions = new JarArchiveComparatorOptions();
 
@@ -43,27 +54,37 @@ public class IntergrationMain {
 		JarArchiveComparator jarArchiveComparator = new JarArchiveComparator(comparatorOptions);
 
 		//getChangeStatus : UNCHANGED NEW MODIFIED  REMOVED
-		List<JApiClass> jApiClasses = jarArchiveComparator.compare(oldArchive, newArchive);
-		for (JApiClass jApiClass : jApiClasses) {
-			if (jApiClass.getChangeStatus().toString().equals("UNCHANGED")) {
-				++unchangedcount;
-				
-			}else if (jApiClass.getChangeStatus().toString().equals("NEW")) {
-				++newcount;
+//		try {
+			List<JApiClass> jApiClasses = jarArchiveComparator.compare(oldArchive, newArchive);
+			for (JApiClass jApiClass : jApiClasses) {
+				if (jApiClass.getChangeStatus().toString().equals("UNCHANGED")) {
+					++unchangedcount;
+					unchangeClassList.add(jApiClass.getFullyQualifiedName());
+					
+				}else if (jApiClass.getChangeStatus().toString().equals("NEW")) {
+					++newcount;
+					newClassList.add(jApiClass.getFullyQualifiedName());
 
-			}else if (jApiClass.getChangeStatus().toString().equals("MODIFIED")) {
-				++modifiedcount;	
-				List<JApiMethod> jApiMethods = jApiClass.getMethods();
-				for (JApiMethod jApiMethod : jApiMethods) {
-//					System.out.println(jApiMethod.getName());
-					System.out.println(jApiMethod.getChangeStatus());
-					jApiMethod.getModifiers();
+				}else if (jApiClass.getChangeStatus().toString().equals("MODIFIED")) {
+					++modifiedcount;	
+					modifiedClassList.add(jApiClass);				
+				}else if (jApiClass.getChangeStatus().toString().equals("REMOVED")) {
+					++removedcount;
+					removedClassList.add(jApiClass.getFullyQualifiedName());					
 				}
-			}else if (jApiClass.getChangeStatus().toString().equals("REMOVED")) {
-				++removedcount;
-				
+			}
+//		} catch (Exception e) {
+			// TODO: handle exception
+//			System.out.println("not a complete jar!");
+//		}
+		
+		for (JApiClass jApiClass: modifiedClassList) {
+			List<JApiField> jApiFields = jApiClass.getFields();
+			for (JApiField jApiField : jApiFields) {
+				System.out.println(jApiField.getChangeStatus());
 			}
 		}
+	
 		
 		System.out.println(unchangedcount);
 		System.out.println(newcount);

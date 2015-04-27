@@ -20,8 +20,8 @@ import java.util.List;
 public class ReadFile {
 	
     private List<String> fileList =new ArrayList<String>();
-    private static List<String> javaFileList =new ArrayList<String>();
-    private static List<String> jarFileList =new ArrayList<String>();
+    private List<String> javaFileList =new ArrayList<String>();
+    private List<String> jarFileList =new ArrayList<String>();
     
     private String filepath;
     
