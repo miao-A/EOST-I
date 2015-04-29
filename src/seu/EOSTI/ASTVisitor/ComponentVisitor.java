@@ -9,6 +9,7 @@ import java.util.List;
 
 
 
+
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -21,6 +22,7 @@ import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.QualifiedType;
@@ -44,6 +46,11 @@ public class ComponentVisitor extends ASTVisitor {
 	public ComponentVisitor(){
 		typeModel = new TypeModel();
 	}
+	
+	public boolean visit(PackageDeclaration node){
+		typeModel.setPackage(node.getName().toString());
+		return true;
+	}
 
 	public boolean visit(TypeDeclaration node){
 	
@@ -52,65 +59,45 @@ public class ComponentVisitor extends ASTVisitor {
 			return true;
 		}
 		
-//		System.out.println("Type:\t"+node.getName().getIdentifier());
+
+		
 		String string=node.getName().getIdentifier();
 		typeModel.setClassName(string);
 		System.out.println("Type:\t"+node.getName().getIdentifier());
 		if (node.getSuperclassType() != null) {
 			typeModel.setSuperClass(node.getSuperclassType().toString());
-//		System.out.println("superclass:"+node.getSuperclassType().toString());
-		}
+		}		
+		
+		typeModel.setINTERFACE(node.isInterface());
+		
+		//class继承的接口类
 		List<Type> list = node.superInterfaceTypes();
 		for (Type interfaceType : list) {
-			
+			typeModel.setSuperInterfaceType(interfaceType.toString());
 		}
 
-		typeModel.setModifier(getJModifier(node));	
-		 
+		//class的属性
+		typeModel.setModifier(getJModifier(node));	 
 		
-		
+		//class的父类
 		if (node.getSuperclassType() != null) {
-//			System.out.println("Superclass:\t"+node.getSuperclassType());
+			typeModel.setSuperClass(node.getSuperclassType().toString());
 		}
-//		System.out.println(node.getSuperclassType());
-		node.superInterfaceTypes();
 	
 	
 		//处理field //声明部分记录，未记录后面的初始化
-		FieldDeclaration[] fields = node.getFields();
+		/*FieldDeclaration[] fields = node.getFields();
 		for (FieldDeclaration fieldDeclaration : fields) {
-			getJModifier(fieldDeclaration);
-			
-			Type type = fieldDeclaration.getType();
-			System.out.println("####################################"+type.toString());
-			if (type instanceof PrimitiveType) {
-				System.out.println("PrimitiveType");
-				System.out.println(((PrimitiveType) type).toString());
-			}else if (type instanceof SimpleType) {
-				System.out.println("simpletype");
-				System.out.println(((SimpleType) type).getName());
-			}else if (type instanceof ParameterizedType) {
-				System.out.println("ParameterizedType");
-				System.out.println(((ParameterizedType) type).getType());
-				System.out.println(((ParameterizedType) type).typeArguments());
-			}else if (type instanceof ArrayType) {
-				System.out.println("ArrayType");
-				System.out.println(((ArrayType) type).getComponentType());
-
-			}else  if (type instanceof QualifiedType ) {
-				System.out.println("QualifiedType");
-			}else if (type instanceof WildcardType) {
-				System.out.println("WildcardType");
+			FieldModel fieldModel = new FieldModel();
+			fieldModel.setModifier(getJModifier(fieldDeclaration));
+			fieldModel.setType(fieldDeclaration.getType().toString());
+			List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
+			for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
+				fieldModel.setFieldName(vdf.getName().toString());
+				typeModel.addFieldModel(fieldModel);
 			}
-			
-			List<VariableDeclarationFragment> fragment = fieldDeclaration.fragments();
-			
-			for (VariableDeclarationFragment vdFragment : fragment) {
-
-//				System.out.println("vdFragment:"+vdFragment.getName());
-			}			
-
-		}
+		}*/
+		typeModel.setFieldModels(getFieldModels(node));
 		
 		
 		//处理枚举类型
@@ -193,45 +180,26 @@ public class ComponentVisitor extends ASTVisitor {
 	}
 	
 	private String getTypeName(Type type){
-		String string = null;
-		if (type instanceof PrimitiveType) {
-//			System.out.println("PrimitiveType");
-			System.out.println(((PrimitiveType) type).toString());
-			string = ((PrimitiveType) type).toString();
-		}else if (type instanceof SimpleType) {
-//			System.out.println("simpletype");
-//			System.out.println(((SimpleType) type).getName());
-			string = ((SimpleType) type).getName().toString();
-		}else if (type instanceof ParameterizedType) {
-//			System.out.println("ParameterizedType");
-//			System.out.println(((ParameterizedType) type).getType());
-			string = ((ParameterizedType) type).getType().toString();
-		}else if (type instanceof ArrayType) {
-//			System.out.println("ArrayType");
-//			System.out.println(((ArrayType) type).getComponentType());
-			string = ((ArrayType) type).getComponentType().toString();
+		return type.toString();		
+	}
 
-		}else  if (type instanceof QualifiedType ) {
-//			System.out.println("QualifiedType");
-			((QualifiedType) type).getName().toString();
-		}else if (type instanceof WildcardType) {
-//			System.out.println("WildcardType");
-			System.out.println("WildcardType"+getTypeName(((WildcardType) type).getBound()));
-		}
-		
-		return string;
-		
+
+	private List<FieldModel> getFieldModels(TypeDeclaration node){
+		List<FieldModel> list = new LinkedList<>(); 
+		FieldDeclaration[] fields = node.getFields();
+		for (FieldDeclaration fieldDeclaration : fields) {
+			FieldModel fieldModel = new FieldModel();
+			fieldModel.setModifier(getJModifier(fieldDeclaration));
+			fieldModel.setType(fieldDeclaration.getType().toString());
+			List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
+			for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
+				fieldModel.setFieldName(vdf.getName().toString());
+				list.add(fieldModel);
+			}
+		}		
+		return list;
 	}
 	
-/*	private FieldModel formFieldModel(FieldDeclaration node){
-		FieldModel fieldModel;
-		node.getModifiers();
-		node.getType();
-		node.fragments();
-		
-		return fieldModel;
-	}
-	*/
 	public TypeModel getTypeModel(){
 		return typeModel;
 	}

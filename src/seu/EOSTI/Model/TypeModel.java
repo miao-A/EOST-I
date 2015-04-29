@@ -11,16 +11,10 @@ public class TypeModel {
 	
 	private String packageName = null;
 	private String className;	
-	private ClassType classType;
-
+	private boolean INTERFACE = false;
 	
 	private List<String> superInterfaceTypes = new LinkedList<>();
 	private String superClass;
-	/*private JModifier<AccessModifier> accessModifier;
-	private JModifier<AbstractModifier> abstractModifier;
-	private JModifier<FinalModifier> finalModifier;
-	private JModifier<StaticModifier> staticModifier;*/
-	
 	private JModifier modifier = new JModifier();
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
@@ -33,11 +27,17 @@ public class TypeModel {
 		packageName = name;
 	}
 	
+	public String getPackage(){
+		return packageName;
+	}
+	
 	public void setClassName(String name){
 		className = name;
 	}
 	
-	
+	public String getClassName(){
+		return className;
+	}
 	
 	public void addInnerClass(TypeModel typeModel) {
 		innerClassModels.add(typeModel);		
@@ -45,6 +45,10 @@ public class TypeModel {
 	
 	public void setModifier(JModifier jModifier){
 		modifier = jModifier;
+	}
+	
+	public JModifier getModifier(){
+		return modifier;
 	}
 
 	
@@ -60,8 +64,27 @@ public class TypeModel {
 		return superInterfaceTypes;
 	}
 
-	public void setSuperInterfaceTypes(List<String> superInterfaceTypes) {
-		this.superInterfaceTypes = superInterfaceTypes;
+	public void setSuperInterfaceType(String superInterfaceType) {
+		this.superInterfaceTypes.add(superInterfaceType);
 	}
+
+	public boolean isINTERFACE() {
+		return INTERFACE;
+	}
+
+	public void setINTERFACE(boolean iNTERFACE) {
+		INTERFACE = iNTERFACE;
+	}
+
+	public List<FieldModel> getFieldModels() {
+		return fieldModels;
+	}
+
+	public void setFieldModels(List<FieldModel> fieldModels) {
+		for (FieldModel fieldModel : fieldModels) {
+			this.fieldModels.add(fieldModel);
+		}
+	}	
+
 
 }
