@@ -3,19 +3,14 @@ package seu.EOSTI.Model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.Modifier;
-
-
-
-public class TypeModel {
+public class EnumModel {
 	
 	private String packageName = null;
 	private String className;	
-	private boolean INTERFACE = false;
-	
 	private List<String> superInterfaceTypes = new LinkedList<>();
-	private String superClass;
 	private JModifier modifier = new JModifier();
+	
+	private List<String> enumConstant = new LinkedList<>();
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
@@ -51,14 +46,6 @@ public class TypeModel {
 		return modifier;
 	}
 
-	
-	public void setSuperClass(String superClass) {
-		this.superClass = superClass;
-	}
-	
-	public String getSuperClass() {
-		return superClass;
-	}
 
 	public List<String> getSuperInterfaceTypes() {
 		return superInterfaceTypes;
@@ -68,16 +55,13 @@ public class TypeModel {
 		this.superInterfaceTypes.add(superInterfaceType);
 	}
 
-	public boolean isINTERFACE() {
-		return INTERFACE;
-	}
-
-	public void setINTERFACE(boolean iNTERFACE) {
-		INTERFACE = iNTERFACE;
-	}
-
+	
 	public List<FieldModel> getFieldModels() {
 		return fieldModels;
+	}
+	
+	public void addFieldModel(FieldModel fieldModel) {
+		this.fieldModels.add(fieldModel);		
 	}
 
 	public void setFieldModels(List<FieldModel> fieldModels) {
@@ -86,13 +70,29 @@ public class TypeModel {
 		}
 	}
 
+
+	public List<String> getEnumConstant() {
+		return enumConstant;
+	}
+
+	public void setEnumConstant(List<String> enumConstant) {
+		this.enumConstant = enumConstant;
+	}	
+	
+	public void addEnumConstant(String enumConstant){
+		this.enumConstant.add(enumConstant);
+	}
+
 	public List<EnumModel> getEnumClassModels() {
 		return enumClassModels;
 	}
 
-	public void addEnumClassModel(EnumModel enumModel) {
-		this.enumClassModels.add(enumModel);
-	}	
-
+	public void setEnumClassModels(List<EnumModel> enumClassModels) {
+		this.enumClassModels = enumClassModels;
+	}
+	
+	public void addEnumClassModel(EnumModel enumClassModel) {
+		this.enumClassModels.add(enumClassModel);
+	}
 
 }

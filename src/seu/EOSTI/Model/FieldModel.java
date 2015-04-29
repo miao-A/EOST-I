@@ -29,6 +29,4 @@ public class FieldModel {
 		this.modifier = modifier;
 	}
 	
-	
-
 }

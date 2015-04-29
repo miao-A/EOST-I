@@ -10,11 +10,16 @@ import java.util.List;
 
 
 
+
+
+
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
@@ -35,6 +40,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import seu.EOSTI.Model.AccessModifier;
 import seu.EOSTI.Model.ClassType;
+import seu.EOSTI.Model.EnumModel;
 import seu.EOSTI.Model.FieldModel;
 import seu.EOSTI.Model.JModifier;
 import seu.EOSTI.Model.TypeModel;
@@ -42,9 +48,11 @@ import seu.EOSTI.Model.TypeModel;
 public class ComponentVisitor extends ASTVisitor {
 
 	private TypeModel typeModel;
+	private EnumModel enumModel;
 	
 	public ComponentVisitor(){
 		typeModel = new TypeModel();
+		enumModel = new EnumModel();
 	}
 	
 	public boolean visit(PackageDeclaration node){
@@ -52,15 +60,29 @@ public class ComponentVisitor extends ASTVisitor {
 		return true;
 	}
 
+	public boolean visit(EnumDeclaration node){
+		if (node.isMemberTypeDeclaration()) {
+			return true;
+		}
+		enumModel = getEnumModel(node);
+		return true;
+
+		
+	}
+	
+	
 	public boolean visit(TypeDeclaration node){
 	
 		//内部类或匿名类
 		if (node.isMemberTypeDeclaration()) {
 			return true;
 		}
-		
-
-		
+		typeModel = getClassType(node);
+		return true;
+	}
+	
+	private TypeModel getClassType(TypeDeclaration node){
+		TypeModel typeModel = new TypeModel();
 		String string=node.getName().getIdentifier();
 		typeModel.setClassName(string);
 		System.out.println("Type:\t"+node.getName().getIdentifier());
@@ -82,31 +104,19 @@ public class ComponentVisitor extends ASTVisitor {
 		//class的父类
 		if (node.getSuperclassType() != null) {
 			typeModel.setSuperClass(node.getSuperclassType().toString());
-		}
+		}	
 	
-	
-		//处理field //声明部分记录，未记录后面的初始化
-		/*FieldDeclaration[] fields = node.getFields();
-		for (FieldDeclaration fieldDeclaration : fields) {
-			FieldModel fieldModel = new FieldModel();
-			fieldModel.setModifier(getJModifier(fieldDeclaration));
-			fieldModel.setType(fieldDeclaration.getType().toString());
-			List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
-			for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
-				fieldModel.setFieldName(vdf.getName().toString());
-				typeModel.addFieldModel(fieldModel);
-			}
-		}*/
-		typeModel.setFieldModels(getFieldModels(node));
+		//处理field //声明部分记录，未记录后面的初始化	
+		typeModel.setFieldModels(getFieldModels(node));		
 		
-		
-		//处理枚举类型
+		//处理Body部分类型
 		List bd = node.bodyDeclarations();
 		for (Object object : bd) {
 			if (object instanceof EnumDeclaration) {
 //				System.out.println("EnumDeclaration:\t"+((EnumDeclaration) object).getName());
+				typeModel.addEnumClassModel(getEnumModel((EnumDeclaration) object));
 			} else if(object instanceof TypeDeclaration){
-//				System.out.println("TypeDeclaration:\t"+((TypeDeclaration) object).getName());
+				typeModel.addInnerClass(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
 				if (((MethodDeclaration) object).isConstructor()) {
 //					System.out.println("Constructor:\t"+((MethodDeclaration) object).getName());
@@ -119,47 +129,95 @@ public class ComponentVisitor extends ASTVisitor {
 //					System.out.println("MethodDeclaration:\t"+((MethodDeclaration) object).getName());
 				}
 			} else if (object instanceof FieldDeclaration) {
-				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
+//				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
 			} else if(object instanceof Initializer) {
 				System.out.println("Initializer");
 			} 
 		}		
-	
-		return true;
-	}
-	
-	private TypeModel innerClassType(TypeDeclaration type){
-		TypeModel typeModel = new TypeModel();
-		TypeDeclaration[] innerTypes = type.getTypes();
-		for (TypeDeclaration innerType : innerTypes) {
-			typeModel.addInnerClass(innerClassType(innerType));
-		}
 		
-		return typeModel;		
+		return typeModel;
+	
+	}	
+	
+	private EnumModel getEnumModel(EnumDeclaration node){
+		
+		EnumModel enumModel = new EnumModel();
+		String string = node.getName().getIdentifier();
+		typeModel.setClassName(string);
+		System.out.println("EnumType:\t"+node.getName().getIdentifier());
+		
+		//class继承的接口类
+		List<Type> list = node.superInterfaceTypes();
+		for (Type interfaceType : list) {
+			typeModel.setSuperInterfaceType(interfaceType.toString());
+		}
+
+		//class的属性
+		typeModel.setModifier(getJModifier(node));
+	
+	
+		//处理field //声明部分记录，未记录后面的初始化	
+		typeModel.setFieldModels(getFieldModels(node));		
+		
+		List<EnumConstantDeclaration> list2= ((EnumDeclaration) node).enumConstants();
+		  for (EnumConstantDeclaration enumConstantDeclaration : list2) {
+//			System.out.println(enumConstantDeclaration.getName());
+			enumModel.addEnumConstant(enumConstantDeclaration.getName().toString());
+		  }
+		
+		
+		
+		//处理枚举类型
+		List bd = node.bodyDeclarations();
+		for (Object object : bd) {
+			if (object instanceof EnumDeclaration) {
+//				System.out.println("EnumDeclaration:\t"+((EnumDeclaration) object).getName());
+				enumModel.addEnumClassModel(getEnumModel((EnumDeclaration) object));
+			} else if(object instanceof TypeDeclaration){
+				enumModel.addInnerClass(getClassType((TypeDeclaration)object));
+			} else if (object instanceof MethodDeclaration) {
+				if (((MethodDeclaration) object).isConstructor()) {
+//					System.out.println("Constructor:\t"+((MethodDeclaration) object).getName());
+					List<SingleVariableDeclaration> p = ((MethodDeclaration) object).parameters();
+					for (SingleVariableDeclaration singleVariableDeclaration : p) {
+						System.out.println(singleVariableDeclaration.getType()+" "+singleVariableDeclaration.getName());
+					}
+					
+				} else{
+//					System.out.println("MethodDeclaration:\t"+((MethodDeclaration) object).getName());
+				}
+			} else if (object instanceof FieldDeclaration) {
+//				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
+			} else if(object instanceof Initializer) {
+				System.out.println("Initializer");
+			} 
+		}		
+		
+		return enumModel;
 	}
+	
 	
 	private JModifier getJModifier(ASTNode node){
 		List<IExtendedModifier> ieModifiers = new LinkedList<IExtendedModifier>();
 		if (node instanceof TypeDeclaration) {
 			ieModifiers = ((TypeDeclaration) node).modifiers();	
-			System.out.println("1");
+
 		}else if (node instanceof EnumDeclaration) {
 			 ieModifiers = ((EnumDeclaration) node).modifiers();
-			 System.out.println("2");
+
 		}else if (node instanceof MethodDeclaration) {
 			ieModifiers = ((MethodDeclaration) node).modifiers();
-			System.out.println("3");
+
 		}else if (node instanceof FieldDeclaration) {
 			ieModifiers = ((FieldDeclaration) node).modifiers();
-			System.out.println("4");
+			
 		}else  {
 			System.out.println("!!!!not include, check!!!");
 		}
 		
 		JModifier jm = new JModifier();
 		for (IExtendedModifier modifier : ieModifiers) {
-			if (modifier.isModifier()) {
-				
+			if (modifier.isModifier()) {				
 				jm.setABSTRACT(((Modifier) modifier).isAbstract());
 				jm.setFINAL(((Modifier) modifier).isFinal());
 				jm.setNATIVE(((Modifier) modifier).isNative());
@@ -172,31 +230,61 @@ public class ComponentVisitor extends ASTVisitor {
 				jm.setTRANSIENT(((Modifier) modifier).isTransient());
 				jm.setVOLATILE(((Modifier) modifier).isVolatile());
 			}
-		}
-		
-		
-		return jm;
-		
+		}		
+		return jm;		
 	}
 	
 	private String getTypeName(Type type){
 		return type.toString();		
 	}
 
+	private List<FieldModel> getFieldModels(ASTNode node){
+		List<FieldModel> list = new LinkedList<>(); 	
+		if (node instanceof TypeDeclaration) {
+			FieldDeclaration[] fields = ((TypeDeclaration) node).getFields();
+			for (FieldDeclaration fieldDeclaration : fields) {
+				FieldModel fieldModel = new FieldModel();
+				fieldModel.setModifier(getJModifier(fieldDeclaration));
+				fieldModel.setType(fieldDeclaration.getType().toString());
+				List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
+				for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
+					fieldModel.setFieldName(vdf.getName().toString());
+					list.add(fieldModel);
+				}
+			}		
 
-	private List<FieldModel> getFieldModels(TypeDeclaration node){
-		List<FieldModel> list = new LinkedList<>(); 
-		FieldDeclaration[] fields = node.getFields();
-		for (FieldDeclaration fieldDeclaration : fields) {
-			FieldModel fieldModel = new FieldModel();
-			fieldModel.setModifier(getJModifier(fieldDeclaration));
-			fieldModel.setType(fieldDeclaration.getType().toString());
-			List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
-			for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
-				fieldModel.setFieldName(vdf.getName().toString());
-				list.add(fieldModel);
+		}else if (node instanceof EnumDeclaration) {			  
+			  List<BodyDeclaration> list2= ((EnumDeclaration) node).bodyDeclarations();
+			  for (BodyDeclaration bodyDeclaration : list2) {
+				if (bodyDeclaration instanceof FieldDeclaration) {
+					FieldModel fieldModel = new FieldModel();
+					fieldModel.setModifier(getJModifier((FieldDeclaration)bodyDeclaration));
+					fieldModel.setType(((FieldDeclaration)bodyDeclaration).getType().toString());
+					List<VariableDeclarationFragment> variableDeclarationFragments = ((FieldDeclaration)bodyDeclaration).fragments();
+					for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
+						fieldModel.setFieldName(vdf.getName().toString());
+						list.add(fieldModel);
+					}
+				} else if (bodyDeclaration instanceof MethodDeclaration) {
+					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+				}
 			}
-		}		
+			 
+			 /* FieldDeclaration[] fields = 
+				for (FieldDeclaration fieldDeclaration : fields) {
+					FieldModel fieldModel = new FieldModel();
+					fieldModel.setModifier(getJModifier(fieldDeclaration));
+					fieldModel.setType(fieldDeclaration.getType().toString());
+					List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
+					for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
+						fieldModel.setFieldName(vdf.getName().toString());
+						list.add(fieldModel);
+					}
+				}		*/
+		}
+		
+
+		
 		return list;
 	}
 	
