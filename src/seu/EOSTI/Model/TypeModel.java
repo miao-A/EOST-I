@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.Modifier;
 
+import com.ibm.icu.text.StringTransform;
+
 
 
 public class TypeModel {
@@ -19,9 +21,10 @@ public class TypeModel {
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
-	private List<ConstructorModel> constructorModels = new LinkedList<>();
+//	private List<ConstructorModel> constructorModels = new LinkedList<>();
 	private List<EnumModel> enumClassModels = new LinkedList<>();
 	private List<TypeModel> innerClassModels = new LinkedList<>();
+	private List<String> typeParameters = new LinkedList<>();
 
 	public void setPackage(String name){
 		packageName = name;
@@ -92,7 +95,32 @@ public class TypeModel {
 
 	public void addEnumClassModel(EnumModel enumModel) {
 		this.enumClassModels.add(enumModel);
-	}	
+	}
 
+	public List<String> getTypeParameters() {
+		return typeParameters;
+	}
+
+	public void setTypeParameters(List<String> typeParameters) {
+		this.typeParameters = typeParameters;
+	}	
+	
+	public void addTypeParameter(String typeParameter){
+		this.typeParameters.add(typeParameter);
+	}
+
+	public List<MethodModel> getMethodModels() {
+		return methodModels;
+	}
+
+	public void setMethodModels(List<MethodModel> methodModels) {
+		for (MethodModel methodModel : methodModels) {
+			this.methodModels.add(methodModel);
+		}
+	}
+
+	public void addMethodModel(MethodModel methodModel){
+		this.methodModels.add(methodModel);
+	}
 
 }

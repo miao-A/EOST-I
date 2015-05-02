@@ -37,7 +37,7 @@ public class IntergrationMain {
 			"D:/ProjectEOfHW/junit4.5","D:/ProjectEOfHW/junit4.6","D:/ProjectEOfHW/junit4.7","D:/ProjectEOfHW/junit4.8",
 			"D:/ProjectEOfHW/junit4.9","D:/ProjectEOfHW/junit4.10","D:/ProjectEOfHW/junit4.11"};
 	*/
-	String oldPathOfComponet = "E:/git/japicmp/japicmp/src/main/java/japicmp/model";
+	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.3/src/org/jeditor/diff";
 	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.3/src/org/jeditor/diff";
 	
 	ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);

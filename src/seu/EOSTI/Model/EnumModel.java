@@ -3,6 +3,8 @@ package seu.EOSTI.Model;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.TypeParameter;
+
 public class EnumModel {
 	
 	private String packageName = null;
@@ -14,9 +16,10 @@ public class EnumModel {
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
-	private List<ConstructorModel> constructorModels = new LinkedList<>();
+
 	private List<EnumModel> enumClassModels = new LinkedList<>();
 	private List<TypeModel> innerClassModels = new LinkedList<>();
+	private List<String> typeParameters = new LinkedList<>(); 
 
 	public void setPackage(String name){
 		packageName = name;
@@ -93,6 +96,28 @@ public class EnumModel {
 	
 	public void addEnumClassModel(EnumModel enumClassModel) {
 		this.enumClassModels.add(enumClassModel);
+	}
+	
+	public List<String> getTypeParameters() {
+		return typeParameters;
+	}
+
+	public void setTypeParameters(List<String> typeParameters) {
+		this.typeParameters = typeParameters;
+	}	
+	
+	public void addTypeParameter(String typeParameter){
+		this.typeParameters.add(typeParameter);
+	}
+
+	public List<MethodModel> getMethodModels() {		
+		return methodModels;
+	}
+
+	public void setMethodModels(List<MethodModel> methodModels) {
+		for (MethodModel methodModel : methodModels) {
+			this.methodModels.add(methodModel);
+		}
 	}
 
 }

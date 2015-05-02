@@ -4,16 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
-
-
-
-
-
-
-
-
-import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -24,25 +14,23 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.MarkerAnnotation;
+
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.ParameterizedType;
-import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.QualifiedType;
-import org.eclipse.jdt.core.dom.SimpleType;
+
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.WildcardType;
 
-import seu.EOSTI.Model.AccessModifier;
-import seu.EOSTI.Model.ClassType;
 import seu.EOSTI.Model.EnumModel;
 import seu.EOSTI.Model.FieldModel;
 import seu.EOSTI.Model.JModifier;
+import seu.EOSTI.Model.MethodModel;
+import seu.EOSTI.Model.SingleVariableModel;
 import seu.EOSTI.Model.TypeModel;
 
 public class ComponentVisitor extends ASTVisitor {
@@ -85,10 +73,17 @@ public class ComponentVisitor extends ASTVisitor {
 		TypeModel typeModel = new TypeModel();
 		String string=node.getName().getIdentifier();
 		typeModel.setClassName(string);
+		
 		System.out.println("Type:\t"+node.getName().getIdentifier());
 		if (node.getSuperclassType() != null) {
 			typeModel.setSuperClass(node.getSuperclassType().toString());
 		}		
+		
+		List<TypeParameter> typeParameters = node.typeParameters();
+		for (TypeParameter typeParameter : typeParameters) {
+			System.out.println("typeParameter:"+typeParameter.getName());
+			typeModel.addTypeParameter(typeParameter.getName().toString());
+		}
 		
 		typeModel.setINTERFACE(node.isInterface());
 		
@@ -107,7 +102,10 @@ public class ComponentVisitor extends ASTVisitor {
 		}	
 	
 		//处理field //声明部分记录，未记录后面的初始化	
-		typeModel.setFieldModels(getFieldModels(node));		
+		typeModel.setFieldModels(getFieldModels(node));	
+		
+		//处理method //记录函数签名
+		typeModel.setMethodModels(getMethodModels(node));
 		
 		//处理Body部分类型
 		List bd = node.bodyDeclarations();
@@ -118,18 +116,10 @@ public class ComponentVisitor extends ASTVisitor {
 			} else if(object instanceof TypeDeclaration){
 				typeModel.addInnerClass(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
-				if (((MethodDeclaration) object).isConstructor()) {
-//					System.out.println("Constructor:\t"+((MethodDeclaration) object).getName());
-					List<SingleVariableDeclaration> p = ((MethodDeclaration) object).parameters();
-					for (SingleVariableDeclaration singleVariableDeclaration : p) {
-						System.out.println(singleVariableDeclaration.getType()+" "+singleVariableDeclaration.getName());
-					}
-					
-				} else{
-//					System.out.println("MethodDeclaration:\t"+((MethodDeclaration) object).getName());
-				}
+
 			} else if (object instanceof FieldDeclaration) {
 //				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
+				
 			} else if(object instanceof Initializer) {
 				System.out.println("Initializer");
 			} 
@@ -143,21 +133,24 @@ public class ComponentVisitor extends ASTVisitor {
 		
 		EnumModel enumModel = new EnumModel();
 		String string = node.getName().getIdentifier();
-		typeModel.setClassName(string);
+		enumModel.setClassName(string);
 		System.out.println("EnumType:\t"+node.getName().getIdentifier());
 		
 		//class继承的接口类
 		List<Type> list = node.superInterfaceTypes();
 		for (Type interfaceType : list) {
-			typeModel.setSuperInterfaceType(interfaceType.toString());
+			enumModel.setSuperInterfaceType(interfaceType.toString());
 		}
 
 		//class的属性
-		typeModel.setModifier(getJModifier(node));
-	
-	
+		enumModel.setModifier(getJModifier(node));	
+		
 		//处理field //声明部分记录，未记录后面的初始化	
-		typeModel.setFieldModels(getFieldModels(node));		
+		enumModel.setFieldModels(getFieldModels(node));	
+		
+		//处理method 
+		enumModel.setMethodModels(getMethodModels(node));
+		
 		
 		List<EnumConstantDeclaration> list2= ((EnumDeclaration) node).enumConstants();
 		  for (EnumConstantDeclaration enumConstantDeclaration : list2) {
@@ -176,16 +169,7 @@ public class ComponentVisitor extends ASTVisitor {
 			} else if(object instanceof TypeDeclaration){
 				enumModel.addInnerClass(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
-				if (((MethodDeclaration) object).isConstructor()) {
-//					System.out.println("Constructor:\t"+((MethodDeclaration) object).getName());
-					List<SingleVariableDeclaration> p = ((MethodDeclaration) object).parameters();
-					for (SingleVariableDeclaration singleVariableDeclaration : p) {
-						System.out.println(singleVariableDeclaration.getType()+" "+singleVariableDeclaration.getName());
-					}
-					
-				} else{
-//					System.out.println("MethodDeclaration:\t"+((MethodDeclaration) object).getName());
-				}
+
 			} else if (object instanceof FieldDeclaration) {
 //				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
 			} else if(object instanceof Initializer) {
@@ -211,7 +195,9 @@ public class ComponentVisitor extends ASTVisitor {
 		}else if (node instanceof FieldDeclaration) {
 			ieModifiers = ((FieldDeclaration) node).modifiers();
 			
-		}else  {
+		}else if (node instanceof SingleVariableDeclaration) {
+			ieModifiers = ((SingleVariableDeclaration) node).modifiers();
+		}else {
 			System.out.println("!!!!not include, check!!!");
 		}
 		
@@ -239,6 +225,7 @@ public class ComponentVisitor extends ASTVisitor {
 	}
 
 	private List<FieldModel> getFieldModels(ASTNode node){
+		
 		List<FieldModel> list = new LinkedList<>(); 	
 		if (node instanceof TypeDeclaration) {
 			FieldDeclaration[] fields = ((TypeDeclaration) node).getFields();
@@ -265,28 +252,90 @@ public class ComponentVisitor extends ASTVisitor {
 						fieldModel.setFieldName(vdf.getName().toString());
 						list.add(fieldModel);
 					}
-				} else if (bodyDeclaration instanceof MethodDeclaration) {
-					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-				}
-			}
-			 
-			 /* FieldDeclaration[] fields = 
-				for (FieldDeclaration fieldDeclaration : fields) {
-					FieldModel fieldModel = new FieldModel();
-					fieldModel.setModifier(getJModifier(fieldDeclaration));
-					fieldModel.setType(fieldDeclaration.getType().toString());
-					List<VariableDeclarationFragment> variableDeclarationFragments = fieldDeclaration.fragments();
-					for (VariableDeclarationFragment vdf :variableDeclarationFragments) {
-						fieldModel.setFieldName(vdf.getName().toString());
-						list.add(fieldModel);
-					}
-				}		*/
-		}
-		
-
-		
+				} 
+			}	
+		}		
 		return list;
 	}
+
+	public List<MethodModel> getMethodModels(ASTNode node){
+		
+		List<MethodModel> list = new LinkedList<>(); 	
+		if (node instanceof TypeDeclaration) {
+			MethodDeclaration[] methods = ((TypeDeclaration) node).getMethods();
+			for (MethodDeclaration methodDeclaration : methods) {
+				MethodModel methodModel = new MethodModel();
+				methodModel.setMethodName(methodDeclaration.getName().getIdentifier());
+				methodModel.setModifier(getJModifier(methodDeclaration));
+				if (methodDeclaration.isConstructor()){
+					methodModel.setConstructor(methodDeclaration.isConstructor());					
+				}else {
+					methodModel.setReturnType(methodDeclaration.getReturnType2().toString());
+				}
+				
+				List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
+				for (TypeParameter typeParameter : typeParameters) {
+					System.out.println("typeParameter:"+typeParameter.getName());
+					methodModel.addTypeParameter(typeParameter.getName().toString());					
+				}
+				
+				List<SingleVariableDeclaration> singleVariableDeclarations = methodDeclaration.parameters();
+				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
+					SingleVariableModel svm = new SingleVariableModel();
+					svm.setModifier(getJModifier(singleVariableDeclaration));
+					svm.setType(singleVariableDeclaration.getType().toString());
+					svm.setVarargs(singleVariableDeclaration.isVarargs());
+					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+					methodModel.addFormalParameters(svm);
+				}
+				methodModel.setExtraDimensions(methodDeclaration.getExtraDimensions());
+				List<Name> throwList = methodDeclaration.thrownExceptions();
+				for (Name name : throwList) {
+					methodModel.addThrownList(name.getFullyQualifiedName());
+				}
+				list.add(methodModel);
+			}		
+
+		}else if (node instanceof EnumDeclaration) {			  
+			  List<BodyDeclaration> list2= ((EnumDeclaration) node).bodyDeclarations();
+			  for (BodyDeclaration bodyDeclaration : list2) {
+				if (bodyDeclaration instanceof MethodDeclaration) {
+					MethodModel methodModel = new MethodModel();
+					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
+					if (((MethodDeclaration)bodyDeclaration).isConstructor()){
+						methodModel.setConstructor(((MethodDeclaration)bodyDeclaration).isConstructor());					
+					}else {
+						methodModel.setReturnType(((MethodDeclaration)bodyDeclaration).getReturnType2().toString());
+					}
+					
+					List<TypeParameter> typeParameters = ((MethodDeclaration)bodyDeclaration).typeParameters();
+					for (TypeParameter typeParameter : typeParameters) {
+						System.out.println("typeParameter:"+typeParameter.getName());
+						methodModel.addTypeParameter(typeParameter.getName().toString());					
+					}
+					
+					List<SingleVariableDeclaration> singleVariableDeclarations = ((MethodDeclaration)bodyDeclaration).parameters();
+					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
+						SingleVariableModel svm = new SingleVariableModel();
+						svm.setModifier(getJModifier(singleVariableDeclaration));
+						svm.setType(singleVariableDeclaration.getType().toString());
+						svm.setVarargs(singleVariableDeclaration.isVarargs());
+						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+						methodModel.addFormalParameters(svm);
+					}
+					methodModel.setExtraDimensions(((MethodDeclaration)bodyDeclaration).getExtraDimensions());
+					List<Name> throwList = ((MethodDeclaration)bodyDeclaration).thrownExceptions();
+					for (Name name : throwList) {
+						methodModel.addThrownList(name.getFullyQualifiedName());
+					}
+					list.add(methodModel);				
+				} 
+			
+			}	
+		}		
+		return list;
+	}
+	
 	
 	public TypeModel getTypeModel(){
 		return typeModel;
