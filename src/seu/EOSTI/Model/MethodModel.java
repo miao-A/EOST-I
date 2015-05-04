@@ -1,7 +1,10 @@
 package seu.EOSTI.Model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 
 /**
@@ -31,9 +34,16 @@ public class MethodModel {
 	private String returnType = null;
 	private int extraDimensions = 0;
 	
-	private List<SingleVariableModel> formalParameters = new LinkedList<>();
+	private ArrayList<SingleVariableModel> formalParameters = new ArrayList<SingleVariableModel>();
 	private List<String> thrownList = new LinkedList<>();
 	
+	public String getMethodName(int i, double d) {
+		return methodName;
+	}
+	
+	public String getMethodName(double d, int i) {
+		return methodName;
+	}
 	
 	public String getMethodName() {
 		return methodName;
@@ -87,7 +97,7 @@ public class MethodModel {
 		return formalParameters;
 	}
 
-	public void setFormalParameters(List<SingleVariableModel> formalParameters) {
+	public void setFormalParameters(ArrayList<SingleVariableModel> formalParameters) {
 		this.formalParameters = formalParameters;
 	}
 	
@@ -115,5 +125,23 @@ public class MethodModel {
 		this.thrownList.add(thrown);
 	}
 
+	public boolean equals(Object obj){
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof MethodModel) {
+			if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
+				List<SingleVariableModel> oldList = this.getFormalParameters();
+				List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
+				if (oldList.size() != newList.size()) {
+					return false;
+				}				
+				for (int i = 0; i < oldList.size(); i++) {
+					oldList.get(i).equals(newList.get(i));
+				}
+			}
+		}
+		return false;
+	}
 
 }

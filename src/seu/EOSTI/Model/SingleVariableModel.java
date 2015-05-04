@@ -18,6 +18,9 @@ public class SingleVariableModel {
 	public JModifier getModifier() {
 		return modifier;
 	}
+	
+	
+	
 	public void setModifier(JModifier modifier) {
 		this.modifier = modifier;
 	}
@@ -39,5 +42,20 @@ public class SingleVariableModel {
 	public void setExtraDimensions(int extraDimensions) {
 		this.extraDimensions = extraDimensions;
 	}	
+	
+
+	
+	public boolean equals(Object obj){
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof SingleVariableModel) {
+			if (this.getType().equals(((SingleVariableModel) obj).getType())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 }

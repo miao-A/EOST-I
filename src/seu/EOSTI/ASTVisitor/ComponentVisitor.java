@@ -4,8 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+
+
+
+
+import javassist.compiler.ast.Visitor;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -14,18 +21,19 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.Initializer;
-
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import com.mysql.jdbc.AbandonedConnectionCleanupThread;
+
+import seu.EOSTI.Model.AbstractTypeModel;
 import seu.EOSTI.Model.EnumModel;
 import seu.EOSTI.Model.FieldModel;
 import seu.EOSTI.Model.JModifier;
@@ -37,25 +45,26 @@ public class ComponentVisitor extends ASTVisitor {
 
 	private TypeModel typeModel;
 	private EnumModel enumModel;
+	private String packageName = null;
 	
 	public ComponentVisitor(){
 		typeModel = new TypeModel();
 		enumModel = new EnumModel();
-	}
+	}	
 	
 	public boolean visit(PackageDeclaration node){
-		typeModel.setPackage(node.getName().toString());
-		return true;
+		packageName =node.getName().toString();
+		return true;	
 	}
 
 	public boolean visit(EnumDeclaration node){
 		if (node.isMemberTypeDeclaration()) {
 			return true;
 		}
-		enumModel = getEnumModel(node);
-		return true;
-
 		
+		enumModel = getEnumModel(node);
+		enumModel.setPackage(packageName);
+		return true;		
 	}
 	
 	
@@ -65,12 +74,17 @@ public class ComponentVisitor extends ASTVisitor {
 		if (node.isMemberTypeDeclaration()) {
 			return true;
 		}
+		
+		
 		typeModel = getClassType(node);
+		typeModel.setPackage(packageName);
+		
 		return true;
 	}
 	
 	private TypeModel getClassType(TypeDeclaration node){
 		TypeModel typeModel = new TypeModel();
+		typeModel.setEmpty(false);
 		String string=node.getName().getIdentifier();
 		typeModel.setClassName(string);
 		
@@ -132,6 +146,7 @@ public class ComponentVisitor extends ASTVisitor {
 	private EnumModel getEnumModel(EnumDeclaration node){
 		
 		EnumModel enumModel = new EnumModel();
+		enumModel.setEmpty(false);
 		String string = node.getName().getIdentifier();
 		enumModel.setClassName(string);
 		System.out.println("EnumType:\t"+node.getName().getIdentifier());
@@ -220,9 +235,6 @@ public class ComponentVisitor extends ASTVisitor {
 		return jm;		
 	}
 	
-	private String getTypeName(Type type){
-		return type.toString();		
-	}
 
 	private List<FieldModel> getFieldModels(ASTNode node){
 		
@@ -337,9 +349,20 @@ public class ComponentVisitor extends ASTVisitor {
 	}
 	
 	
-	public TypeModel getTypeModel(){
-		return typeModel;
-	}
-	
+	public AbstractTypeModel getTypeModel() {
+		AbstractTypeModel atm = null ;
+		if (!typeModel.isEmpty()) {
+			System.out.println("get typemodel");
+			atm = typeModel;
+		}
+
+		if (!enumModel.isEmpty()) {
+			System.out.println("get enumModel");
+			atm = enumModel;
+		}
+		
+		return atm;
+		
+	}	
 	
 }

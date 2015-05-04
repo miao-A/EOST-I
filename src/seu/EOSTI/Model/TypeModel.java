@@ -9,10 +9,10 @@ import com.ibm.icu.text.StringTransform;
 
 
 
-public class TypeModel {
+public class TypeModel extends AbstractTypeModel {
 	
 	private String packageName = null;
-	private String className;	
+	private String className = null;	
 	private boolean INTERFACE = false;
 	
 	private List<String> superInterfaceTypes = new LinkedList<>();
@@ -21,10 +21,12 @@ public class TypeModel {
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
-//	private List<ConstructorModel> constructorModels = new LinkedList<>();
 	private List<EnumModel> enumClassModels = new LinkedList<>();
 	private List<TypeModel> innerClassModels = new LinkedList<>();
-	private List<String> typeParameters = new LinkedList<>();
+	private List<String> typeParameters =  new LinkedList<>();
+	private boolean empty = true;
+
+	
 
 	public void setPackage(String name){
 		packageName = name;
@@ -121,6 +123,16 @@ public class TypeModel {
 
 	public void addMethodModel(MethodModel methodModel){
 		this.methodModels.add(methodModel);
+	}
+
+
+	public boolean isEmpty() {
+		return empty;
+	}
+
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
 	}
 
 }

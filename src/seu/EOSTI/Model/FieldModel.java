@@ -29,4 +29,13 @@ public class FieldModel {
 		this.modifier = modifier;
 	}
 	
+	public boolean equals(Object obj){
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof FieldModel) {
+			return this.getFieldName().equals(((FieldModel) obj).getFieldName())&&this.getType().equals(((FieldModel) obj).getFieldName());
+		}
+		return false;
+	}
 }

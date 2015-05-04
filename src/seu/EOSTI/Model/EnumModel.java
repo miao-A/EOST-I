@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.TypeParameter;
 
-public class EnumModel {
+public class EnumModel extends AbstractTypeModel{
 	
 	private String packageName = null;
 	private String className;	
@@ -20,6 +20,8 @@ public class EnumModel {
 	private List<EnumModel> enumClassModels = new LinkedList<>();
 	private List<TypeModel> innerClassModels = new LinkedList<>();
 	private List<String> typeParameters = new LinkedList<>(); 
+	
+	private boolean empty = true;
 
 	public void setPackage(String name){
 		packageName = name;
@@ -118,6 +120,14 @@ public class EnumModel {
 		for (MethodModel methodModel : methodModels) {
 			this.methodModels.add(methodModel);
 		}
+	}
+
+	public boolean isEmpty() {
+		return empty;
+	}
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
 	}
 
 }

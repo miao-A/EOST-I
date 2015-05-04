@@ -8,6 +8,7 @@ import japicmp.model.JApiMethod;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -37,7 +38,7 @@ public class IntergrationMain {
 			"D:/ProjectEOfHW/junit4.5","D:/ProjectEOfHW/junit4.6","D:/ProjectEOfHW/junit4.7","D:/ProjectEOfHW/junit4.8",
 			"D:/ProjectEOfHW/junit4.9","D:/ProjectEOfHW/junit4.10","D:/ProjectEOfHW/junit4.11"};
 	*/
-	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.3/src/org/jeditor/diff";
+	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.2/src/org/jeditor/diff";
 	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.3/src/org/jeditor/diff";
 	
 	ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
@@ -80,6 +81,9 @@ public class IntergrationMain {
 
 		
 	}*/
+	
+
+	
 	System.out.println("end!");
 	}
 
