@@ -22,10 +22,11 @@ public class TypeChangeRecoder {
 	private TypeParameterRecoder typeParameterRecoder;
 	private SuperInterfaceClassRecoder superInterfaceClassRecoder;
 	private FieldRecoder fieldRecoder;
-	private MethodRecoder methodRecoder;	
-		
+	private MethodRecoder methodRecoder;
+	private EnumConstantRecoder enumConstantRecoder;
 	
-	private List<EnumModel> enumClassModels = new LinkedList<>();
+
+
 	
 	
 	
@@ -41,6 +42,12 @@ public class TypeChangeRecoder {
 			superClassRecoder =new SuperClassRecoder(((TypeModel)oldTypeModel).getSuperClass(),((TypeModel)newTypeModel).getSuperClass());
 
 		}
+		
+		if ((oldTypeModel instanceof EnumModel)&&(newTypeModel instanceof EnumModel)) {
+			enumConstantRecoder =new EnumConstantRecoder(((EnumModel)oldTypeModel).getEnumConstant(),((EnumModel)newTypeModel).getEnumConstant());
+		}
+		
+		
 		
 		modifierRecoder = new ModifierRecoder(oldTypeModel.getModifier(),newTypeModel.getModifier());
 		typeParameterRecoder = new TypeParameterRecoder(oldTypeModel.getSuperInterfaceTypes(), newTypeModel.getSuperInterfaceTypes());
