@@ -27,14 +27,14 @@ public class FieldRecoder {
 	public FieldRecoder(List<FieldModel> oldFieldModels,List<FieldModel> newFieldModels) {
 		this.oldFieldModels = oldFieldModels;
 		this.newFieldModels = newFieldModels;
-		compareFieldModel();
+		this.changeStatus = compareFieldModel();
 	}
 	
-	public void compareFieldModel(){
+	public ChangeStatus compareFieldModel(){
 		if (oldFieldModels.containsAll(newFieldModels)&&newFieldModels.containsAll(oldFieldModels)) {
-			changeStatus = ChangeStatus.UNCHANGED;
+			this.changeStatus = ChangeStatus.UNCHANGED;
 		}else{
-			changeStatus = ChangeStatus.MODIFIED;
+			this.changeStatus = ChangeStatus.MODIFIED;
 			for (FieldModel oldFieldModel : oldFieldModels) {
 				if (!newFieldModels.contains(oldFieldModel)) {
 					removedFieldModels.add(oldFieldModel);
@@ -61,6 +61,7 @@ public class FieldRecoder {
 				}
 			}
 		}
+		return this.changeStatus;
 	}
 
 	public ChangeStatus getChangeStatus() {

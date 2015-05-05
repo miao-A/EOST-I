@@ -126,9 +126,9 @@ public class ComponentVisitor extends ASTVisitor {
 		for (Object object : bd) {
 			if (object instanceof EnumDeclaration) {
 //				System.out.println("EnumDeclaration:\t"+((EnumDeclaration) object).getName());
-				typeModel.addEnumClassModel(getEnumModel((EnumDeclaration) object));
+				typeModel.addInnerClassModel(getEnumModel((EnumDeclaration) object));
 			} else if(object instanceof TypeDeclaration){
-				typeModel.addInnerClass(getClassType((TypeDeclaration)object));
+				typeModel.addInnerClassModel(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
 
 			} else if (object instanceof FieldDeclaration) {
@@ -180,9 +180,9 @@ public class ComponentVisitor extends ASTVisitor {
 		for (Object object : bd) {
 			if (object instanceof EnumDeclaration) {
 //				System.out.println("EnumDeclaration:\t"+((EnumDeclaration) object).getName());
-				enumModel.addEnumClassModel(getEnumModel((EnumDeclaration) object));
+				enumModel.addInnerClassModel(getEnumModel((EnumDeclaration) object));
 			} else if(object instanceof TypeDeclaration){
-				enumModel.addInnerClass(getClassType((TypeDeclaration)object));
+				enumModel.addInnerClassModel(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
 
 			} else if (object instanceof FieldDeclaration) {

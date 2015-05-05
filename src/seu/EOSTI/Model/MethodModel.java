@@ -135,10 +135,14 @@ public class MethodModel {
 				List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
 				if (oldList.size() != newList.size()) {
 					return false;
-				}				
-				for (int i = 0; i < oldList.size(); i++) {
-					oldList.get(i).equals(newList.get(i));
 				}
+				boolean flag = true;
+				for (int i = 0; i < oldList.size(); i++) {
+					if (!oldList.get(i).equals(newList.get(i))) {
+						flag = false;
+					};
+				}
+				return flag;
 			}
 		}
 		return false;

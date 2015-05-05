@@ -4,12 +4,21 @@ public class SuperClassRecoder {
 	
 	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
 	
-	private String oldSuperClass = new String();
-	private String newSuperClass = new String();
+	private String oldSuperClass = "";
+	private String newSuperClass = "";
 	
 	public SuperClassRecoder(String oldString,String newString){
-		oldSuperClass = oldString;
-		newSuperClass = newString;
+		if (oldString == null) {
+			oldSuperClass = "";
+		}else {
+			oldSuperClass = oldString;
+		}
+		
+		if (newString == null) {
+			newSuperClass = "";
+		}else {
+			newSuperClass = newString;
+		}
 		changeStatus = compareSuperClass();
 	}	
 	

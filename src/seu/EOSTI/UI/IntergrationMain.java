@@ -27,19 +27,9 @@ public class IntergrationMain {
 	
 	public static void main(String args[]) {
 		
-//		String [] arrayOfProjects = {"E:/GitHub/EOST-I"};
-		
-//		String [] arrayOfProjects = {"D:/ProjectEOfHW/junit/junit3.4/src/junit/awtui"};	
-//		String [] arrayOfProjects = {"D:/ProjectEOfHW/jEditor/jeditor0.2"};	
-	
-/*	String [] arrayOfProjects = {"D:/ProjectEOfHW/junit3.4","D:/ProjectEOfHW/junit3.5","D:/ProjectEOfHW/junit3.6",
-			"D:/ProjectEOfHW/junit3.7","D:/ProjectEOfHW/junit3.8","D:/ProjectEOfHW/junit3.9","D:/ProjectEOfHW/junit4.0",
-			"D:/ProjectEOfHW/junit4.1","D:/ProjectEOfHW/junit4.2","D:/ProjectEOfHW/junit4.3","D:/ProjectEOfHW/junit4.4",
-			"D:/ProjectEOfHW/junit4.5","D:/ProjectEOfHW/junit4.6","D:/ProjectEOfHW/junit4.7","D:/ProjectEOfHW/junit4.8",
-			"D:/ProjectEOfHW/junit4.9","D:/ProjectEOfHW/junit4.10","D:/ProjectEOfHW/junit4.11"};
-	*/
+
 	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.2/src/org/jeditor/diff";
-	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.3/src/org/jeditor/diff";
+	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.2/src/org/jeditor/app";
 	
 	ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
 	componentParser.parser();

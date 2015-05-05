@@ -11,8 +11,8 @@ import com.ibm.icu.text.StringTransform;
 
 public class TypeModel extends AbstractTypeModel {
 	
-	private String packageName = null;
-	private String className = null;	
+	private String packageName = "";
+	private String className = "";	
 	private boolean INTERFACE = false;
 	
 	private List<String> superInterfaceTypes = new LinkedList<>();
@@ -21,15 +21,23 @@ public class TypeModel extends AbstractTypeModel {
 	
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
-	private List<EnumModel> enumClassModels = new LinkedList<>();
-	private List<TypeModel> innerClassModels = new LinkedList<>();
+	
+/*	private List<EnumModel> enumClassModels = new LinkedList<>();
+	private List<TypeModel> innerClassModels = new LinkedList<>();*/
+	
+	private List<AbstractTypeModel> innerClassModels = new LinkedList<>();
 	private List<String> typeParameters =  new LinkedList<>();
 	private boolean empty = true;
 
 	
 
 	public void setPackage(String name){
-		packageName = name;
+		if (name == null) {
+			packageName = "";
+		}else {
+			packageName = name;
+		}
+		
 	}
 	
 	public String getPackage(){
@@ -91,13 +99,13 @@ public class TypeModel extends AbstractTypeModel {
 		}
 	}
 
-	public List<EnumModel> getEnumClassModels() {
+	/*public List<EnumModel> getEnumClassModels() {
 		return enumClassModels;
 	}
 
 	public void addEnumClassModel(EnumModel enumModel) {
 		this.enumClassModels.add(enumModel);
-	}
+	}*/
 
 	public List<String> getTypeParameters() {
 		return typeParameters;
@@ -134,5 +142,40 @@ public class TypeModel extends AbstractTypeModel {
 	public void setEmpty(boolean empty) {
 		this.empty = empty;
 	}
+
+	@Override
+	public List<AbstractTypeModel> getInnerClassModels() {
+		// TODO Auto-generated method stub
+		return innerClassModels;
+	}
+
+	@Override
+	public void setInnerClassModels(List<AbstractTypeModel> innerClassModels) {
+		// TODO Auto-generated method stub
+		this.innerClassModels = innerClassModels;
+	}
+
+	@Override
+	public void addInnerClassModel(AbstractTypeModel innerClassModel) {
+		// TODO Auto-generated method stub
+		this.innerClassModels.add(innerClassModel);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (this == obj) {
+			return true;			
+		}
+		if (obj instanceof TypeModel) {
+			TypeModel other = (TypeModel) obj;
+			if (this.getPackage().equals(other.getPackage())&&this.getClassName().equals(other.getClassName())) {
+				return true;
+			}
+		}	
+		return false;
+	}
+	
+	
 
 }

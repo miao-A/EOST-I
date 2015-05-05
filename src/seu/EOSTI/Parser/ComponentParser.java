@@ -57,13 +57,10 @@ public class ComponentParser {
 		List<String> newfilelist = readnewFile.readJavaFiles();
 		sourceFilePaths = newfilelist.toArray(new String[newfilelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], newComponentRequertor, null);
+		parser.createASTs(sourceFilePaths,  null, new String[0], newComponentRequertor, null);	
 		
-		oldComponentRequertor.getTypeModels();
-		newComponentRequertor.getTypeModels();
-		
-		ClassComparator cStatusModel = new ClassComparator(oldComponentRequertor.getTypeModels(),newComponentRequertor.getTypeModels());
-		
+		ClassComparator csModel = new ClassComparator(oldComponentRequertor.getTypeModels(),newComponentRequertor.getTypeModels());
+		csModel.getTypeChangeRecoders();
 	}	
 
 }

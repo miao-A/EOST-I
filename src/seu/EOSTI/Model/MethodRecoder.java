@@ -53,7 +53,7 @@ public class MethodRecoder {
 			
 			for (MethodModel newMethodModel : newMethodModels) {
 				if (!oldMethodModels.contains(newMethodModel)) {
-					newMethodModels.add(newMethodModel);
+					newAddMethodModels.add(newMethodModel);
 				}			
 			}
 			

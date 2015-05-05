@@ -37,29 +37,21 @@ public abstract class AbstractTypeModel {
 	
 	public abstract void setFieldModels(List<FieldModel> fieldModels);
 	
-	public abstract List<EnumModel> getEnumClassModels();
+	/*public abstract List<EnumModel> getEnumClassModels();
 
-	public abstract void addEnumClassModel(EnumModel enumModel);
+	public abstract void addEnumClassModel(EnumModel enumModel);*/
 	
 	public abstract List<MethodModel> getMethodModels();
 
 	public abstract void setMethodModels(List<MethodModel> methodModels);
 	
-	public boolean equals(Object obj){
-		if (this == obj) {
-			return true;			
-		}
-		
-		if (obj == null) {
-			return false;
-		}
-		
-		AbstractTypeModel other = (AbstractTypeModel) obj;
-		if (this.getPackage().equals(other.getPackage())&&this.getClassName().equals(other.getClassName())) {
-			return true;
-		}
-		
-		return false;
-	}
+	public abstract List<AbstractTypeModel> getInnerClassModels();
+	
+	public abstract void setInnerClassModels(List<AbstractTypeModel> innerClassModels);
+	
+	public abstract void addInnerClassModel(AbstractTypeModel innerClassModel);	
+	
+	public abstract boolean equals(Object obj);
 
+	
 }

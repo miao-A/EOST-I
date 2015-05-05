@@ -34,7 +34,7 @@ public class FieldModel {
 			return true;
 		}
 		if (obj instanceof FieldModel) {
-			return this.getFieldName().equals(((FieldModel) obj).getFieldName())&&this.getType().equals(((FieldModel) obj).getFieldName());
+			return this.getFieldName().equals(((FieldModel) obj).getFieldName())&&this.getType().equals(((FieldModel) obj).getType());
 		}
 		return false;
 	}

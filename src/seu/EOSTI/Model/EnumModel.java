@@ -17,8 +17,10 @@ public class EnumModel extends AbstractTypeModel{
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
 
-	private List<EnumModel> enumClassModels = new LinkedList<>();
-	private List<TypeModel> innerClassModels = new LinkedList<>();
+/*	private List<EnumModel> enumClassModels = new LinkedList<>();
+	private List<TypeModel> innerClassModels = new LinkedList<>()*/;
+	
+	private List<AbstractTypeModel> innerClassModels = new LinkedList<>();
 	private List<String> typeParameters = new LinkedList<>(); 
 	
 	private boolean empty = true;
@@ -39,9 +41,9 @@ public class EnumModel extends AbstractTypeModel{
 		return className;
 	}
 	
-	public void addInnerClass(TypeModel typeModel) {
+/*	public void addInnerClass(AbstractTypeModel typeModel) {
 		innerClassModels.add(typeModel);		
-	}
+	}*/
 	
 	public void setModifier(JModifier jModifier){
 		modifier = jModifier;
@@ -88,7 +90,7 @@ public class EnumModel extends AbstractTypeModel{
 		this.enumConstant.add(enumConstant);
 	}
 
-	public List<EnumModel> getEnumClassModels() {
+	/*public List<EnumModel> getEnumClassModels() {
 		return enumClassModels;
 	}
 
@@ -98,7 +100,7 @@ public class EnumModel extends AbstractTypeModel{
 	
 	public void addEnumClassModel(EnumModel enumClassModel) {
 		this.enumClassModels.add(enumClassModel);
-	}
+	}*/
 	
 	public List<String> getTypeParameters() {
 		return typeParameters;
@@ -128,6 +130,48 @@ public class EnumModel extends AbstractTypeModel{
 
 	public void setEmpty(boolean empty) {
 		this.empty = empty;
+	}
+
+	@Override
+	public void addInnerClass(TypeModel typeModel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	@Override
+	public List<AbstractTypeModel> getInnerClassModels() {
+		// TODO Auto-generated method stub
+		return innerClassModels;
+	}
+
+	@Override
+	public void setInnerClassModels(List<AbstractTypeModel> innerClassModels) {
+		// TODO Auto-generated method stub
+		this.innerClassModels = innerClassModels;
+		
+	}
+
+	@Override
+	public void addInnerClassModel(AbstractTypeModel innerClassModel) {
+		// TODO Auto-generated method stub
+		this.innerClassModels.add(innerClassModel);		
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (this == obj) {
+			return true;			
+		}
+		if (obj instanceof EnumModel) {
+			EnumModel other = (EnumModel) obj;
+			if (this.getPackage().equals(other.getPackage())&&this.getClassName().equals(other.getClassName())) {
+				return true;
+			}
+		}	
+		return false;
 	}
 
 }

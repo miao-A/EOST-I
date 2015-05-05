@@ -6,17 +6,11 @@ import java.util.List;
 import org.omg.CORBA.PRIVATE_MEMBER;
 
 public class ClassComparator {
-
-
 	
 	private List<AbstractTypeModel> removedType = new LinkedList<>();
 	private List<AbstractTypeModel> newType = new LinkedList<>();
 	
-	private TypeChangeRecoder typeChangeRecoder;
-	
-
-	
-	
+	private List<TypeChangeRecoder>  typeChangeRecoders = new LinkedList<>();
 	
 	public ClassComparator(List<AbstractTypeModel> oldModels,List<AbstractTypeModel> newModels){
 
@@ -35,16 +29,17 @@ public class ClassComparator {
 		for (AbstractTypeModel newTypeModel : newModels) {
 			if (oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				typeChangeRecoder = new TypeChangeRecoder(oldModels.get(index),newTypeModel);
-
+				typeChangeRecoders.add(new TypeChangeRecoder(oldModels.get(index),newTypeModel));
 			}
 		}
 		
 	}
 	
-	
-	
-	
-
+	public List<TypeChangeRecoder> getTypeChangeRecoders(){
+		
+		removedType.clear();
+		newType.clear();;
+		return typeChangeRecoders;
+	}
 	
 }

@@ -25,19 +25,20 @@ public class TypeChangeRecoder {
 	private MethodRecoder methodRecoder;
 	private EnumConstantRecoder enumConstantRecoder;
 	
-
-
-	
+	private List<AbstractTypeModel> newInnerTypeModels = new LinkedList<>();
+	private List<AbstractTypeModel> removedInnerTypeModels = new LinkedList<>();
+	private List<AbstractTypeModel> unchangedInnerTypeModels = new LinkedList<>();
+	private List<AbstractTypeModel> modifiedInnerTypeModels = new LinkedList<>();
 	
 	
 	public TypeChangeRecoder(AbstractTypeModel oldModel,AbstractTypeModel newModel){
 		this.oldTypeModel = oldModel;
 		this.newTypeModel = newModel;
-		compareRun();
+		changeStatus = compareRun();
 	}
 	
 	
-	public void compareRun(){
+	public ChangeStatus compareRun(){
 		if ((oldTypeModel instanceof TypeModel)&&(newTypeModel instanceof TypeModel)) {
 			superClassRecoder =new SuperClassRecoder(((TypeModel)oldTypeModel).getSuperClass(),((TypeModel)newTypeModel).getSuperClass());
 
@@ -62,14 +63,42 @@ public class TypeChangeRecoder {
 		}else {
 			this.changeStatus = ChangeStatus.MODIFIED;
 		}
+		
+		
+		List<AbstractTypeModel> oldInners = oldTypeModel.getInnerClassModels();
+		List<AbstractTypeModel> newInners = newTypeModel.getInnerClassModels();
+		
+		for (AbstractTypeModel oldInner : oldInners) {
+			if (!newInners.contains(oldInner)) {
+				removedInnerTypeModels.add(oldInner);
+				this.changeStatus = ChangeStatus.MODIFIED;
+			}
+		}
+		
+		for (AbstractTypeModel newInner : newInners) {
+			if (!oldInners.contains(newInner)) {
+				newInnerTypeModels.add(newInner);
+				this.changeStatus = ChangeStatus.MODIFIED;
+			}
+		}
+		
+		for (AbstractTypeModel newInner : newInners) {
+			if (oldInners.contains(newInner)) {
+				int index = oldInners.indexOf(newInner);
+				TypeChangeRecoder innertypeChangeRecoder = new TypeChangeRecoder(oldInners.get(index), newInner); 
+				if (isUnchanged(innertypeChangeRecoder.getChangeStatus())) {
+					unchangedInnerTypeModels.add(newInner);
+				}else {
+					modifiedInnerTypeModels.add(newInner);
+					this.changeStatus = ChangeStatus.MODIFIED;
+				}
+			}
+		}
+		
+		return this.changeStatus;		
 	}	
 	
 	
-
-	public void setTypeChangeStatus() {
-		
-	
-	}
 	
 	private boolean isUnchanged(ChangeStatus changeStatus) {
 		return changeStatus.equals(ChangeStatus.UNCHANGED);
