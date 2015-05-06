@@ -31,19 +31,11 @@ public class MethodModel {
 	private JModifier modifier = new JModifier();
 	private List<String> typeParameters = new LinkedList<>();
 	
-	private String returnType = null;
+	private String returnType = "";
 	private int extraDimensions = 0;
 	
 	private ArrayList<SingleVariableModel> formalParameters = new ArrayList<SingleVariableModel>();
-	private List<String> thrownList = new LinkedList<>();
-	
-	public String getMethodName(int i, double d) {
-		return methodName;
-	}
-	
-	public String getMethodName(double d, int i) {
-		return methodName;
-	}
+	private List<String> thrownList = new LinkedList<>();	
 	
 	public String getMethodName() {
 		return methodName;
@@ -89,8 +81,10 @@ public class MethodModel {
 	public void setReturnType(String returnType) {
 		if (returnType == null) {
 			setConstructor(true);
+		}else {
+			this.returnType = returnType;
 		}
-		this.returnType = returnType;
+	
 	}
 
 	public List<SingleVariableModel> getFormalParameters() {

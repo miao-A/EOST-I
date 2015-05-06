@@ -22,6 +22,10 @@ public class SuperClassRecoder {
 		changeStatus = compareSuperClass();
 	}	
 	
+	public SuperClassRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
 	}

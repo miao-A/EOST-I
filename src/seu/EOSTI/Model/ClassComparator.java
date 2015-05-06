@@ -33,13 +33,19 @@ public class ClassComparator {
 			}
 		}
 		
+		this.getinfo();
+		
 	}
 	
 	public List<TypeChangeRecoder> getTypeChangeRecoders(){
-		
-		removedType.clear();
-		newType.clear();;
+
 		return typeChangeRecoders;
+	}
+	
+	public void getinfo(){
+		for (TypeChangeRecoder tpr : typeChangeRecoders) {
+			tpr.getInfoOfTypeRecoder();
+		}
 	}
 	
 }

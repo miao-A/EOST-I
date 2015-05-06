@@ -28,8 +28,12 @@ public class IntergrationMain {
 	public static void main(String args[]) {
 		
 
-	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.2/src/org/jeditor/diff";
-	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.2/src/org/jeditor/app";
+	String oldPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.4.1";
+	String newPathOfComponet = "D:/ProjectEOfHW/jEditor/jEditor0.4.2";
+		
+/*	String oldPathOfComponet = "E:/git/japicmp-japicmp-base-0.3.1/japicmp/src/main";
+	String newPathOfComponet = "E:/git/japicmp-japicmp-base-0.3.1/japicmp/src/main";*/
+
 	
 	ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
 	componentParser.parser();

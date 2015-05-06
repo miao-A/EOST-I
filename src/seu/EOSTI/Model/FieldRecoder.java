@@ -16,9 +16,7 @@ public class FieldRecoder {
 	private List<FieldModel> unchangedFieldModels = new LinkedList<>();
 	private List<FieldModel> modifiedFieldModels = new LinkedList<>();
 	
-	private Map<FieldModel, ChangeStatus> modifierRecoderMap = new HashMap<FieldModel, ChangeStatus>();
-	
-	
+	private Map<FieldModel, ChangeStatus> modifierRecoderMap = new HashMap<FieldModel, ChangeStatus>();	
 	
 	/*private String fieldName;
 	private String type;
@@ -30,6 +28,10 @@ public class FieldRecoder {
 		this.changeStatus = compareFieldModel();
 	}
 	
+	public FieldRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public ChangeStatus compareFieldModel(){
 		if (oldFieldModels.containsAll(newFieldModels)&&newFieldModels.containsAll(oldFieldModels)) {
 			this.changeStatus = ChangeStatus.UNCHANGED;
@@ -43,7 +45,7 @@ public class FieldRecoder {
 			
 			for (FieldModel newFieldModel : newFieldModels) {
 				if (!oldFieldModels.contains(newFieldModel)) {
-					newFieldModels.add(newFieldModel);
+					newAddFieldModels.add(newFieldModel);
 				}			
 			}
 			
@@ -71,5 +73,23 @@ public class FieldRecoder {
 	public void setChangeStatus(ChangeStatus changeStatus) {
 		this.changeStatus = changeStatus;
 	}	
+	
+	public List<FieldModel> getNewAddFieldModels(){
+		return newAddFieldModels;
+	}
+	
+	public List<FieldModel> getRemovedFieldModels(){
+		return removedFieldModels;
+	}
+	
+	public List<FieldModel> getUnchangedFieldModels(){
+		return unchangedFieldModels;
+	}
+	
+
+	public List<FieldModel> getModifiedFieldModels() {
+		// TODO Auto-generated method stub
+		return modifiedFieldModels;
+	}
 	
 }

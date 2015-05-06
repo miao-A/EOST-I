@@ -9,13 +9,14 @@ public class EnumConstantRecoder {
 	
 	private List<String> oldEnumConstants = new LinkedList<>();
 	private List<String> newEnumConstants = new LinkedList<>();
-
+	
+	public EnumConstantRecoder(){
+	}
 	
 	public EnumConstantRecoder(List<String> olds,List<String> news){
 		oldEnumConstants = olds;
 		newEnumConstants = news;
-		changeStatus = compareEnumConstants();
-		
+		changeStatus = compareEnumConstants();		
 	}
 	
 	

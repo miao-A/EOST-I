@@ -1,7 +1,9 @@
 package seu.EOSTI.ASTVisitor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 
 
 
@@ -242,6 +244,7 @@ public class ComponentVisitor extends ASTVisitor {
 		if (node instanceof TypeDeclaration) {
 			FieldDeclaration[] fields = ((TypeDeclaration) node).getFields();
 			for (FieldDeclaration fieldDeclaration : fields) {
+				
 				FieldModel fieldModel = new FieldModel();
 				fieldModel.setModifier(getJModifier(fieldDeclaration));
 				fieldModel.setType(fieldDeclaration.getType().toString());
@@ -298,6 +301,7 @@ public class ComponentVisitor extends ASTVisitor {
 					svm.setType(singleVariableDeclaration.getType().toString());
 					svm.setVarargs(singleVariableDeclaration.isVarargs());
 					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+					svm.setName(singleVariableDeclaration.getName().toString());
 					methodModel.addFormalParameters(svm);
 				}
 				methodModel.setExtraDimensions(methodDeclaration.getExtraDimensions());
@@ -313,6 +317,9 @@ public class ComponentVisitor extends ASTVisitor {
 			  for (BodyDeclaration bodyDeclaration : list2) {
 				if (bodyDeclaration instanceof MethodDeclaration) {
 					MethodModel methodModel = new MethodModel();
+
+					
+					methodModel.setMethodName(((MethodDeclaration) bodyDeclaration).getName().toString());
 					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
 					if (((MethodDeclaration)bodyDeclaration).isConstructor()){
 						methodModel.setConstructor(((MethodDeclaration)bodyDeclaration).isConstructor());					

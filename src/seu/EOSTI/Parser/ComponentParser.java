@@ -1,7 +1,10 @@
 package seu.EOSTI.Parser;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -17,21 +20,27 @@ public class ComponentParser {
 	private String oldPathOfComponet;
 	private String newPathOfComponet;
 	private List<AbstractTypeModel> changeRecoder;
-
-	private  ASTParser parser;
-
 	
 //	private static Vector<InfoOfExtensibility> vec = new Vector<>();
 	
 	public  ComponentParser(String oldPathOfComponet,String newPathOfComponet) {
 		// TODO Auto-generated constructor stub
 		this.oldPathOfComponet = oldPathOfComponet;
-		this.newPathOfComponet = newPathOfComponet;		
+		this.newPathOfComponet = newPathOfComponet;
+		changeRecoder = new LinkedList<>();
 	}
 	
-	public void parser()  {
+	
+	
+	public void parser()  {	
+				
+		ClassComparator csModel = new ClassComparator(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));
+		csModel.getTypeChangeRecoders();
+	}	
+	
+	public List<AbstractTypeModel> parserComponet(String pathOfComponet)  {
 		// create a AST parser
-
+		ASTParser parser;
 		parser = ASTParser.newParser(AST.JLS4);
 	
 		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
@@ -45,22 +54,13 @@ public class ComponentParser {
 		parser.setBindingsRecovery(true);
 		parser.setStatementsRecovery(true);
 		
-		ComponentRequertor oldComponentRequertor = new ComponentRequertor();
-		ReadFile readoldFile = new ReadFile(oldPathOfComponet);		
-		List<String> oldfilelist = readoldFile.readJavaFiles();
-		String[] sourceFilePaths = oldfilelist.toArray(new String[oldfilelist.size()]);
+		ComponentRequertor ComponentRequertor = new ComponentRequertor();
+		ReadFile readFile = new ReadFile(pathOfComponet);		
+		List<String> filelist = readFile.readJavaFiles();
+		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], oldComponentRequertor, null);
-		
-		ComponentRequertor newComponentRequertor = new ComponentRequertor();
-		ReadFile readnewFile = new ReadFile(newPathOfComponet);		
-		List<String> newfilelist = readnewFile.readJavaFiles();
-		sourceFilePaths = newfilelist.toArray(new String[newfilelist.size()]);
-		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], newComponentRequertor, null);	
-		
-		ClassComparator csModel = new ClassComparator(oldComponentRequertor.getTypeModels(),newComponentRequertor.getTypeModels());
-		csModel.getTypeChangeRecoders();
+		parser.createASTs(sourceFilePaths,  null, new String[0], ComponentRequertor, null);	
+		return ComponentRequertor.getTypeModels();
 	}	
 
 }

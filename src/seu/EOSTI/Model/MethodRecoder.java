@@ -39,6 +39,10 @@ public class MethodRecoder {
 		compareMethodModel();
 	}
 	
+	public MethodRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void compareMethodModel(){
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
@@ -79,5 +83,21 @@ public class MethodRecoder {
 
 	public void setChangeStatus(ChangeStatus changeStatus) {
 		this.changeStatus = changeStatus;
+	}
+	
+	public List<MethodModel> getNewAddMethodModels(){
+		return newAddMethodModels;
+	}
+	
+	public List<MethodModel> getRemovedMethodModels(){
+		return removedMethodModels;
+	}
+	
+	public List<MethodModel> getUnchangedMethodModels(){
+		return unchangedMethodModels;
+	}
+	
+	public List<MethodModel> getModifiedMethodModels(){
+		return modifiedMethodModels;
 	}
 }

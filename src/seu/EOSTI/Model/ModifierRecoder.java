@@ -33,6 +33,10 @@ public class ModifierRecoder {
 		compareModifier();
 	}
 	
+	public ModifierRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void compareModifier() {
 		// TODO Auto-generated method stub		
 		

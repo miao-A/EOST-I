@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.TypeParameter;
 
 public class EnumModel extends AbstractTypeModel{
 	
-	private String packageName = null;
+	private String packageName = "";
 	private String className;	
 	private List<String> superInterfaceTypes = new LinkedList<>();
 	private JModifier modifier = new JModifier();
@@ -26,7 +26,12 @@ public class EnumModel extends AbstractTypeModel{
 	private boolean empty = true;
 
 	public void setPackage(String name){
-		packageName = name;
+		if (name == null) {
+			packageName = "";
+		}else{
+			packageName = name;
+		}
+		
 	}
 	
 	public String getPackage(){

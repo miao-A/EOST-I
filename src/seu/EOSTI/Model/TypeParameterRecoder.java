@@ -18,6 +18,11 @@ public class TypeParameterRecoder {
 	}
 	
 	
+	public TypeParameterRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
 	}
@@ -33,4 +38,6 @@ public class TypeParameterRecoder {
 			return ChangeStatus.MODIFIED;
 		}
 	}	
+	
+	
 }

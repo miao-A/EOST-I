@@ -18,6 +18,11 @@ public class SuperInterfaceClassRecoder {
 	}
 	
 	
+	public SuperInterfaceClassRecoder() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
 	}
