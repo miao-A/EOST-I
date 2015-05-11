@@ -31,21 +31,13 @@ public class ClassComparator {
 				int index = oldModels.indexOf(newTypeModel);
 				typeChangeRecoders.add(new TypeChangeRecoder(oldModels.get(index),newTypeModel));
 			}
-		}
-		
-		this.getinfo();
-		
+		}		
 	}
 	
 	public List<TypeChangeRecoder> getTypeChangeRecoders(){
 
 		return typeChangeRecoders;
-	}
+	}	
 	
-	public void getinfo(){
-		for (TypeChangeRecoder tpr : typeChangeRecoders) {
-			tpr.getInfoOfTypeRecoder();
-		}
-	}
 	
 }

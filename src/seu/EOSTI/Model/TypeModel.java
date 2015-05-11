@@ -175,6 +175,18 @@ public class TypeModel extends AbstractTypeModel {
 		}	
 		return false;
 	}
+
+	@Override
+	public int getPublicMethodNum() {
+		// TODO Auto-generated method stub
+		int count = 0;
+		for (MethodModel methodModel :  methodModels) {
+			if (methodModel.getModifier().isPUBLIC()) {
+				count++;
+			}
+		}
+		return count;
+	}
 	
 	
 

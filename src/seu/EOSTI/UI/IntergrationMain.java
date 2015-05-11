@@ -24,7 +24,7 @@ import seu.EOSTI.Parser.ProjectParser;
 
 
 public class IntergrationMain {
-	
+		
 	public static void main(String args[]) {
 		
 

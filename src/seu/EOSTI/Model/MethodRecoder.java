@@ -15,9 +15,9 @@ public class MethodRecoder {
 	private List<MethodModel> newAddMethodModels = new LinkedList<>();
 	private List<MethodModel> removedMethodModels = new LinkedList<>();
 	private List<MethodModel> unchangedMethodModels = new LinkedList<>();
-	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
+//	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
 	
-	private Map<MethodModel, ChangeStatus> modifierRecoderMap = new HashMap<MethodModel, ChangeStatus>();
+	private Map<MethodModel, MethodModel> modifiedMethodMap = new HashMap<MethodModel, MethodModel>();
 	
 	/*
 	 * private String methodName;	
@@ -67,8 +67,8 @@ public class MethodRecoder {
 					int index = oldMethodModels.indexOf(newMethodModel);
 					ModifierRecoder mr = new ModifierRecoder(oldMethodModels.get(index).getModifier(), newMethodModel.getModifier());
 					if (mr.hasChange()) {
-						modifierRecoderMap.put(oldMethodModels.get(index), ChangeStatus.MODIFIED);
-						modifiedMethodModels.add(newMethodModel);
+						modifiedMethodMap.put(oldMethodModels.get(index), newMethodModel);
+
 					}else {
 						unchangedMethodModels.add(newMethodModel);
 					}
@@ -97,8 +97,51 @@ public class MethodRecoder {
 	public List<MethodModel> getUnchangedMethodModels(){
 		return unchangedMethodModels;
 	}
-	
-	public List<MethodModel> getModifiedMethodModels(){
-		return modifiedMethodModels;
+
+	public Map<MethodModel, MethodModel> getModifiedMethodMap() {
+		return modifiedMethodMap;
 	}
+	
+	public int getNewAddMehodNum(){
+		int count =0;
+		for (MethodModel methodModel : newAddMethodModels) {
+			if (methodModel.getModifier().isPUBLIC()) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int getRemovedMehodNum(){
+		int count =0;
+		for (MethodModel methodModel : removedMethodModels) {
+			if (methodModel.getModifier().isPUBLIC()) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int getUnchangedMethodNum(){
+		int count =0;
+		for (MethodModel methodModel : unchangedMethodModels) {
+			if (methodModel.getModifier().isPUBLIC()) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+
+	public int getModifiedMethodNum(){
+		int count =0;	
+		for (MethodModel methodModel : modifiedMethodMap.keySet()) {
+			if (methodModel.getModifier().isPUBLIC()||modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
+				count++;
+			}
+			
+		}
+		return count;
+	}
+	
 }

@@ -34,7 +34,7 @@ public class ComponentParser {
 	
 	public void parser()  {	
 				
-		Compatibility csModel = new Compatibility(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));
+		Compatibility csModel = new Compatibility(oldPathOfComponet,newPathOfComponet);
 		csModel.getTypeChangeRecoders();
 	}	
 	

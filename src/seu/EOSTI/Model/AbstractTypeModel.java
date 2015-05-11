@@ -42,6 +42,8 @@ public abstract class AbstractTypeModel {
 	public abstract void addEnumClassModel(EnumModel enumModel);*/
 	
 	public abstract List<MethodModel> getMethodModels();
+	
+	public abstract int getPublicMethodNum();
 
 	public abstract void setMethodModels(List<MethodModel> methodModels);
 	

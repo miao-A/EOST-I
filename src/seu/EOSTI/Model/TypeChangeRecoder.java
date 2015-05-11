@@ -44,9 +44,7 @@ public class TypeChangeRecoder {
 		
 		if ((oldTypeModel instanceof EnumModel)&&(newTypeModel instanceof EnumModel)) {
 			enumConstantRecoder =new EnumConstantRecoder(((EnumModel)oldTypeModel).getEnumConstant(),((EnumModel)newTypeModel).getEnumConstant());
-		}
-		
-		
+		}	
 		
 		modifierRecoder = new ModifierRecoder(oldTypeModel.getModifier(),newTypeModel.getModifier());
 		typeParameterRecoder = new TypeParameterRecoder(oldTypeModel.getSuperInterfaceTypes(), newTypeModel.getSuperInterfaceTypes());
@@ -56,10 +54,15 @@ public class TypeChangeRecoder {
 		
 		if (isUnchanged(modifierRecoder.getChangeStatus())&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
 				isUnchanged(superInterfaceClassRecoder.getChangeStatus())&&isUnchanged(fieldRecoder.getChangeStatus())&&isUnchanged(methodRecoder.getChangeStatus())) {
-
+			
 			this.changeStatus = ChangeStatus.UNCHANGED;
 		}else {
 			this.changeStatus = ChangeStatus.MODIFIED;
+			
+			superClassChangeStatus = superClassRecoder.getChangeStatus();
+			superInterfaceChangeStatus = superInterfaceClassRecoder.getChangeStatus();
+			fieldChangeStatus = fieldRecoder.getChangeStatus();
+			methodChangeStatus = methodRecoder.getChangeStatus();
 		}
 		
 		
@@ -157,128 +160,6 @@ public class TypeChangeRecoder {
 		return methodRecoder;
 	}
 	
-	public void getInfoOfTypeRecoder(){
-		if (changeStatus.equals(ChangeStatus.UNCHANGED)) {
-			/*System.out.println();
-			System.out.println("Class UNCHANGED--------------------------------------------------------------");
-			System.out.println("PackageName:" + oldTypeModel.getClassName());
-			System.out.println("ClassName:" + oldTypeModel.getClassName());
-			System.out.println("-----------------------------------------------------------------------------");
-			System.out.println();*/
-		}else {
-			System.out.println();
-			System.out.println("Class CHANGED--------------------------------------------------------------");
-			System.out.println("PackageName:" + oldTypeModel.getClassName());
-			System.out.println("ClassName:"+oldTypeModel.getClassName());
-			
-			if (!superClassRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-				System.out.println("SuperClass CHANGED--------------------------------------------------------------");
-				System.out.println("oldSuperClass:" + superClassRecoder.getOldSuperClass());
-				System.out.println("newSuperClass:" + superClassRecoder.getNewSuperClass());				
-			}
-			
-			if (!superInterfaceClassRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-				System.out.println("SuperInterfaceClass CHANGED--------------------------------------------------------------");
-			}
-			
-			if(!modifierRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)){
-				System.out.println("class modifier change-----------------");
-			}
-			
-			if (!fieldRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-				List<FieldModel> list = fieldRecoder.getNewAddFieldModels();
-				if (!list.isEmpty()) {
-					System.out.println("add field ###");
-					for (FieldModel fieldModel : list) {
-						System.out.println(fieldModel.getType() + " " + fieldModel.getFieldName());
-					}
-				}
-				
-				list = fieldRecoder.getRemovedFieldModels();
-				if (!list.isEmpty()) {
-					System.out.println("removed field ###");
-					for (FieldModel fieldModel : list) {
-						System.out.println(fieldModel.getType() + " " + fieldModel.getFieldName());
-					}
-				}
-				
-				list = fieldRecoder.getModifiedFieldModels();
-				if (!list.isEmpty()) {
-					System.out.println("modified field ###");
-					for (FieldModel fieldModel : list) {
-						System.out.println(fieldModel.getType() + " " + fieldModel.getFieldName());
-					}
-				}		
-				
-			}
-			
-			if (!methodRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {				
-				List<MethodModel> list = methodRecoder.getNewAddMethodModels();
-				if (!list.isEmpty()) {
-					System.out.println("add method ***");
-					for (MethodModel methodModel : list) {
-						System.out.print(methodModel.getMethodName()+"(");
-						List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-						for (int i = 0; i < tpList.size(); i++) {
-							System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-							if (i!=tpList.size()-1) {
-								System.out.print(",");
-							}
-						}
-						System.out.println(")");						
-					}
-				}
-				
-				list = methodRecoder.getRemovedMethodModels();
-				if (!list.isEmpty()) {
-					System.out.println("removed method ***");
-					for (MethodModel methodModel : list) {
-						System.out.print(methodModel.getMethodName()+"(");
-						List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-						for (int i = 0; i < tpList.size(); i++) {
-							System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-							if (i!=tpList.size()-1) {
-								System.out.print(",");
-							}
-						}
-						System.out.println(")");						
-					}
-				}
-				
-				list = methodRecoder.getModifiedMethodModels();
-				if (!list.isEmpty()) {
-					System.out.println("modified method ***");
-					for (MethodModel methodModel : list) {
-						System.out.print(methodModel.getMethodName()+"(");
-						List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-						for (int i = 0; i < tpList.size(); i++) {
-							System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-							if (i!=tpList.size()-1) {
-								System.out.print(",");
-							}
-						}
-						System.out.println(")");						
-					}
-				}	
-				
-			}
-			
-			if (!enumConstantRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-				System.out.println("enum constant change--------------------------");
-			}
-			
-		}		
-		
-			
-/*		private ModifierRecoder modifierRecoder;
-		private SuperClassRecoder superClassRecoder;
-		private TypeParameterRecoder typeParameterRecoder;
-		private SuperInterfaceClassRecoder superInterfaceClassRecoder;
-		private FieldRecoder fieldRecoder;
-		private MethodRecoder methodRecoder;
-		private EnumConstantRecoder enumConstantRecoder;
-		
-*/
-	}
+	
 
 }

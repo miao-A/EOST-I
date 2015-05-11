@@ -118,6 +118,21 @@ public class MethodModel {
 	public void addThrownList(String thrown) {
 		this.thrownList.add(thrown);
 	}
+	
+	public String getFullName(){
+		String string = new String();
+		string += this.getModifier().getModifierInfo()+this.getReturnType()+" "
+				+this.getMethodName()+"(";
+		List<SingleVariableModel> tpList =  this.getFormalParameters();
+		for (int i = 0; i < tpList.size(); i++) {
+			string += tpList.get(i).getType()+" "+tpList.get(i).getName();
+			if (i!=tpList.size()-1) {
+				string +=",";
+			}
+		}
+		string += ")";
+		return string;
+	}
 
 	public boolean equals(Object obj){
 		if (this == obj) {

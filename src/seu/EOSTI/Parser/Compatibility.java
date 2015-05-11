@@ -2,7 +2,13 @@ package seu.EOSTI.Parser;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+
+import seu.EOSTI.ASTVisitor.ComponentRequertor;
 import seu.EOSTI.Model.AbstractTypeModel;
 import seu.EOSTI.Model.ChangeStatus;
 import seu.EOSTI.Model.MethodModel;
@@ -12,6 +18,10 @@ import seu.EOSTI.Model.TypeChangeRecoder;
 
 public class Compatibility {
 	
+	private String oldPathOfComponet;
+	private String newPathOfComponet;
+	private List<AbstractTypeModel> changeRecoder;
+	
 	private List<AbstractTypeModel> removedType = new LinkedList<>();
 	private List<AbstractTypeModel> newType = new LinkedList<>();
 	private List<TypeChangeRecoder> unchangedType = new LinkedList<>();
@@ -19,7 +29,15 @@ public class Compatibility {
 	
 	private List<TypeChangeRecoder>  typeChangeRecoders = new LinkedList<>();
 	
-	public Compatibility(List<AbstractTypeModel> oldModels,List<AbstractTypeModel> newModels){
+	public Compatibility(String oldPathOfComponet,String newPathOfComponet) {
+		// TODO Auto-generated constructor stub
+		this.oldPathOfComponet = oldPathOfComponet;
+		this.newPathOfComponet = newPathOfComponet;
+		changeRecoder = new LinkedList<>();
+		compatibilityParser(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));		
+	}
+	
+	public void compatibilityParser(List<AbstractTypeModel> oldModels,List<AbstractTypeModel> newModels){
 
 		for (AbstractTypeModel oldTypeModel : oldModels) {
 			if (!newModels.contains(oldTypeModel)) {
@@ -54,10 +72,56 @@ public class Compatibility {
 		
 	}
 	
+	
+	public List<AbstractTypeModel> parserComponet(String pathOfComponet)  {
+		// create a AST parser
+		ASTParser parser;
+		parser = ASTParser.newParser(AST.JLS4);
+	
+		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
+		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
+		parser.setCompilerOptions(complierOptions);
+		parser.setEnvironment(null, null, null, true);
+		
+		// enable binding	
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setResolveBindings(true);
+		parser.setBindingsRecovery(true);
+		parser.setStatementsRecovery(true);
+		
+		ComponentRequertor ComponentRequertor = new ComponentRequertor();
+		ReadFile readFile = new ReadFile(pathOfComponet);		
+		List<String> filelist = readFile.readJavaFiles();
+		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
+		System.out.println("fileread over!");
+		parser.createASTs(sourceFilePaths,  null, new String[0], ComponentRequertor, null);	
+		return ComponentRequertor.getTypeModels();
+	}		
+	
 	public List<TypeChangeRecoder> getTypeChangeRecoders(){
 
 		return typeChangeRecoders;
 	}
+	
+	
+	public List<AbstractTypeModel> getNewTypeModels(){
+		return newType;
+	}
+	
+	public List<AbstractTypeModel> getRemovedTypeModels(){
+		return removedType;
+	}
+	
+	public List<TypeChangeRecoder> getUnchangedRecoders(){
+		return unchangedType;
+	}
+	
+	public List<TypeChangeRecoder> getModifiedRecoders(){
+		return modifiedType;
+	}
+	
+	
+	
 	
 	public void getinfo(){
 		for(AbstractTypeModel atm : newType){
@@ -148,26 +212,8 @@ public class Compatibility {
 				}
 				System.out.println(")");						
 			}*/
-			if (mr.getModifiedMethodModels().size()!=0) {
-				System.out.println("ModifiedMethod:");
-			}
-			
-			for (MethodModel methodModel : mr.getModifiedMethodModels()) {
-				System.out.print(methodModel.getModifier().getModifierInfo());
-				System.out.print(methodModel.getReturnType()+" ");
-				System.out.print(methodModel.getMethodName()+"(");
-				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-				for (int i = 0; i < tpList.size(); i++) {
-					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-					if (i!=tpList.size()-1) {
-						System.out.print(",");
-					}
-				}
-				System.out.println(")");						
-			}			
-			
+								
+						
 		}
 	}
-	
-
 }
