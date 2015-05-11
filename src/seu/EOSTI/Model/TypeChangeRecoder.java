@@ -145,6 +145,18 @@ public class TypeChangeRecoder {
 		this.changeStatus = changeStatus;
 	}
 	
+	public AbstractTypeModel getOldTypeModel(){
+		return oldTypeModel;
+	}
+	
+	public AbstractTypeModel getNewTypeModel(){
+		return newTypeModel;
+	}
+	
+	public MethodRecoder getMethodRecoder(){
+		return methodRecoder;
+	}
+	
 	public void getInfoOfTypeRecoder(){
 		if (changeStatus.equals(ChangeStatus.UNCHANGED)) {
 			/*System.out.println();
