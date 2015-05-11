@@ -5,7 +5,9 @@ import java.util.List;
 
 import seu.EOSTI.Model.AbstractTypeModel;
 import seu.EOSTI.Model.ChangeStatus;
+import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
+import seu.EOSTI.Model.SingleVariableModel;
 import seu.EOSTI.Model.TypeChangeRecoder;
 
 public class Compatibility {
@@ -60,23 +62,110 @@ public class Compatibility {
 	public void getinfo(){
 		for(AbstractTypeModel atm : newType){
 			System.out.println("newType:"+ atm.getPackage()+" " +atm.getClassName());
+			
 		}
 		
 		for(AbstractTypeModel atm : removedType){
 			System.out.println("removedType:"+ atm.getPackage()+" " +atm.getClassName());
+			List<MethodModel> list = atm.getMethodModels();
+			int count = 0;
+			for (MethodModel methodModel : list) {
+				if (methodModel.getModifier().isPUBLIC()) {
+					++count;
+				}
+			}
+			System.out.println(count);
 		}
 		
 		for(TypeChangeRecoder atm : unchangedType){
 			System.out.println("unchangedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+			MethodRecoder mr = atm.getMethodRecoder();
+			int count = 0;
+			List<MethodModel> list = mr.getUnchangedMethodModels();
+			for (MethodModel methodModel : list) {
+				if (methodModel.getModifier().isPUBLIC()) {
+					++count;
+				}
+			}
+			System.out.println(count);
 		}
 		
 		for(TypeChangeRecoder atm : modifiedType){
 			System.out.println("modifiedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
-			mr.getNewAddMethodModels();
-			mr.getRemovedMethodModels();
-			mr.getUnchangedMethodModels();
-			mr.getModifiedMethodModels();
+			
+			if (mr.getNewAddMethodModels().size()!=0) {
+				System.out.println("NewAddMethod:");
+			}
+			
+
+			for (MethodModel methodModel : mr.getNewAddMethodModels()) {
+				System.out.print(methodModel.getModifier().getModifierInfo());
+				System.out.print(methodModel.getReturnType()+" ");
+				System.out.print(methodModel.getMethodName()+"(");
+				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
+				for (int i = 0; i < tpList.size(); i++) {
+					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
+					if (i!=tpList.size()-1) {
+						System.out.print(",");
+					}
+				}
+				System.out.println(")");						
+			}
+	
+			if (mr.getRemovedMethodModels().size()!=0) {
+				System.out.println("RemovedMethod:");
+			}
+			
+			for (MethodModel methodModel : mr.getRemovedMethodModels()) {
+				System.out.print(methodModel.getModifier().getModifierInfo());
+				System.out.print(methodModel.getReturnType()+" ");
+				System.out.print(methodModel.getMethodName()+"(");
+				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
+				for (int i = 0; i < tpList.size(); i++) {
+					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
+					if (i!=tpList.size()-1) {
+						System.out.print(",");
+					}
+				}
+				System.out.println(")");						
+			}
+			
+			/*
+			if (mr.getUnchangedMethodModels().size()!=0) {
+				System.out.println("UnchangedMethod:");
+			}
+			for (MethodModel methodModel : mr.getUnchangedMethodModels()) {
+				System.out.print(methodModel.getModifier().getModifierInfo());
+				System.out.print(methodModel.getReturnType()+" ");
+				System.out.print(methodModel.getMethodName()+"(");
+				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
+				for (int i = 0; i < tpList.size(); i++) {
+					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
+					if (i!=tpList.size()-1) {
+						System.out.print(",");
+					}
+				}
+				System.out.println(")");						
+			}*/
+			if (mr.getModifiedMethodModels().size()!=0) {
+				System.out.println("ModifiedMethod:");
+			}
+			
+			for (MethodModel methodModel : mr.getModifiedMethodModels()) {
+				System.out.print(methodModel.getModifier().getModifierInfo());
+				System.out.print(methodModel.getReturnType()+" ");
+				System.out.print(methodModel.getMethodName()+"(");
+				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
+				for (int i = 0; i < tpList.size(); i++) {
+					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
+					if (i!=tpList.size()-1) {
+						System.out.print(",");
+					}
+				}
+				System.out.println(")");						
+			}			
+			
 		}
 	}
 	

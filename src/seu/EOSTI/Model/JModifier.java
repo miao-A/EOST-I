@@ -101,6 +101,57 @@ public class JModifier {
 	public void setSTRICTFP(boolean sTRICTFP) {
 		STRICTFP = sTRICTFP;
 	}
+	
+	public String getModifierInfo(){
+		String string = new String();
+		if (isPRIVATE()) {
+			string += "private ";
+		}
+
+		if (isPUBLIC()) {
+			string += "public ";
+		}
+
+		if (isPROTECTED()) {
+			string += "protected ";
+		}
+		
+		if (isABSTRACT()) {
+			string += "abstract ";
+		}
+		
+
+		if (isSTRICTFP()) {
+			string += "strictfp ";
+		}
+		
+		
+		if (isFINAL()) {
+			string += "final ";
+		}
+		
+		if (isSTATIC()) {
+			string += "static ";
+		}
+
+		if (isNATIVE()) {
+			string += "native";
+		}
+		
+		if (isSYNCHRONIZED()) {
+			string += "synchronized";
+		}
+		
+		if (isTRANSIENT()) {
+			string += "transient";
+		}
+		
+		if (isVOLATILE()) {
+			string += "volatile";
+		}	
+
+		return string;
+	}
 
 
 

@@ -220,19 +220,53 @@ public class ComponentVisitor extends ASTVisitor {
 		
 		JModifier jm = new JModifier();
 		for (IExtendedModifier modifier : ieModifiers) {
-			if (modifier.isModifier()) {				
-				jm.setABSTRACT(((Modifier) modifier).isAbstract());
-				jm.setFINAL(((Modifier) modifier).isFinal());
-				jm.setNATIVE(((Modifier) modifier).isNative());
-				jm.setPUBLIC(((Modifier) modifier).isPublic());
-				jm.setPRIVATE(((Modifier) modifier).isPrivate());
-				jm.setPROTECTED(((Modifier) modifier).isProtected());
-				jm.setSTATIC(((Modifier) modifier).isStatic());
-				jm.setSTRICTFP(((Modifier) modifier).isStrictfp());
-				jm.setSYNCHRONIZED(((Modifier) modifier).isSynchronized());
-				jm.setTRANSIENT(((Modifier) modifier).isTransient());
-				jm.setVOLATILE(((Modifier) modifier).isVolatile());
+			if (modifier.isModifier()) {
+				if (((Modifier) modifier).isAbstract()) {
+					jm.setABSTRACT(true);
+				}
+				
+				if (((Modifier) modifier).isFinal()) {
+					jm.setFINAL(true);
+				}
+				
+				if (((Modifier) modifier).isNative()) {
+					jm.setNATIVE(true);
+				}
+				
+				if (((Modifier) modifier).isPublic()) {
+					jm.setPUBLIC(true);
+				}
+				
+				if (((Modifier) modifier).isPrivate()) {
+					jm.setPRIVATE(true);
+				}
+				
+				if (((Modifier) modifier).isProtected()) {
+					jm.setPROTECTED(true);
+				}
+				
+				if (((Modifier) modifier).isStatic()) {
+					jm.setSTATIC(true);
+				}
+				
+				if (((Modifier) modifier).isStrictfp()) {
+					jm.setSTRICTFP(true);
+				}
+				
+				if (((Modifier) modifier).isSynchronized()) {
+					jm.setSYNCHRONIZED(true);
+				}
+				
+				if (((Modifier) modifier).isTransient()) {
+					jm.setTRANSIENT(true);
+				}
+				
+				if (((Modifier) modifier).isVolatile()) {
+					jm.setVOLATILE(true);
+				}
+				
 			}
+			
 		}		
 		return jm;		
 	}

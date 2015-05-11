@@ -15,7 +15,7 @@ public class NULLComposite extends Composite {
 		super(parent, style);
 		
 		Label lblNull = new Label(this, SWT.NONE);
-		lblNull.setBounds(36, 64, 61, 17);
+		lblNull.setBounds(21, 10, 61, 17);
 		lblNull.setText("Null");
 
 	}

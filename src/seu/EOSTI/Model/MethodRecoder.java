@@ -47,6 +47,7 @@ public class MethodRecoder {
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
 			setChangeStatus(ChangeStatus.UNCHANGED);
+			unchangedMethodModels = oldMethodModels;
 		}else {
 			setChangeStatus(ChangeStatus.MODIFIED);
 			for (MethodModel oldMethodModel : oldMethodModels) {
