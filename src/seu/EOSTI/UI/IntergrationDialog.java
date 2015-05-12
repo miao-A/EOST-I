@@ -60,7 +60,7 @@ public class IntergrationDialog extends Dialog {
 	 */
 	private void createContents() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM);
-		shell.setSize(862, 578);
+		shell.setSize(967, 641);
 		shell.setText("\u8F6F\u4EF6\u6F14\u5316\u2014\u96C6\u6210\u6027");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -77,12 +77,12 @@ public class IntergrationDialog extends Dialog {
 		
 		
 		final Composite rightComposite = new Composite(composite, SWT.NONE);
-		fd_leftComposite.right = new FormAttachment(100, -697);
+		fd_leftComposite.right = new FormAttachment(100, -763);
 		FormData fd_rightComposite = new FormData();
 		fd_rightComposite.left = new FormAttachment(leftComposite, 22);
+		fd_rightComposite.right = new FormAttachment(100, -10);
 		fd_rightComposite.top = new FormAttachment(0, 10);
 		fd_rightComposite.bottom = new FormAttachment(100, -10);
-		fd_rightComposite.right = new FormAttachment(100, -10);
 		rightComposite.setLayoutData(fd_rightComposite);
 		rightComposite.setLayout(rightCompositeSL);
 		
