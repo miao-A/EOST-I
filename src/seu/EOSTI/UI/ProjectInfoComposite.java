@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.omg.CORBA.PRIVATE_MEMBER;
 
+import seu.EOSTI.DBConnect.ProjectInfoConnector;
 import seu.EOSTI.Parser.ProjectParser;
 import seu.EOSTI.Parser.ReadFile;
 
@@ -104,14 +105,17 @@ public class ProjectInfoComposite extends Composite {
 					dialog.open();					
 				}else{
 					
-					String projectPathString = projectPathText.getText();
-					String projectNameString = projectNameText.getText();
-					String versionString = versionText.getText();
-					String versionInfoString = versionInfoText.getText();
+					String projectPath = projectPathText.getText();
+					String projectName = projectNameText.getText();
+					String version = versionText.getText();
+					String versionInfo = versionInfoText.getText();
+					
 					
 					System.out.println("put project information!");
+					ProjectInfoConnector piConnector = new ProjectInfoConnector(projectName, version,versionInfo);		
 					
-					ProjectParser projectParser = new ProjectParser(projectPathString,projectNameString,versionString);
+					
+					ProjectParser projectParser = new ProjectParser(projectPath,projectName,version);
 //					projectParser.parser();
 					projectParser.runDectors();
 				}			

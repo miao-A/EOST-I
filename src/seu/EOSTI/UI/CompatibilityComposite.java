@@ -110,7 +110,7 @@ public class CompatibilityComposite extends Composite {
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
 				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui");
+				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui");//"D:/ProjectOfHW/junit/junit3.4/src/junit/runner"
 				folderDialog.open();
 				
 				oldComponentText.setText(folderDialog.getFilterPath());
@@ -155,37 +155,39 @@ public class CompatibilityComposite extends Composite {
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		Button CompatibilityBtn = new Button(this, SWT.NONE);
+		String[] tableHeader = {"        包+类名        ","        新增方法         ", "        删除方法         ","        修改方法         ","        未变更方法         "};		
+		for (int i = 0; i < tableHeader.length; i++)  
+	    {  					
+			TableColumn tableColumn = new TableColumn(changeTypeTable, SWT.NONE);
+			tableColumn.setText(tableHeader[i]);  
+			// 设置表头可移动，默认为false  
+			tableColumn.setMoveable(false); 
+	    	tableColumn.pack();
+	    	
+	    }
+		
+		Button CompatibilityBtn = new Button(this, SWT.NONE);		
 		CompatibilityBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
 				
 				changeTypeTable.removeAll();
+				
+				myModels.clear();
 
 				
-				String oldPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
-				String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
+				String oldPathOfComponet = oldComponentText.getText(); // "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
+				String newPathOfComponet = newComponentText.getText(); //"D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
 								
 				Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
 				
 				int unchangeCount = 0;
 				int newCount = 0;
 				int removedCount = 0;
-				int modifiedCount = 0;
-						
+				int modifiedCount = 0;					
 
-				String[] tableHeader = {"        包+类名        ","        新增方法         ", "        删除方法         ","        修改方法         ","        未变更方法         "};
 				
-				for (int i = 0; i < tableHeader.length; i++)  
-			    {  
-					
-					TableColumn tableColumn = new TableColumn(changeTypeTable, SWT.NONE);  
-					tableColumn.setText(tableHeader[i]);  
-					// 设置表头可移动，默认为false  
-					tableColumn.setMoveable(false); 
-			    	tableColumn.pack();
-			    }
 			
 				List<TypeChangeRecoder> modifiedType = compatibility.getModifiedRecoders();					
 				if (modifiedType.size()!=0) {
@@ -213,13 +215,12 @@ public class CompatibilityComposite extends Composite {
 						myModel = new MyModel(string[0]);
 						item.setText(string);
 						
-						List<MethodModel> oldlist = tcr.getOldTypeModel().getMethodModels();
+						List<MethodModel> oldlist = tcr.getMethodRecoder().getUnchangedMethodModels();
 						for (MethodModel methodModel : oldlist) {						
 							if (methodModel.getModifier().isPUBLIC()) {
 								myModel.unchangedList.add(methodModel.getFullName());
 							}
 						}				
-						
 						myModels.add(myModel);
 						continue;
 					}else {
@@ -240,7 +241,7 @@ public class CompatibilityComposite extends Composite {
 					MethodRecoder mRecoder = tcr.getMethodRecoder();				
 					Map<MethodModel, MethodModel> modifiedMap = mRecoder.getModifiedMethodMap();	
 					for (MethodModel methodModel : modifiedMap.keySet()) {
-						if (methodModel.getModifier().isPUBLIC()) {
+						if (methodModel.getModifier().isPUBLIC()||modifiedMap.get(methodModel).getModifier().isPUBLIC()) {
 							myModel.modifiedoldList.add("old:" + methodModel.getFullName());
 							myModel.modifiednewList.add("new:" + modifiedMap.get(methodModel).getFullName());
 						}						
@@ -263,8 +264,8 @@ public class CompatibilityComposite extends Composite {
 					}	
 					
 					
-					List<MethodModel> oldlist = tcr.getOldTypeModel().getMethodModels();
-					for (MethodModel methodModel : oldlist) {						
+					List<MethodModel> unlist = mRecoder.getUnchangedMethodModels();
+					for (MethodModel methodModel : unlist) {						
 						if (methodModel.getModifier().isPUBLIC()) {
 							myModel.unchangedList.add(methodModel.getFullName());
 						}
@@ -273,10 +274,7 @@ public class CompatibilityComposite extends Composite {
 				
 					myModels.add(myModel);
 				
-				}
-				
-								
-						
+				}					
 				
 				
 				
@@ -424,8 +422,12 @@ public class CompatibilityComposite extends Composite {
 					    	if (newlist.size() == 0||oldlist.size() == 0) {
 								return;
 							}
-					    	newlist.addAll(oldlist);
+					    	//newlist.addAll(oldlist);
 						    comb.setItems( (String[]) newlist.toArray(new String[newlist.size()]));
+						    int begin = newlist.size();
+						    for (int i = 0; i < oldlist.size(); i++) {
+								comb.add(oldlist.get(i),i+begin);
+							}
 						    comb.add("modified:"+newlist.size(), 0);
 						    comb.addSelectionListener(new SelectionAdapter() {
 						    	@Override

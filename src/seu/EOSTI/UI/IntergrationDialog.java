@@ -1,5 +1,7 @@
 package seu.EOSTI.UI;
 
+import java.io.IOException;
+
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -41,8 +43,9 @@ public class IntergrationDialog extends Dialog {
 	/**
 	 * Open the dialog.
 	 * @return the result
+	 * @throws IOException 
 	 */
-	public Object open() {
+	public Object open() throws IOException {
 		createContents();
 		shell.open();
 		shell.layout();
@@ -57,8 +60,9 @@ public class IntergrationDialog extends Dialog {
 
 	/**
 	 * Create contents of the dialog.
+	 * @throws IOException 
 	 */
-	private void createContents() {
+	private void createContents() throws IOException {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM);
 		shell.setSize(967, 641);
 		shell.setText("\u8F6F\u4EF6\u6F14\u5316\u2014\u96C6\u6210\u6027");
