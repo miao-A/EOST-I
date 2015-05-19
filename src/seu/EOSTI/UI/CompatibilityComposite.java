@@ -110,7 +110,7 @@ public class CompatibilityComposite extends Composite {
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
 				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui");//"D:/ProjectOfHW/junit/junit3.4/src/junit/runner"
+				folderDialog.setFilterPath("D:/ProjectOfHW/junit/junit3.4/src/junit/runner");//"D:/ProjectOfHW/junit/junit3.4/src/junit/runner"
 				folderDialog.open();
 				
 				oldComponentText.setText(folderDialog.getFilterPath());
@@ -135,7 +135,7 @@ public class CompatibilityComposite extends Composite {
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
 				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui");
+				folderDialog.setFilterPath("D:/ProjectOfHW/junit/junit3.4/src/junit/runner");
 				folderDialog.open();
 				
 				newComponentText.setText(folderDialog.getFilterPath());
@@ -146,7 +146,7 @@ public class CompatibilityComposite extends Composite {
 		button.setText("\u8DEF\u5F84...");
 		
 		changeTypeTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		changeTypeTable.setBounds(10, 85, 672, 441);
+		changeTypeTable.setBounds(10, 85, 711, 441);
 		changeTypeTable.setHeaderVisible(true);
 		changeTypeTable.setLinesVisible(true);
 
@@ -196,6 +196,11 @@ public class CompatibilityComposite extends Composite {
 				}
 				for(TypeChangeRecoder tcr : modifiedType){					
 	
+					if (!tcr.getModifierRecoder().isCompatibility()){
+						System.out.println("not compatibility");
+					}
+					
+					
 					//仅统计与public相关类
 					int thenewCount = tcr.getMethodRecoder().getNewAddMehodNum();
 					int theunchangeCount = tcr.getMethodRecoder().getUnchangedMethodNum();
@@ -205,7 +210,7 @@ public class CompatibilityComposite extends Composite {
 					newCount += thenewCount;
 					unchangeCount += theunchangeCount;
 					removedCount += theremovedCount;
-					modifiedCount += themodifiedCount;
+					//modifiedCount += themodifiedCount;
 					
 					MyModel myModel = null;
 				
@@ -237,13 +242,21 @@ public class CompatibilityComposite extends Composite {
 					System.out.println(itemString);
 					
 					
-					
 					MethodRecoder mRecoder = tcr.getMethodRecoder();				
 					Map<MethodModel, MethodModel> modifiedMap = mRecoder.getModifiedMethodMap();	
 					for (MethodModel methodModel : modifiedMap.keySet()) {
 						if (methodModel.getModifier().isPUBLIC()||modifiedMap.get(methodModel).getModifier().isPUBLIC()) {
 							myModel.modifiedoldList.add("old:" + methodModel.getFullName());
 							myModel.modifiednewList.add("new:" + modifiedMap.get(methodModel).getFullName());
+							if (methodModel.getModifier().isPUBLIC()&&modifiedMap.get(methodModel).getModifier().isPUBLIC()){
+								unchangeCount++;
+							}else if (methodModel.getModifier().isPUBLIC()&&modifiedMap.get(methodModel).getModifier().isPRIVATE()){
+								removedCount++;							
+							}else if(methodModel.getModifier().isPRIVATE()&&modifiedMap.get(methodModel).getModifier().isPUBLIC()){
+								newCount++;
+							}else {
+								modifiedCount++;
+							}
 						}						
 					}
 					
@@ -455,6 +468,7 @@ public class CompatibilityComposite extends Composite {
 						    	@Override
 						    	public void widgetSelected(SelectionEvent e) {
 						    		tableitem.setText(col1, comb.getText());
+						    		
 						    		comb.dispose();
 						    		super.widgetSelected(e);
 						    	}
@@ -463,7 +477,13 @@ public class CompatibilityComposite extends Composite {
 						}				
 					}
 				});	
-		
+				
+				if (unchangeCount+removedCount>0) {
+					TableItem lastItem = new TableItem(changeTypeTable, SWT.NONE);
+					Double double1 = new Double(1.0*unchangeCount/(unchangeCount+removedCount+modifiedCount));
+					lastItem.setText(new String[] {"新版本的构件与旧版本相兼容的接口个数:"+unchangeCount,"旧版本软件构件的接口数:"+(unchangeCount+removedCount),double1.toString()});
+				}
+				
 				System.out.println(newCount +"\t"+removedCount+"\t"+modifiedCount+"\t"+unchangeCount);
 			}
 		});

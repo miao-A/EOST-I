@@ -37,6 +37,38 @@ public class ModifierRecoder {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public boolean isCompatibility(){
+		if (!oldModifier.isABSTRACT()) {
+			if (newModifier.isABSTRACT()) {
+				return false;
+			}
+		}
+		
+		if (!oldModifier.isFINAL()) {
+			if (newModifier.isFINAL()) {
+				return false;
+			}
+		}
+		
+		if (oldModifier.isPUBLIC()) {
+			if (!newModifier.isPUBLIC()) {
+				return false;
+			}
+		}
+		
+		if ((!oldModifier.isPRIVATE())&&(oldModifier.isSTATIC())) {
+			if (!newModifier.isSTATIC()) {
+				return false;
+			}
+		}
+		
+		if (oldModifier.isPROTECTED()&&newModifier.isPRIVATE()) {
+			return false;
+		}		
+		return true;
+	}
+	
 	public void compareModifier() {
 		// TODO Auto-generated method stub		
 		

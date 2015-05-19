@@ -54,8 +54,6 @@ public class Compatibility {
 		for (AbstractTypeModel newTypeModel : newModels) {
 			if (oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-//				TypeChangeRecoder tc = new TypeChangeRecoder(oldModels.get(index),newTypeModel);
-				
 				typeChangeRecoders.add(new TypeChangeRecoder(oldModels.get(index),newTypeModel));
 			}
 		}
@@ -99,7 +97,6 @@ public class Compatibility {
 	}		
 	
 	public List<TypeChangeRecoder> getTypeChangeRecoders(){
-
 		return typeChangeRecoders;
 	}
 	

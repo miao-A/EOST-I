@@ -54,11 +54,9 @@ public class TypeChangeRecoder {
 		
 		if (isUnchanged(modifierRecoder.getChangeStatus())&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
 				isUnchanged(superInterfaceClassRecoder.getChangeStatus())&&isUnchanged(fieldRecoder.getChangeStatus())&&isUnchanged(methodRecoder.getChangeStatus())) {
-			
 			this.changeStatus = ChangeStatus.UNCHANGED;
 		}else {
-			this.changeStatus = ChangeStatus.MODIFIED;
-			
+			this.changeStatus = ChangeStatus.MODIFIED;			
 			superClassChangeStatus = superClassRecoder.getChangeStatus();
 			superInterfaceChangeStatus = superInterfaceClassRecoder.getChangeStatus();
 			fieldChangeStatus = fieldRecoder.getChangeStatus();
@@ -160,6 +158,9 @@ public class TypeChangeRecoder {
 		return methodRecoder;
 	}
 	
+	public ModifierRecoder getModifierRecoder(){
+		return modifierRecoder;
+	}
 	
 
 }

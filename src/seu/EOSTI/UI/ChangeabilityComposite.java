@@ -35,10 +35,6 @@ public class ChangeabilityComposite extends Composite {
 	 */
 	public ChangeabilityComposite(Composite parent, int style) {
 		super(parent, style);
-		
-		Label lblChagneabilityComposite = new Label(this, SWT.NONE);
-		lblChagneabilityComposite.setBounds(278, 31, 162, 28);
-		lblChagneabilityComposite.setText("Chagneability Composite");
 
 		
 		
