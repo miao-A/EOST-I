@@ -3,6 +3,7 @@ package seu.EOSTI.UI;
 import java.awt.Frame;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +23,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabFolder;
 
 import seu.EOSTI.DBConnect.ProjectConnector;
+import seu.EOSTI.Parser.BarChart;
+import seu.EOSTI.Parser.ChangeabilityBarChart;
+import seu.EOSTI.Parser.ExtensibilityBarChart;
 
 public class ShowComposite extends Composite {
 
@@ -57,44 +61,72 @@ public class ShowComposite extends Composite {
 		tabFolder.setSize(655, 480);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
-		final CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText("\u53EF\u6269\u5C55\u6027");
+		final CTabItem extenTabItem = new CTabItem(tabFolder, SWT.NONE);
+		extenTabItem.setText("\u53EF\u6269\u5C55\u6027");
 		
 		
 		
-		CTabItem tabItem_1 = new CTabItem(tabFolder, SWT.NONE);
-		tabItem_1.setText("\u53EF\u66FF\u4EE3\u6027");
-		
-		TabFolder tabFolder_1 = new TabFolder(tabFolder, SWT.NONE);
-		tabItem_1.setControl(tabFolder_1);
+		final CTabItem changeTabItem = new CTabItem(tabFolder, SWT.NONE);
+		changeTabItem.setText("\u53EF\u66FF\u4EE3\u6027");
 			
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = projectSelectCombo.getSelectionIndex();
 				String projName = projectSelectCombo.getItem(index);
-				ExtensibilityChart extensibilityChart = new ExtensibilityChart();		
-				extensibilityChart.creatDataSet(projName);		
-				JFreeChart chart = null;
-				try {
-					chart = extensibilityChart.createChart();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				
+				{
+					BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");		
+					extensibilityChart.creatDataSet(projName);		
+					JFreeChart chart = null;
+					try {
+						chart = extensibilityChart.createChart();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					Composite chartComposite = new Composite(tabFolder, SWT.EMBEDDED);
+					extenTabItem.setControl(chartComposite);
+					
+					Frame frame1 = SWT_AWT.new_Frame(chartComposite);
+					
+					Panel panel1 = new Panel();
+					frame1.add(panel1);
+					panel1.setLayout(new BorderLayout(0, 0));
+					ChartPanel extenChartPanel = new ChartPanel(chart);
+					panel1.add(extenChartPanel, BorderLayout.SOUTH);	
+					frame1.setVisible(true);
+					panel1.setVisible(true);
+					extenChartPanel.setVisible(true);
 				}
-				Composite chartComposite = new Composite(tabFolder, SWT.EMBEDDED);
-				tabItem.setControl(chartComposite);
 				
-				Frame frame = SWT_AWT.new_Frame(chartComposite);
+				///
+				{
 				
-				Panel panel = new Panel();
-				frame.add(panel);
-				panel.setLayout(new BorderLayout(0, 0));
-				ChartPanel extenChartPanel = new ChartPanel(chart);
-				panel.add(extenChartPanel, BorderLayout.SOUTH);	
-				frame.setVisible(true);
-				panel.setVisible(true);
-				extenChartPanel.setVisible(true);
+					//dfsfd;
+					BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");		
+					changeabilityChart.creatDataSet(projName);		
+					JFreeChart chart = null;
+					try {
+						chart = changeabilityChart.createChart();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					Composite chartComposite = new Composite(tabFolder, SWT.EMBEDDED);
+					changeTabItem.setControl(chartComposite);
+					
+					Frame frame2 = SWT_AWT.new_Frame(chartComposite);
+					
+					Panel panel2 = new Panel();
+					frame2.add(panel2);
+					panel2.setLayout(new BorderLayout(0, 0));
+					ChartPanel changeChartPanel = new ChartPanel(chart);
+					panel2.add(changeChartPanel, BorderLayout.SOUTH);	
+					frame2.setVisible(true);
+					panel2.setVisible(true);
+					changeChartPanel.setVisible(true);
+				}
 			}
 		});
 		

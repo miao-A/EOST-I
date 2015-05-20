@@ -1,12 +1,15 @@
 package seu.EOSTI.Parser;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ChangeabilityOfClassRequestor;
 import seu.EOSTI.ASTVisitor.ChangeabilityRequestor;
+import seu.EOSTI.DBConnect.ChangeabilityInfoConnector;
+import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 
 
 public class Changeability {
@@ -24,14 +27,18 @@ public class Changeability {
 		System.out.println("fileread over!");
 		parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityRequestor, null);
 //		extensibilityRequestor.ShowInfoOfExitensibily();
+		
+		ChangeabilityInfoConnector dbConnector = new ChangeabilityInfoConnector(projectNameString,versionString);
+		ArrayList<String> packageNameList= dbConnector.getpackageName();
+			// 添加三行数据  		        
+	    for (String string : packageNameList) {
+	    	dbConnector.setChangeabilityInfo(string);
+		}
 	}
 	
 	
 	
-	public void showInfo(){		
-		System.out.println();		
-	}
-
+	
 
 	
 	

@@ -1,4 +1,4 @@
-package seu.EOSTI.UI;
+package seu.EOSTI.Parser;
 
 import java.awt.Font;
 import java.io.FileOutputStream;
@@ -24,20 +24,27 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
-import seu.EOSTI.DBConnect.ProjectInfoConnector;
 
-public class ExtensibilityChart {
+public abstract class BarChart {
 	private DefaultCategoryDataset dataset = null;
+	private String title;
 	
-	public ExtensibilityChart(){
+	public BarChart(){
 		dataset = new DefaultCategoryDataset();
+		title = "指示图";
+	}
+	
+	public BarChart(String title){
+		dataset = new DefaultCategoryDataset();
+		this.title = title;
+		
 	}
 	
 	public JFreeChart createChart() throws IOException{ 
 	    
         CategoryDataset dataset = getDataSet(); 
         JFreeChart chart = ChartFactory.createBarChart( 
-                           "可扩展性指示图", // 图表标题
+                           title, // 图表标题
                            "包名", // 目录轴的显示标签
                            "比例%", // 数值轴的显示标签
                             dataset, // 数据集
@@ -71,25 +78,7 @@ public class ExtensibilityChart {
 	} 
 
 	
-	public void creatDataSet(String projectName){
-		
-		ProjectConnector pConnector = new ProjectConnector();
-		List<String> versionlist = pConnector.getVersion(projectName);
-		
-		Map<String, HashMap<String, Double>> dataMap = new HashMap<String, HashMap<String, Double>>();
-		HashMap<String, Double> map = new HashMap<String, Double>();
-		
-		for (String version : versionlist) {
-			ExtensibilityInfoConnector dbConnector = new ExtensibilityInfoConnector(projectName, version);
-			List<String> pkgNameList = dbConnector.getpackageName();
-			for (String pkgName : pkgNameList) {
-				double ratio = dbConnector.getExtensibilityRatio(pkgName);
-				map.put(pkgName, new Double(ratio));
-			}
-			dataMap.put(projectName+version, map);			
-		}
-		this.setDataSet(dataMap);
-	}
+	public abstract void creatDataSet(String projectName);
 
     /** 
     * 获取一个演示用的简单数据集对象

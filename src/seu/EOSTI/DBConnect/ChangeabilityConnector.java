@@ -25,7 +25,7 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "insert into `eosti`.`packageinfo` (`pkgName`, `projName`, `verID`, `importPkgName`) VALUES ('"
+			String sql = "insert into `eosti`.`pkgCouplingInfo` (`pkgName`, `projName`, `verID`, `importPkgName`) VALUES ('"
 					+ packageName
 					+ "','"
 					+ projectName
@@ -54,7 +54,7 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT pkgName FROM `eosti`.`packageinfo` where projName = '"
+			String sql = "SELECT pkgName FROM `eosti`.`pkgCouplingInfo` where projName = '"
 					+ projectName
 					+ "' and verID = '"
 					+ version
@@ -80,7 +80,7 @@ public class ChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.packageinfo where pkgname = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.pkgCouplingInfo where pkgname = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -106,7 +106,7 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select  distinct importPkgName as result FROM eosti.packageinfo where pkgName = '"
+			String cestr = "Select  distinct importPkgName as result FROM eosti.pkgCouplingInfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -131,7 +131,7 @@ public class ChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / afferent  couplings 该包依赖的外部包数目
-			String castr = "Select  count(distinct pkgName) as result FROM eosti.packageinfo where importPkgName = '"
+			String castr = "Select  count(distinct pkgName) as result FROM eosti.pkgCouplingInfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -159,7 +159,7 @@ public class ChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct pkgName as result FROM eosti.packageinfo where importPkgName = '"
+			String castr = "Select  distinct pkgName as result FROM eosti.pkgCouplingInfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -186,7 +186,7 @@ public class ChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.packageinfo where pkgName = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.pkgCouplingInfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -204,7 +204,7 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add("ce: " + ce);
 			}
 
-			cestr = "Select  distinct importPkgName as result FROM eosti.packageinfo where pkgName = '"
+			cestr = "Select  distinct importPkgName as result FROM eosti.pkgCouplingInfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -215,7 +215,7 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add(str);
 			}
 
-			String castr = "Select  count(distinct pkgName) as result FROM eosti.packageinfo where importPkgName = '"
+			String castr = "Select  count(distinct pkgName) as result FROM eosti.pkgCouplingInfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -228,7 +228,7 @@ public class ChangeabilityConnector extends DBConnector{
 				rStrings.add("ca: " + ca);
 			}
 
-			castr = "Select  distinct pkgName as result FROM eosti.packageinfo where importPkgName = '"
+			castr = "Select  distinct pkgName as result FROM eosti.pkgCouplingInfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version

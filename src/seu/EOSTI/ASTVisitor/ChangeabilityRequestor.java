@@ -8,8 +8,6 @@ import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 
 public class ChangeabilityRequestor extends FileASTRequestor {
-	
-	
 
 	private String projectName;
 	private String version;
