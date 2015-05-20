@@ -24,7 +24,7 @@ private String versionString;
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT pkgname FROM eosti.classinfo where ProjName = '"
+			String sql = "SELECT pkgname FROM eosti.classTypeinfo where ProjName = '"
 					+ projectNameString 
 					+ "' and verID = '"
 					+ versionString 
@@ -49,7 +49,7 @@ private String versionString;
 			
 
 			Statement stmt = connect.createStatement();
-			String sql = "INSERT INTO eosti.classinfo (`pkgName`, `ClassName`, `ProjName` , `VerID`, `ClassType`) VALUES ('"
+			String sql = "INSERT INTO eosti.classTypeinfo (`pkgName`, `ClassName`, `ProjName` , `VerID`, `ClassType`) VALUES ('"
 					+ packageName
 					+"','"
 					+className
@@ -79,7 +79,7 @@ private String versionString;
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classinfo where pkgname = '"
+			String str = "Select  count(classname) as result FROM eosti.classTypeinfo where pkgname = '"
 			+ packageName 
 			+ "' and VerID = '" 
 			+ versionString + "' and projName = '"
@@ -131,14 +131,15 @@ private String versionString;
 	}
 	
 	
-public ArrayList<String> projectExtensibilityRatio(){
+	
+	public ArrayList<String> projectExtensibilityRatio(){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classinfo where VerID = '"
+			String str = "Select  count(classname) as result FROM eosti.classTypeinfo where VerID = '"
 			+ versionString + "' and projName = '"
 					+projectNameString +"'";
 			String concretestr = str +" and classtype = 'concrete'";

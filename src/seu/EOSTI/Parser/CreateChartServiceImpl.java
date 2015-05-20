@@ -122,8 +122,7 @@ public class CreateChartServiceImpl {
      * @param xyDataset 
      * @param charName 
      * @return 
-     */  
-    public String createTimeXYChar(String chartTitle, String x, String y,  
+     */      public String createTimeXYChar(String chartTitle, String x, String y,  
             CategoryDataset xyDataset, String charName) {  
   
         JFreeChart chart = ChartFactory.createLineChart(chartTitle, x, y,  

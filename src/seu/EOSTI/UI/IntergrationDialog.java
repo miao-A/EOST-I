@@ -28,7 +28,7 @@ public class IntergrationDialog extends Dialog {
 	private ExtensibilityComposite extensibilityComposite;
 	private CompatibilityComposite compatibilityComposite;
 	private ProjectInfoComposite projectInfoComposite;
-	private NULLComposite nullComposite;
+	private ShowComposite nullComposite;
 	
 	/**
 	 * Create the dialog.
@@ -146,7 +146,7 @@ public class IntergrationDialog extends Dialog {
 		changeabilityComposite = new ChangeabilityComposite(rightComposite, SWT.NONE);
 		projectInfoComposite = new ProjectInfoComposite(rightComposite, SWT.NONE);
 
-		nullComposite = new NULLComposite(rightComposite, SWT.NONE);
+		nullComposite = new ShowComposite(rightComposite, SWT.NONE);
 		
 		rightCompositeSL.topControl = projectInfoComposite;
 

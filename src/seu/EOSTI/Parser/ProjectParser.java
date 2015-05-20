@@ -68,7 +68,8 @@ public class ProjectParser {
 	}
 	
 	private void runExtensiblityDectector(){
-		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);
+		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);		
+		
 	}
 	
 	private void runChangeabilityDector(){

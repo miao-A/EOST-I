@@ -9,6 +9,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 
 import seu.EOSTI.ASTVisitor.ExtensibilityRequestor;
+import seu.EOSTI.DBConnect.ExtensibilityConnector;
+import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 
 public class Extensibility {
 	private int numOfInterface;
@@ -33,6 +35,13 @@ public class Extensibility {
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
 		parser.createASTs(sourceFilePaths,  null, new String[0], extensibilityRequestor, null);
+		
+		ExtensibilityInfoConnector dbConnector = new ExtensibilityInfoConnector(projectNameString,versionString);
+		ArrayList<String> packageNameList= dbConnector.getpackageName();
+			// 添加三行数据  		        
+	    for (String string : packageNameList) {
+	    	dbConnector.setExtensibilityInfo(string);
+		}
 
 	}
 
