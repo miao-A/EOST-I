@@ -2,7 +2,7 @@ package seu.EOSTI.Model;
 
 import java.util.List;
 //Õ®≈‰∑˚¿‡–Õ
-public class WildCardTypeModel<T> extends TypeModel {
+public class WildCardTypeModel extends TypeModel {
 
 	private String boundType;
 	private boolean upperBound;

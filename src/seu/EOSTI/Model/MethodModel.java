@@ -31,7 +31,7 @@ public class MethodModel {
 	private JModifier modifier = new JModifier();
 	private List<String> typeParameters = new LinkedList<>();
 	
-	private String returnType = "";
+	private TypeModel returnType ;
 	private int extraDimensions = 0;
 	
 	private ArrayList<SingleVariableModel> formalParameters = new ArrayList<SingleVariableModel>();
@@ -68,11 +68,11 @@ public class MethodModel {
 		this.typeParameters.add(typeParameter);
 	}
 
-	public String getReturnType() {
+	public TypeModel getReturnType() {
 		return returnType;
 	}
 
-	public void setReturnType(String returnType) {
+	public void setReturnType(TypeModel returnType) {
 		this.returnType = returnType;
 	}
 
