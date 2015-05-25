@@ -11,15 +11,15 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ComponentRequertor;
-import seu.EOSTI.Model.AbstractTypeModel;
+import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ClassComparator;
-import seu.EOSTI.Model.TypeModel;
+import seu.EOSTI.Model.ClassModel;
 
 public class ComponentParser {
 
 	private String oldPathOfComponet;
 	private String newPathOfComponet;
-	private List<AbstractTypeModel> changeRecoder;
+	private List<AbstractClassModel> changeRecoder;
 	
 //	private static Vector<InfoOfExtensibility> vec = new Vector<>();
 	
@@ -38,7 +38,7 @@ public class ComponentParser {
 		csModel.getTypeChangeRecoders();
 	}	
 	
-	public List<AbstractTypeModel> parserComponet(String pathOfComponet)  {
+	public List<AbstractClassModel> parserComponet(String pathOfComponet)  {
 		// create a AST parser
 		ASTParser parser;
 		parser = ASTParser.newParser(AST.JLS4);

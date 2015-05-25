@@ -4,30 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-
-
-/**
- * MethodDeclaration:
-    [ Javadoc ] { ExtendedModifier }
-                  [ < TypeParameter { , TypeParameter } > ]
-        ( Type | void ) Identifier (
-        [ FormalParameter
-                     { , FormalParameter } ] ) {[ ] }
-        [ throws TypeName { , TypeName } ] ( Block | ; )
- ConstructorDeclaration:
-    [ Javadoc ] { ExtendedModifier }
-                  [ < TypeParameter { , TypeParameter } > ]
-        Identifier (
-                  [ FormalParameter
-                         { , FormalParameter } ] )
-        [throws TypeName { , TypeName } ] Block
- 
- * */
-public class MethodModel {
-
-	private String methodName;	
+public class ConstructorMethodModel {
 	
+	private String methodName;	
 	private JModifier modifier = new JModifier();
 	private List<String> typeParameters = new LinkedList<>();
 	
@@ -55,7 +34,7 @@ public class MethodModel {
 	}
 
 	
-	
+
 	public List<String> getTypeParameters() {
 		return typeParameters;
 	}
@@ -72,9 +51,7 @@ public class MethodModel {
 		return returnType;
 	}
 
-	public void setReturnType(String returnType) {
-		this.returnType = returnType;
-	}
+	
 
 	public List<SingleVariableModel> getFormalParameters() {
 		return formalParameters;

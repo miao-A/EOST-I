@@ -71,7 +71,7 @@ public class ModifierRecoder {
 	
 	public void compareModifier() {
 		// TODO Auto-generated method stub		
-		
+		Object object = new String("tttt");
 		if (oldModifier.isABSTRACT()^newModifier.isABSTRACT()) {
 			modifierChangeStatus.put("abstract", ChangeStatus.MODIFIED);
 			changeflag = true;

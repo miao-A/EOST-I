@@ -3,32 +3,40 @@ package seu.EOSTI.Model;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.Modifier;
 
-public class EnumModel extends AbstractClassModel{
+import com.ibm.icu.text.StringTransform;
+
+
+
+public class ClassModel extends AbstractClassModel {
 	
 	private String packageName = "";
-	private String className;	
+	private String className = "";	
+	private boolean INTERFACE = false;
+	
 	private List<String> superInterfaceTypes = new LinkedList<>();
+	private String superClass;
 	private JModifier modifier = new JModifier();
 	
-	private List<String> enumConstant = new LinkedList<>();
 	
+	private List<ConstructorMethodModel> constructorMethodModels = new LinkedList<>();
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
-
+	
 /*	private List<EnumModel> enumClassModels = new LinkedList<>();
-	private List<TypeModel> innerClassModels = new LinkedList<>()*/;
+	private List<TypeModel> innerClassModels = new LinkedList<>();*/
 	
 	private List<AbstractClassModel> innerClassModels = new LinkedList<>();
-	private List<String> typeParameters = new LinkedList<>(); 
-	
+	private List<String> typeParameters =  new LinkedList<>();
 	private boolean empty = true;
+
+	
 
 	public void setPackage(String name){
 		if (name == null) {
 			packageName = "";
-		}else{
+		}else {
 			packageName = name;
 		}
 		
@@ -46,9 +54,9 @@ public class EnumModel extends AbstractClassModel{
 		return className;
 	}
 	
-/*	public void addInnerClass(AbstractTypeModel typeModel) {
+	public void addInnerClass(ClassModel typeModel) {
 		innerClassModels.add(typeModel);		
-	}*/
+	}
 	
 	public void setModifier(JModifier jModifier){
 		modifier = jModifier;
@@ -58,6 +66,14 @@ public class EnumModel extends AbstractClassModel{
 		return modifier;
 	}
 
+	
+	public void setSuperClass(String superClass) {
+		this.superClass = superClass;
+	}
+	
+	public String getSuperClass() {
+		return superClass;
+	}
 
 	public List<String> getSuperInterfaceTypes() {
 		return superInterfaceTypes;
@@ -67,13 +83,16 @@ public class EnumModel extends AbstractClassModel{
 		this.superInterfaceTypes.add(superInterfaceType);
 	}
 
-	
+	public boolean isINTERFACE() {
+		return INTERFACE;
+	}
+
+	public void setINTERFACE(boolean iNTERFACE) {
+		INTERFACE = iNTERFACE;
+	}
+
 	public List<FieldModel> getFieldModels() {
 		return fieldModels;
-	}
-	
-	public void addFieldModel(FieldModel fieldModel) {
-		this.fieldModels.add(fieldModel);		
 	}
 
 	public void setFieldModels(List<FieldModel> fieldModels) {
@@ -82,31 +101,14 @@ public class EnumModel extends AbstractClassModel{
 		}
 	}
 
-
-	public List<String> getEnumConstant() {
-		return enumConstant;
-	}
-
-	public void setEnumConstant(List<String> enumConstant) {
-		this.enumConstant = enumConstant;
-	}	
-	
-	public void addEnumConstant(String enumConstant){
-		this.enumConstant.add(enumConstant);
-	}
-
 	/*public List<EnumModel> getEnumClassModels() {
 		return enumClassModels;
 	}
 
-	public void setEnumClassModels(List<EnumModel> enumClassModels) {
-		this.enumClassModels = enumClassModels;
-	}
-	
-	public void addEnumClassModel(EnumModel enumClassModel) {
-		this.enumClassModels.add(enumClassModel);
+	public void addEnumClassModel(EnumModel enumModel) {
+		this.enumClassModels.add(enumModel);
 	}*/
-	
+
 	public List<String> getTypeParameters() {
 		return typeParameters;
 	}
@@ -119,7 +121,7 @@ public class EnumModel extends AbstractClassModel{
 		this.typeParameters.add(typeParameter);
 	}
 
-	public List<MethodModel> getMethodModels() {		
+	public List<MethodModel> getMethodModels() {
 		return methodModels;
 	}
 
@@ -129,21 +131,19 @@ public class EnumModel extends AbstractClassModel{
 		}
 	}
 
+	public void addMethodModel(MethodModel methodModel){
+		this.methodModels.add(methodModel);
+	}
+
+
 	public boolean isEmpty() {
 		return empty;
 	}
 
+
 	public void setEmpty(boolean empty) {
 		this.empty = empty;
 	}
-
-	@Override
-	public void addInnerClass(ClassModel typeModel) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 	@Override
 	public List<AbstractClassModel> getInnerClassModels() {
@@ -155,23 +155,22 @@ public class EnumModel extends AbstractClassModel{
 	public void setInnerClassModels(List<AbstractClassModel> innerClassModels) {
 		// TODO Auto-generated method stub
 		this.innerClassModels = innerClassModels;
-		
 	}
 
 	@Override
 	public void addInnerClassModel(AbstractClassModel innerClassModel) {
 		// TODO Auto-generated method stub
-		this.innerClassModels.add(innerClassModel);		
+		this.innerClassModels.add(innerClassModel);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		if (this == obj) {
 			return true;			
 		}
-		if (obj instanceof EnumModel) {
-			EnumModel other = (EnumModel) obj;
+		if (obj instanceof ClassModel) {
+			ClassModel other = (ClassModel) obj;
 			if (this.getPackage().equals(other.getPackage())&&this.getClassName().equals(other.getClassName())) {
 				return true;
 			}
@@ -190,5 +189,15 @@ public class EnumModel extends AbstractClassModel{
 		}
 		return count;
 	}
+
+	public List<ConstructorMethodModel> getConstructorMethodModels() {
+		return constructorMethodModels;
+	}
+
+	public void setConstructorMethodModels(List<ConstructorMethodModel> constructorMethodModels) {
+		this.constructorMethodModels = constructorMethodModels;
+	}
+	
+	
 
 }

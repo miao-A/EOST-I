@@ -7,34 +7,34 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 
 public class ClassComparator {
 	
-	private List<AbstractTypeModel> removedType = new LinkedList<>();
-	private List<AbstractTypeModel> newType = new LinkedList<>();
+	private List<AbstractClassModel> removedType = new LinkedList<>();
+	private List<AbstractClassModel> newType = new LinkedList<>();
 	
-	private List<TypeChangeRecoder>  typeChangeRecoders = new LinkedList<>();
+	private List<ClassChangeRecoder>  typeChangeRecoders = new LinkedList<>();
 	
-	public ClassComparator(List<AbstractTypeModel> oldModels,List<AbstractTypeModel> newModels){
+	public ClassComparator(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
 
-		for (AbstractTypeModel oldTypeModel : oldModels) {
+		for (AbstractClassModel oldTypeModel : oldModels) {
 			if (!newModels.contains(oldTypeModel)) {
 				removedType.add(oldTypeModel);
 			}			
 		}
 		
-		for (AbstractTypeModel newTypeModel : newModels) {
+		for (AbstractClassModel newTypeModel : newModels) {
 			if (!oldModels.contains(newTypeModel)) {
 				newType.add(newTypeModel);
 			}
 		}
 		
-		for (AbstractTypeModel newTypeModel : newModels) {
+		for (AbstractClassModel newTypeModel : newModels) {
 			if (oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				typeChangeRecoders.add(new TypeChangeRecoder(oldModels.get(index),newTypeModel));
+				typeChangeRecoders.add(new ClassChangeRecoder(oldModels.get(index),newTypeModel));
 			}
 		}		
 	}
 	
-	public List<TypeChangeRecoder> getTypeChangeRecoders(){
+	public List<ClassChangeRecoder> getTypeChangeRecoders(){
 
 		return typeChangeRecoders;
 	}	

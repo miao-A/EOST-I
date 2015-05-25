@@ -3,7 +3,7 @@ package seu.EOSTI.Model;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractTypeModel {
+public abstract class AbstractClassModel {
 	
 /*	private String packageName = null;
 	private String className = null;	
@@ -23,7 +23,7 @@ public abstract class AbstractTypeModel {
 	
 	public abstract String getClassName();
 	
-	public abstract void addInnerClass(TypeModel typeModel);
+	public abstract void addInnerClass(ClassModel typeModel);
 		
 	public abstract void setModifier(JModifier jModifier);
 		
@@ -47,11 +47,11 @@ public abstract class AbstractTypeModel {
 
 	public abstract void setMethodModels(List<MethodModel> methodModels);
 	
-	public abstract List<AbstractTypeModel> getInnerClassModels();
+	public abstract List<AbstractClassModel> getInnerClassModels();
 	
-	public abstract void setInnerClassModels(List<AbstractTypeModel> innerClassModels);
+	public abstract void setInnerClassModels(List<AbstractClassModel> innerClassModels);
 	
-	public abstract void addInnerClassModel(AbstractTypeModel innerClassModel);	
+	public abstract void addInnerClassModel(AbstractClassModel innerClassModel);	
 	
 	public abstract boolean equals(Object obj);
 

@@ -11,13 +11,13 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import seu.EOSTI.Model.AbstractTypeModel;
-import seu.EOSTI.Model.TypeModel;
+import seu.EOSTI.Model.AbstractClassModel;
+import seu.EOSTI.Model.ClassModel;
 
 public class ComponentRequertor extends FileASTRequestor {
 
 
-	private List<AbstractTypeModel> typeModels;
+	private List<AbstractClassModel> typeModels;
 	
 	public ComponentRequertor(){
 		typeModels = new LinkedList<>();
@@ -31,7 +31,7 @@ public class ComponentRequertor extends FileASTRequestor {
 		typeModels.add(visitor.getTypeModel());
 	}
 	
-	public List<AbstractTypeModel> getTypeModels(){
+	public List<AbstractClassModel> getTypeModels(){
 		return typeModels;
 	}
 	

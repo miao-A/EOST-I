@@ -28,12 +28,12 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.internal.dnd.SwtUtil;
 
-import seu.EOSTI.Model.AbstractTypeModel;
+import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ChangeStatus;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
-import seu.EOSTI.Model.TypeChangeRecoder;
+import seu.EOSTI.Model.ClassChangeRecoder;
 import seu.EOSTI.Parser.Compatibility;
 
 import org.eclipse.swt.widgets.Table;
@@ -189,12 +189,12 @@ public class CompatibilityComposite extends Composite {
 
 				
 			
-				List<TypeChangeRecoder> modifiedType = compatibility.getModifiedRecoders();					
+				List<ClassChangeRecoder> modifiedType = compatibility.getModifiedRecoders();					
 				if (modifiedType.size()!=0) {
 					TableItem uItem = new TableItem(changeTypeTable, SWT.NONE);
 					uItem.setText(new String[] {"修改的类","------","------","------","------"});
 				}
-				for(TypeChangeRecoder tcr : modifiedType){					
+				for(ClassChangeRecoder tcr : modifiedType){					
 	
 					if (!tcr.getModifierRecoder().isCompatibility()){
 						System.out.println("not compatibility");
@@ -291,12 +291,12 @@ public class CompatibilityComposite extends Composite {
 				
 				
 				
-				List<AbstractTypeModel> removedType = compatibility.getRemovedTypeModels();	
+				List<AbstractClassModel> removedType = compatibility.getRemovedTypeModels();	
 				if (removedType.size()!=0) {
 					TableItem uItem = new TableItem(changeTypeTable, SWT.NONE);
 					uItem.setText(new String[] {"删除的类","------","------","------","------"});
 				}
-				for(AbstractTypeModel atm : removedType){
+				for(AbstractClassModel atm : removedType){
 					final TableItem item = new TableItem(changeTypeTable, SWT.NONE);
 					int theremovedCount =  atm.getPublicMethodNum();
 					removedCount += theremovedCount;
@@ -317,12 +317,12 @@ public class CompatibilityComposite extends Composite {
 				
 				
 
-				List<TypeChangeRecoder> unchangeType = compatibility.getUnchangedRecoders();
+				List<ClassChangeRecoder> unchangeType = compatibility.getUnchangedRecoders();
 				if (unchangeType.size()!=0) {
 					TableItem uItem = new TableItem(changeTypeTable, SWT.NONE);
 					uItem.setText(new String[] {"未变更的类","------","------","------","------"});
 				}
-				for(TypeChangeRecoder tcr : unchangeType){
+				for(ClassChangeRecoder tcr : unchangeType){
 					final TableItem item = new TableItem(changeTypeTable, SWT.NONE);					
 					MethodRecoder mRecoder = tcr.getMethodRecoder();
 					int theunchangeCount = mRecoder.getUnchangedMethodNum();

@@ -10,6 +10,13 @@ import java.util.List;
 
 
 
+
+
+
+
+
+
+
 import javassist.compiler.ast.Visitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -27,30 +34,37 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.QualifiedType;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.UnionType;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.WildcardType;
 
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
-import seu.EOSTI.Model.AbstractTypeModel;
+import seu.EOSTI.Model.AbstractClassModel;
+import seu.EOSTI.Model.ConstructorMethodModel;
 import seu.EOSTI.Model.EnumModel;
 import seu.EOSTI.Model.FieldModel;
 import seu.EOSTI.Model.JModifier;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.SingleVariableModel;
-import seu.EOSTI.Model.TypeModel;
+import seu.EOSTI.Model.ClassModel;
 
 public class ComponentVisitor extends ASTVisitor {
 
-	private TypeModel typeModel;
+	private ClassModel typeModel;
 	private EnumModel enumModel;
 	private String packageName = null;
 	
 	public ComponentVisitor(){
-		typeModel = new TypeModel();
+		typeModel = new ClassModel();
 		enumModel = new EnumModel();
 	}	
 	
@@ -84,8 +98,8 @@ public class ComponentVisitor extends ASTVisitor {
 		return true;
 	}
 	
-	private TypeModel getClassType(TypeDeclaration node){
-		TypeModel typeModel = new TypeModel();
+	private ClassModel getClassType(TypeDeclaration node){
+		ClassModel typeModel = new ClassModel();
 		typeModel.setEmpty(false);
 		String string=node.getName().getIdentifier();
 		typeModel.setClassName(string);
@@ -122,6 +136,8 @@ public class ComponentVisitor extends ASTVisitor {
 		
 		//处理method //记录函数签名
 		typeModel.setMethodModels(getMethodModels(node));
+		typeModel.setConstructorMethodModels(getConstructorMethodModels(node));
+		
 		
 		//处理Body部分类型
 		List bd = node.bodyDeclarations();
@@ -316,10 +332,29 @@ public class ComponentVisitor extends ASTVisitor {
 				MethodModel methodModel = new MethodModel();
 				methodModel.setMethodName(methodDeclaration.getName().getIdentifier());
 				methodModel.setModifier(getJModifier(methodDeclaration));
-				if (methodDeclaration.isConstructor()){
-					methodModel.setConstructor(methodDeclaration.isConstructor());					
-				}else {
-					methodModel.setReturnType(methodDeclaration.getReturnType2().toString());
+				if (!methodDeclaration.isConstructor()){
+					Type type = methodDeclaration.getReturnType2();
+					if (type instanceof PrimitiveType) {
+						System.out.println(type.getClass().getName()+" "+type.toString());
+					}else if (type instanceof ArrayType) {
+						System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
+					}else if (type instanceof SimpleType) {
+
+						System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
+					}else if (type instanceof QualifiedType) {
+						System.out.println(type.getClass().getName());
+					}else if (type instanceof WildcardType) {
+						System.out.println(type.getClass().getName());
+					}else if (type instanceof ParameterizedType) {
+						System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
+						List<Type> types = ((ParameterizedType) type).typeArguments();
+						for (Type type2 : types) {
+							System.out.println(type2.toString());
+						}
+					}else if (type instanceof UnionType) {
+						System.out.println(type.getClass().getName());
+					}
+					methodModel.setReturnType(methodDeclaration.getReturnType2().toString());					
 				}
 				
 				List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
@@ -355,10 +390,8 @@ public class ComponentVisitor extends ASTVisitor {
 					
 					methodModel.setMethodName(((MethodDeclaration) bodyDeclaration).getName().toString());
 					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
-					if (((MethodDeclaration)bodyDeclaration).isConstructor()){
-						methodModel.setConstructor(((MethodDeclaration)bodyDeclaration).isConstructor());					
-					}else {
-						methodModel.setReturnType(((MethodDeclaration)bodyDeclaration).getReturnType2().toString());
+					if (!((MethodDeclaration)bodyDeclaration).isConstructor()){
+						methodModel.setReturnType(((MethodDeclaration)bodyDeclaration).getReturnType2().toString());					
 					}
 					
 					List<TypeParameter> typeParameters = ((MethodDeclaration)bodyDeclaration).typeParameters();
@@ -390,8 +423,86 @@ public class ComponentVisitor extends ASTVisitor {
 	}
 	
 	
-	public AbstractTypeModel getTypeModel() {
-		AbstractTypeModel atm = null ;
+public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
+		
+		List<ConstructorMethodModel> list = new LinkedList<>(); 	
+		if (node instanceof TypeDeclaration) {
+			MethodDeclaration[] methods = ((TypeDeclaration) node).getMethods();
+			for (MethodDeclaration methodDeclaration : methods) {
+				ConstructorMethodModel methodModel = new ConstructorMethodModel();
+				methodModel.setMethodName(methodDeclaration.getName().getIdentifier());
+				methodModel.setModifier(getJModifier(methodDeclaration));
+				if (!methodDeclaration.isConstructor()){
+					continue;					
+				}
+				
+				List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
+				for (TypeParameter typeParameter : typeParameters) {
+					System.out.println("typeParameter:"+typeParameter.getName());
+					methodModel.addTypeParameter(typeParameter.getName().toString());					
+				}
+				
+				List<SingleVariableDeclaration> singleVariableDeclarations = methodDeclaration.parameters();
+				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
+					SingleVariableModel svm = new SingleVariableModel();
+					svm.setModifier(getJModifier(singleVariableDeclaration));
+					svm.setType(singleVariableDeclaration.getType().toString());
+					svm.setVarargs(singleVariableDeclaration.isVarargs());
+					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+					svm.setName(singleVariableDeclaration.getName().toString());
+					methodModel.addFormalParameters(svm);
+				}
+				methodModel.setExtraDimensions(methodDeclaration.getExtraDimensions());
+				List<Name> throwList = methodDeclaration.thrownExceptions();
+				for (Name name : throwList) {
+					methodModel.addThrownList(name.getFullyQualifiedName());
+				}
+				list.add(methodModel);
+			}		
+
+		}else if (node instanceof EnumDeclaration) {			  
+			  List<BodyDeclaration> list2= ((EnumDeclaration) node).bodyDeclarations();
+			  for (BodyDeclaration bodyDeclaration : list2) {
+				if (bodyDeclaration instanceof MethodDeclaration) {
+					ConstructorMethodModel methodModel = new ConstructorMethodModel();
+
+					
+					methodModel.setMethodName(((MethodDeclaration) bodyDeclaration).getName().toString());
+					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
+					if (!((MethodDeclaration)bodyDeclaration).isConstructor()){
+						continue;
+					}
+					
+					List<TypeParameter> typeParameters = ((MethodDeclaration)bodyDeclaration).typeParameters();
+					for (TypeParameter typeParameter : typeParameters) {
+						System.out.println("typeParameter:"+typeParameter.getName());
+						methodModel.addTypeParameter(typeParameter.getName().toString());					
+					}
+					
+					List<SingleVariableDeclaration> singleVariableDeclarations = ((MethodDeclaration)bodyDeclaration).parameters();
+					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
+						SingleVariableModel svm = new SingleVariableModel();
+						svm.setModifier(getJModifier(singleVariableDeclaration));
+						svm.setType(singleVariableDeclaration.getType().toString());
+						svm.setVarargs(singleVariableDeclaration.isVarargs());
+						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+						methodModel.addFormalParameters(svm);
+					}
+					methodModel.setExtraDimensions(((MethodDeclaration)bodyDeclaration).getExtraDimensions());
+					List<Name> throwList = ((MethodDeclaration)bodyDeclaration).thrownExceptions();
+					for (Name name : throwList) {
+						methodModel.addThrownList(name.getFullyQualifiedName());
+					}
+					list.add(methodModel);				
+				} 
+			
+			}	
+		}		
+		return list;
+	}
+	
+	public AbstractClassModel getTypeModel() {
+		AbstractClassModel atm = null ;
 		if (!typeModel.isEmpty()) {
 			System.out.println("get typemodel");
 			atm = typeModel;

@@ -9,25 +9,25 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ComponentRequertor;
-import seu.EOSTI.Model.AbstractTypeModel;
+import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ChangeStatus;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
-import seu.EOSTI.Model.TypeChangeRecoder;
+import seu.EOSTI.Model.ClassChangeRecoder;
 
 public class Compatibility {
 	
 	private String oldPathOfComponet;
 	private String newPathOfComponet;
-	private List<AbstractTypeModel> changeRecoder;
+	private List<AbstractClassModel> changeRecoder;
 	
-	private List<AbstractTypeModel> removedType = new LinkedList<>();
-	private List<AbstractTypeModel> newType = new LinkedList<>();
-	private List<TypeChangeRecoder> unchangedType = new LinkedList<>();
-	private List<TypeChangeRecoder> modifiedType = new LinkedList<>();
+	private List<AbstractClassModel> removedType = new LinkedList<>();
+	private List<AbstractClassModel> newType = new LinkedList<>();
+	private List<ClassChangeRecoder> unchangedType = new LinkedList<>();
+	private List<ClassChangeRecoder> modifiedType = new LinkedList<>();
 	
-	private List<TypeChangeRecoder>  typeChangeRecoders = new LinkedList<>();
+	private List<ClassChangeRecoder>  typeChangeRecoders = new LinkedList<>();
 	
 	public Compatibility(String oldPathOfComponet,String newPathOfComponet) {
 		// TODO Auto-generated constructor stub
@@ -37,28 +37,28 @@ public class Compatibility {
 		compatibilityParser(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));		
 	}
 	
-	public void compatibilityParser(List<AbstractTypeModel> oldModels,List<AbstractTypeModel> newModels){
+	public void compatibilityParser(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
 
-		for (AbstractTypeModel oldTypeModel : oldModels) {
+		for (AbstractClassModel oldTypeModel : oldModels) {
 			if (!newModels.contains(oldTypeModel)) {
 				removedType.add(oldTypeModel);
 			}			
 		}
 		
-		for (AbstractTypeModel newTypeModel : newModels) {
+		for (AbstractClassModel newTypeModel : newModels) {
 			if (!oldModels.contains(newTypeModel)) {
 				newType.add(newTypeModel);
 			}
 		}
 		
-		for (AbstractTypeModel newTypeModel : newModels) {
+		for (AbstractClassModel newTypeModel : newModels) {
 			if (oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				typeChangeRecoders.add(new TypeChangeRecoder(oldModels.get(index),newTypeModel));
+				typeChangeRecoders.add(new ClassChangeRecoder(oldModels.get(index),newTypeModel));
 			}
 		}
 		
-		for (TypeChangeRecoder tc : typeChangeRecoders) {
+		for (ClassChangeRecoder tc : typeChangeRecoders) {
 			if (tc.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
 				unchangedType.add(tc);			
 			}else if(tc.getChangeStatus().equals(ChangeStatus.MODIFIED)){
@@ -71,7 +71,7 @@ public class Compatibility {
 	}
 	
 	
-	public List<AbstractTypeModel> parserComponet(String pathOfComponet)  {
+	public List<AbstractClassModel> parserComponet(String pathOfComponet)  {
 		// create a AST parser
 		ASTParser parser;
 		parser = ASTParser.newParser(AST.JLS4);
@@ -96,24 +96,24 @@ public class Compatibility {
 		return ComponentRequertor.getTypeModels();
 	}		
 	
-	public List<TypeChangeRecoder> getTypeChangeRecoders(){
+	public List<ClassChangeRecoder> getTypeChangeRecoders(){
 		return typeChangeRecoders;
 	}
 	
 	
-	public List<AbstractTypeModel> getNewTypeModels(){
+	public List<AbstractClassModel> getNewTypeModels(){
 		return newType;
 	}
 	
-	public List<AbstractTypeModel> getRemovedTypeModels(){
+	public List<AbstractClassModel> getRemovedTypeModels(){
 		return removedType;
 	}
 	
-	public List<TypeChangeRecoder> getUnchangedRecoders(){
+	public List<ClassChangeRecoder> getUnchangedRecoders(){
 		return unchangedType;
 	}
 	
-	public List<TypeChangeRecoder> getModifiedRecoders(){
+	public List<ClassChangeRecoder> getModifiedRecoders(){
 		return modifiedType;
 	}
 	
@@ -121,12 +121,12 @@ public class Compatibility {
 	
 	
 	public void getinfo(){
-		for(AbstractTypeModel atm : newType){
+		for(AbstractClassModel atm : newType){
 			System.out.println("newType:"+ atm.getPackage()+" " +atm.getClassName());
 			
 		}
 		
-		for(AbstractTypeModel atm : removedType){
+		for(AbstractClassModel atm : removedType){
 			System.out.println("removedType:"+ atm.getPackage()+" " +atm.getClassName());
 			List<MethodModel> list = atm.getMethodModels();
 			int count = 0;
@@ -138,7 +138,7 @@ public class Compatibility {
 			System.out.println(count);
 		}
 		
-		for(TypeChangeRecoder atm : unchangedType){
+		for(ClassChangeRecoder atm : unchangedType){
 			System.out.println("unchangedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			int count = 0;
@@ -151,7 +151,7 @@ public class Compatibility {
 			System.out.println(count);
 		}
 		
-		for(TypeChangeRecoder atm : modifiedType){
+		for(ClassChangeRecoder atm : modifiedType){
 			System.out.println("modifiedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			
