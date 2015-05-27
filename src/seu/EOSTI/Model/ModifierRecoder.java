@@ -12,20 +12,6 @@ public class ModifierRecoder {
 	private Map<String,ChangeStatus> modifierChangeStatus = new HashMap<>();
 	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
 	private boolean changeflag = false; 
-
-	
-	/*private ChangeStatus publicStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus privateStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus protectStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus staticStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus abstrctStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus finalStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus nativeStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus synchronizedStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus transientStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus volatileStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus strictfpStatus = ChangeStatus.UNCHANGED;*/
-	
 	
 	public ModifierRecoder(JModifier oldJModifier,JModifier newModifier){
 		this.oldModifier = oldJModifier;
@@ -71,7 +57,7 @@ public class ModifierRecoder {
 	
 	public void compareModifier() {
 		// TODO Auto-generated method stub		
-		Object object = new String("tttt");
+		
 		if (oldModifier.isABSTRACT()^newModifier.isABSTRACT()) {
 			modifierChangeStatus.put("abstract", ChangeStatus.MODIFIED);
 			changeflag = true;

@@ -1,10 +1,21 @@
 package seu.EOSTI.Model;
 
+import java.util.List;
+
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.QualifiedType;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.UnionType;
+import org.eclipse.jdt.core.dom.WildcardType;
+
 public class SingleVariableModel {
 
 	private String name;
 	private JModifier modifier;
-	private String type;
+	private TypeModel typeModel;
 	private boolean varargs = false;
 	private int extraDimensions = 0;
 	
@@ -24,11 +35,32 @@ public class SingleVariableModel {
 	public void setModifier(JModifier modifier) {
 		this.modifier = modifier;
 	}
-	public String getType() {
-		return type;
+	public TypeModel getType() {
+		return typeModel;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setType(Type type) {
+
+		if (type instanceof PrimitiveType) {
+			System.out.println(type.getClass().getName()+" "+type.toString());
+			typeModel = new PrimitiveTypeModel(type.toString());
+		}else if (type instanceof ArrayType) {
+			System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
+			typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
+		}else if (type instanceof SimpleType) {
+			System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
+			typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
+		}else if (type instanceof QualifiedType) {
+			System.out.println(type.getClass().getName());
+		}else if (type instanceof WildcardType) {
+			System.out.println(type.getClass().getName());
+		}else if (type instanceof ParameterizedType) {
+			System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
+			typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
+			List<Type> types = ((ParameterizedType) type).typeArguments();
+			((ParameterizedTypeModel) typeModel).setTypeArguments(types);						
+		}else if (type instanceof UnionType) {
+			System.out.println("Union");
+		}
 	}
 	public boolean isVarargs() {
 		return varargs;
@@ -50,7 +82,7 @@ public class SingleVariableModel {
 			return true;
 		}
 		if (obj instanceof SingleVariableModel) {
-			if (this.getType().equals(((SingleVariableModel) obj).getType())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
+			if (this.getType().getTypeName().equals(((SingleVariableModel) obj).getType().getTypeName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
 				return true;
 			}
 		}

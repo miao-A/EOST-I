@@ -274,22 +274,16 @@ public class CompatibilityComposite extends Composite {
 							myModel.removedList.add(methodModel.getFullName());
 
 						}
-					}	
-					
+					}					
 					
 					List<MethodModel> unlist = mRecoder.getUnchangedMethodModels();
 					for (MethodModel methodModel : unlist) {						
 						if (methodModel.getModifier().isPUBLIC()) {
 							myModel.unchangedList.add(methodModel.getFullName());
 						}
-					}
-				
-				
-					myModels.add(myModel);
-				
-				}					
-				
-				
+					}				
+					myModels.add(myModel);				
+				}									
 				
 				List<AbstractClassModel> removedType = compatibility.getRemovedTypeModels();	
 				if (removedType.size()!=0) {
@@ -338,7 +332,8 @@ public class CompatibilityComposite extends Composite {
 								
 							}
 						}
-					}
+					}				
+					
 					myModels.add(myModel);
 				}		
 					

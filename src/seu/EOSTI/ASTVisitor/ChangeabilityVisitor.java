@@ -98,20 +98,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 	}
 
 	
-	/*public boolean visit(MethodInvocation node){
-		IMethodBinding binding =  node.resolveMethodBinding();//node.getName().resolveBinding();
-		if (binding == null) {
-			System.out.println("method binding is null in class:" +classString );
-			return true;
-		}
-		String importpackageName = binding.getDeclaringClass().getPackage().getName();
-		if (!importpackageName.equals(packageString)) {
-			System.out.println(classString + " binding is in package:" + packageString );
-			importPackageStrings.add(importpackageName);
-		}
-		return true;
-	}*/
-
+	
 	public void endVisit(CompilationUnit node){
 		//可用于数据库插入，数据库建成后上述get方法可删除
 	

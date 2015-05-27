@@ -2,15 +2,13 @@ package seu.EOSTI.Model;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-public class ClassChangeRecoder {
-
-	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus superClassChangeStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus superInterfaceChangeStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus fieldChangeStatus = ChangeStatus.UNCHANGED;
-	private ChangeStatus methodChangeStatus = ChangeStatus.UNCHANGED;
+public class ClassCompatibilityRecoder {
+	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+	private CompatibilityStatus superClassCompatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+	private CompatibilityStatus superInterfaceCompatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+	private CompatibilityStatus fieldCompatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+	private CompatibilityStatus methodCompatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	
 	private AbstractClassModel oldTypeModel = null;
 	private AbstractClassModel newTypeModel = null;
@@ -30,14 +28,14 @@ public class ClassChangeRecoder {
 	private List<AbstractClassModel> modifiedInnerTypeModels = new LinkedList<>();
 	
 	
-	public ClassChangeRecoder(AbstractClassModel oldModel,AbstractClassModel newModel){
+	public ClassCompatibilityRecoder(AbstractClassModel oldModel,AbstractClassModel newModel){
 		this.oldTypeModel = oldModel;
 		this.newTypeModel = newModel;
-		changeStatus = compareRun();
+		compatibilityStatus = compareRun();
 	}
 	
 	
-	public ChangeStatus compareRun(){
+	public CompatibilityStatus compareRun(){
 		if ((oldTypeModel instanceof ClassModel)&&(newTypeModel instanceof ClassModel)) {
 			superClassRecoder =new SuperClassRecoder(((ClassModel)oldTypeModel).getSuperClass(),((ClassModel)newTypeModel).getSuperClass());
 		}
@@ -52,32 +50,39 @@ public class ClassChangeRecoder {
 		fieldRecoder = new FieldRecoder(oldTypeModel.getFieldModels(), newTypeModel.getFieldModels());
 		methodRecoder = new MethodRecoder(oldTypeModel.getMethodModels(), newTypeModel.getMethodModels());
 		
-		if (isUnchanged(modifierRecoder.getChangeStatus())&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
-				isUnchanged(superInterfaceClassRecoder.getChangeStatus())&&isUnchanged(fieldRecoder.getChangeStatus())&&isUnchanged(methodRecoder.getChangeStatus())) {
-			this.changeStatus = ChangeStatus.UNCHANGED;
-		}else {
-			this.changeStatus = ChangeStatus.MODIFIED;			
-			superClassChangeStatus = superClassRecoder.getChangeStatus();
-			superInterfaceChangeStatus = superInterfaceClassRecoder.getChangeStatus();
-			fieldChangeStatus = fieldRecoder.getChangeStatus();
-			methodChangeStatus = methodRecoder.getChangeStatus();
+		if (modifierRecoder.isCompatibility()&& methodRecoder.isCompatibility()&&constructorMethodRecoder.isCompatibility()&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
+				isUnchanged(superInterfaceClassRecoder.getChangeStatus())) {
+			this.compatibilityStatus = compatibilityStatus.COMPATIBILITY;
+		}else{
+		
+			this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+			if (superClassRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
+				superClassCompatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+			}
+			
+			if (superInterfaceClassRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
+				superInterfaceCompatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+			}
+			
+			if (!methodRecoder.isCompatibility()){
+				methodCompatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+			}			
 		}
-		
-		
+				
 		List<AbstractClassModel> oldInners = oldTypeModel.getInnerClassModels();
 		List<AbstractClassModel> newInners = newTypeModel.getInnerClassModels();
 		
 		for (AbstractClassModel oldInner : oldInners) {
 			if (!newInners.contains(oldInner)) {
 				removedInnerTypeModels.add(oldInner);
-				this.changeStatus = ChangeStatus.MODIFIED;
+				this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
 			}
 		}
 		
 		for (AbstractClassModel newInner : newInners) {
 			if (!oldInners.contains(newInner)) {
 				newInnerTypeModels.add(newInner);
-				this.changeStatus = ChangeStatus.MODIFIED;
+				this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
 			}
 		}
 		
@@ -89,12 +94,12 @@ public class ClassChangeRecoder {
 					unchangedInnerTypeModels.add(newInner);
 				}else {
 					modifiedInnerTypeModels.add(newInner);
-					this.changeStatus = ChangeStatus.MODIFIED;
+					this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
 				}
 			}
 		}
 		
-		return this.changeStatus;		
+		return this.compatibilityStatus;		
 	}	
 	
 	
@@ -103,29 +108,29 @@ public class ClassChangeRecoder {
 		return changeStatus.equals(ChangeStatus.UNCHANGED);
 	}
 	
-	public ChangeStatus getSuperClassChangeStatus() {
-		return superClassChangeStatus;
+	public CompatibilityStatus getSuperClassChangeStatus() {
+		return superClassCompatibilityStatus;
 	}
-	public void setSuperClassChangeStatus(ChangeStatus superClassChangeStatus) {
-		this.superClassChangeStatus = superClassChangeStatus;
+	public void setSuperClassChangeStatus(CompatibilityStatus superClassChangeStatus) {
+		this.superClassCompatibilityStatus = superClassChangeStatus;
 	}
-	public ChangeStatus getSuperInterfaceChangeStatus() {
-		return superInterfaceChangeStatus;
+	public CompatibilityStatus getSuperInterfaceChangeStatus() {
+		return superInterfaceCompatibilityStatus;
 	}
-	public void setSuperInterfaceChangeStatus(ChangeStatus superInterfaceChangeStatus) {
-		this.superInterfaceChangeStatus = superInterfaceChangeStatus;
+	public void setSuperInterfaceChangeStatus(CompatibilityStatus superInterfaceChangeStatus) {
+		this.superInterfaceCompatibilityStatus = superInterfaceChangeStatus;
 	}
-	public ChangeStatus getFieldChangeStatus() {
-		return fieldChangeStatus;
+	public CompatibilityStatus getFieldChangeStatus() {
+		return fieldCompatibilityStatus;
 	}
-	public void setFieldChangeStatus(ChangeStatus fieldChangeStatus) {
-		this.fieldChangeStatus = fieldChangeStatus;
+	public void setFieldChangeStatus(CompatibilityStatus fieldChangeStatus) {
+		this.fieldCompatibilityStatus = fieldChangeStatus;
 	}
-	public ChangeStatus getMethodChangeStatus() {
-		return methodChangeStatus;
+	public CompatibilityStatus getMethodChangeStatus() {
+		return methodCompatibilityStatus;
 	}
-	public void setMethodChangeStatus(ChangeStatus methodChangeStatus) {
-		this.methodChangeStatus = methodChangeStatus;
+	public void setMethodChangeStatus(CompatibilityStatus methodChangeStatus) {
+		this.methodCompatibilityStatus = methodChangeStatus;
 	}	
 
 	public SuperClassRecoder getSuperClassRecoder() {
@@ -137,13 +142,13 @@ public class ClassChangeRecoder {
 	}
 
 
-	public ChangeStatus getChangeStatus() {
-		return changeStatus;
+	public CompatibilityStatus getChangeStatus() {
+		return compatibilityStatus;
 	}
 
 
-	public void setChangeStatus(ChangeStatus changeStatus) {
-		this.changeStatus = changeStatus;
+	public void setChangeStatus(CompatibilityStatus changeStatus) {
+		this.compatibilityStatus = changeStatus;
 	}
 	
 	public AbstractClassModel getOldTypeModel(){

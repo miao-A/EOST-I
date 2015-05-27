@@ -23,6 +23,7 @@ import java.util.List;
 
 
 
+
 import javassist.compiler.ast.Visitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -35,6 +36,7 @@ import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -198,10 +200,10 @@ public class ComponentVisitor extends ASTVisitor {
 		
 		
 		List<EnumConstantDeclaration> list2= ((EnumDeclaration) node).enumConstants();
-		  for (EnumConstantDeclaration enumConstantDeclaration : list2) {
+		for (EnumConstantDeclaration enumConstantDeclaration : list2) {
 //			System.out.println(enumConstantDeclaration.getName());
 			enumModel.addEnumConstant(enumConstantDeclaration.getName().toString());
-		  }
+		}
 		
 		
 		
@@ -344,18 +346,26 @@ public class ComponentVisitor extends ASTVisitor {
 				MethodModel methodModel = new MethodModel();
 				methodModel.setMethodName(methodDeclaration.getName().getIdentifier());
 				methodModel.setModifier(getJModifier(methodDeclaration));
-				if (!methodDeclaration.isConstructor()){
+				if (methodDeclaration.isConstructor()){
+					continue ;
+				}
 					TypeModel typeModel = null;
 					Type type = methodDeclaration.getReturnType2();
 					if (type instanceof PrimitiveType) {
 						System.out.println(type.getClass().getName()+" "+type.toString());
-						typeModel = new PrimitiveTypeModel(type.toString());
+						typeModel = new PrimitiveTypeModel(type.toString());						
 					}else if (type instanceof ArrayType) {
 						System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
 						typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
 					}else if (type instanceof SimpleType) {
 						System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
 						typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
+						if (type.resolveBinding()!=null) {
+							if (type.resolveBinding().getSuperclass() != null) {
+								System.out.println(((SimpleType) type).resolveBinding().getSuperclass().getName());
+								((SimpleTypeModel) typeModel).setSuperClass(((SimpleType) type).resolveBinding().getSuperclass().getName());
+							}							
+						}						
 					}else if (type instanceof QualifiedType) {
 						System.out.println(type.getClass().getName());
 					}else if (type instanceof WildcardType) {
@@ -370,7 +380,7 @@ public class ComponentVisitor extends ASTVisitor {
 					}
 					
 					methodModel.setReturnType(typeModel);					
-				}
+				
 				
 				List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
 				for (TypeParameter typeParameter : typeParameters) {
@@ -382,7 +392,7 @@ public class ComponentVisitor extends ASTVisitor {
 				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
 					SingleVariableModel svm = new SingleVariableModel();
 					svm.setModifier(getJModifier(singleVariableDeclaration));
-					svm.setType(singleVariableDeclaration.getType().toString());
+					svm.setType(singleVariableDeclaration.getType());
 					svm.setVarargs(singleVariableDeclaration.isVarargs());
 					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
 					svm.setName(singleVariableDeclaration.getName().toString());
@@ -401,7 +411,6 @@ public class ComponentVisitor extends ASTVisitor {
 			  for (BodyDeclaration bodyDeclaration : list2) {
 				if (bodyDeclaration instanceof MethodDeclaration) {
 					MethodModel methodModel = new MethodModel();
-
 					
 					methodModel.setMethodName(((MethodDeclaration) bodyDeclaration).getName().toString());
 					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
@@ -444,7 +453,7 @@ public class ComponentVisitor extends ASTVisitor {
 					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
 						SingleVariableModel svm = new SingleVariableModel();
 						svm.setModifier(getJModifier(singleVariableDeclaration));
-						svm.setType(singleVariableDeclaration.getType().toString());
+						svm.setType(singleVariableDeclaration.getType());
 						svm.setVarargs(singleVariableDeclaration.isVarargs());
 						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
 						methodModel.addFormalParameters(svm);
@@ -486,7 +495,7 @@ public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
 				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
 					SingleVariableModel svm = new SingleVariableModel();
 					svm.setModifier(getJModifier(singleVariableDeclaration));
-					svm.setType(singleVariableDeclaration.getType().toString());
+					svm.setType(singleVariableDeclaration.getType());
 					svm.setVarargs(singleVariableDeclaration.isVarargs());
 					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
 					svm.setName(singleVariableDeclaration.getName().toString());
@@ -523,7 +532,7 @@ public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
 					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
 						SingleVariableModel svm = new SingleVariableModel();
 						svm.setModifier(getJModifier(singleVariableDeclaration));
-						svm.setType(singleVariableDeclaration.getType().toString());
+						svm.setType(singleVariableDeclaration.getType());
 						svm.setVarargs(singleVariableDeclaration.isVarargs());
 						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
 						methodModel.addFormalParameters(svm);

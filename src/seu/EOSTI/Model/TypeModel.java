@@ -41,4 +41,7 @@ public abstract class TypeModel {
 		this.typeName = typeName;
 	}	
 	
+	public abstract boolean CanCompatibility(TypeModel typeModel);
+	
+	public abstract String getFullName();
 }

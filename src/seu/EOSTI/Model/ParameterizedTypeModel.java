@@ -15,10 +15,14 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 public class ParameterizedTypeModel extends TypeModel {
 	
+	
+	
 	private List<TypeModel> typeArguments = new LinkedList<>();
+	private SimpleTypeModel simpletype;
+	
 	
 	public ParameterizedTypeModel(String typeName){
-		super(typeName);
+		simpletype = new SimpleTypeModel(typeName);
 	}
 
 	public List<? extends TypeModel> getTypeArguments() {
@@ -49,6 +53,29 @@ public class ParameterizedTypeModel extends TypeModel {
 			this.typeArguments.add(typeModel);
 		}
 
+	}
+
+	@Override
+	public boolean CanCompatibility(TypeModel typeModel) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getFullName() {
+		// TODO Auto-generated method stub
+		String string = "";
+		string +=this.simpletype.getFullName();
+		string += "<";
+		for (int i = 0; i < typeArguments.size(); i++) {
+			string += typeArguments.get(i).getFullName();
+			if (i == typeArguments.size()) {
+				string += ">";
+			}else {
+				string += ",";
+			}
+		}
+		return string;
 	}	
 	
 }

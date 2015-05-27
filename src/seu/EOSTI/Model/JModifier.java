@@ -135,15 +135,15 @@ public class JModifier {
 		}
 
 		if (isNATIVE()) {
-			string += "native";
+			string += "native ";
 		}
 		
 		if (isSYNCHRONIZED()) {
-			string += "synchronized";
+			string += "synchronized ";
 		}
 		
 		if (isTRANSIENT()) {
-			string += "transient";
+			string += "transient ";
 		}
 		
 		if (isVOLATILE()) {

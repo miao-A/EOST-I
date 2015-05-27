@@ -46,20 +46,40 @@ public class ComponentParser {
 		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
 		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
 		parser.setCompilerOptions(complierOptions);
-		parser.setEnvironment(null, null, null, true);
+		//parser.setEnvironment(null, null, null, true);
 		
 		// enable binding	
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setResolveBindings(true);
 		parser.setBindingsRecovery(true);
-		parser.setStatementsRecovery(true);
+		parser.setStatementsRecovery(true);	
+		
+		
 		
 		ComponentRequertor ComponentRequertor = new ComponentRequertor();
-		ReadFile readFile = new ReadFile(pathOfComponet);		
+		ReadFile readFile = new ReadFile(pathOfComponet);	
+		
+		//////////////////////////////////////////////////////////////////////
+		List<String> jarfilelist = readFile.readJarFiles();		
+		String[] jarpathEntries = jarfilelist.toArray(new String[jarfilelist.size()]);
+//		String[] jarpathEntries = {pathOfProject};
+		
+		List<String> javafilelist = readFile.readJavaFiles();		
+//		String[] sourcepathEntries = javafilelist.toArray(new String[javafilelist.size()]);
+		String[] sourcepathEntries = {pathOfComponet};
+		//jarpathEntries为项目依赖的jar包，sourcepathEntries为项目中java文件
+		parser.setEnvironment(jarpathEntries, sourcepathEntries, null, true);
+		/////////////////////////////////////////////////////////////////////////
+		
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
 		parser.createASTs(sourceFilePaths,  null, new String[0], ComponentRequertor, null);	
+		
+		
+		
+		
+		
 		return ComponentRequertor.getTypeModels();
 	}	
 

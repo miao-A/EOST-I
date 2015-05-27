@@ -31,7 +31,7 @@ public class MethodModel {
 	private JModifier modifier = new JModifier();
 	private List<String> typeParameters = new LinkedList<>();
 	
-	private TypeModel returnType ;
+	private TypeModel returnType;
 	private int extraDimensions = 0;
 	
 	private ArrayList<SingleVariableModel> formalParameters = new ArrayList<SingleVariableModel>();
@@ -109,18 +109,27 @@ public class MethodModel {
 	}
 	
 	public String getFullName(){
+		try{
 		String string = new String();
-		string += this.getModifier().getModifierInfo()+this.getReturnType()+" "
+		string += this.getModifier().getModifierInfo()+this.getReturnType().getFullName()+" "
 				+this.getMethodName()+"(";
 		List<SingleVariableModel> tpList =  this.getFormalParameters();
 		for (int i = 0; i < tpList.size(); i++) {
-			string += tpList.get(i).getType()+" "+tpList.get(i).getName();
+			string += tpList.get(i).getType().getTypeName()+" "+tpList.get(i).getName();
 			if (i!=tpList.size()-1) {
 				string +=",";
 			}
 		}
 		string += ")";
 		return string;
+		}catch(NullPointerException n)
+		{
+			System.out.println("");
+			return "";
+		}
+		
+		
+		
 	}
 
 	public boolean equals(Object obj){
@@ -144,6 +153,25 @@ public class MethodModel {
 			}
 		}
 		return false;
+	}
+	
+	public boolean canCompatibility(MethodModel methodModel){
+		
+		if(!this.getReturnType().CanCompatibility(methodModel.getReturnType())){
+			return false;
+		}
+			
+		if (this.getFormalParameters().size() == this.getFormalParameters().size()) {				
+			List<SingleVariableModel> removed = this.getFormalParameters();
+			List<SingleVariableModel> newadd = methodModel.getFormalParameters();
+			for (int i = 0; i < removed.size(); i++) {
+				if(!newadd.get(i).getType().CanCompatibility(removed.get(i).getType())){
+					return false;
+				}
+			}
+		}		
+		
+		return true;		
 	}
 
 }

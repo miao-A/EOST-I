@@ -5,19 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
-public class MethodRecoder {
+public class ConstructorMethodRecoder {
 	
+	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
-	private List<MethodModel> oldMethodModels = new LinkedList<>();
-	private List<MethodModel> newMethodModels = new LinkedList<>();
+	private List<ConstructorMethodModel> oldMethodModels = new LinkedList<>();
+	private List<ConstructorMethodModel> newMethodModels = new LinkedList<>();
 	
-	private List<MethodModel> newAddMethodModels = new LinkedList<>();
-	private List<MethodModel> removedMethodModels = new LinkedList<>();
-	private List<MethodModel> unchangedMethodModels = new LinkedList<>();
-//	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
+	private List<ConstructorMethodModel> newAddMethodModels = new LinkedList<>();
+	private List<ConstructorMethodModel> removedMethodModels = new LinkedList<>();
+	private List<ConstructorMethodModel> unchangedMethodModels = new LinkedList<>();
+
 	
-	private Map<MethodModel, MethodModel> modifiedMethodMap = new HashMap<MethodModel, MethodModel>();
+	private Map<ConstructorMethodModel, ConstructorMethodModel> modifiedMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
 	
 	/*
 	 * private String methodName;	
@@ -33,13 +33,13 @@ public class MethodRecoder {
 	
 	
 	
-	public MethodRecoder(List<MethodModel> oldMethodModels,List<MethodModel> newMethodModels) {
+	public ConstructorMethodRecoder(List<ConstructorMethodModel> oldMethodModels,List<ConstructorMethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
 		this.newMethodModels = newMethodModels;
 		compareMethodModel();
 	}
 	
-	public MethodRecoder() {
+	public ConstructorMethodRecoder() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -50,23 +50,23 @@ public class MethodRecoder {
 			unchangedMethodModels = oldMethodModels;
 		}else {
 			setChangeStatus(ChangeStatus.MODIFIED);
-			for (MethodModel oldMethodModel : oldMethodModels) {
+			for (ConstructorMethodModel oldMethodModel : oldMethodModels) {
 				if (!newMethodModels.contains(oldMethodModel)) {
 					removedMethodModels.add(oldMethodModel);
 				}			
 			}
 			
-			for (MethodModel newMethodModel : newMethodModels) {
+			for (ConstructorMethodModel newMethodModel : newMethodModels) {
 				if (!oldMethodModels.contains(newMethodModel)) {
 					newAddMethodModels.add(newMethodModel);
 				}			
 			}
 			
-			for (MethodModel newMethodModel : newMethodModels) {
+			for (ConstructorMethodModel newMethodModel : newMethodModels) {
 				if (oldMethodModels.contains(newMethodModel)){
 					int index = oldMethodModels.indexOf(newMethodModel);
 					ModifierRecoder mr = new ModifierRecoder(oldMethodModels.get(index).getModifier(), newMethodModel.getModifier());
-					if (!mr.isCompatibility()) {
+					if (mr.hasChange()) {
 						modifiedMethodMap.put(oldMethodModels.get(index), newMethodModel);
 
 					}else {
@@ -86,25 +86,25 @@ public class MethodRecoder {
 		this.changeStatus = changeStatus;
 	}
 	
-	public List<MethodModel> getNewAddMethodModels(){
+	public List<ConstructorMethodModel> getNewAddMethodModels(){
 		return newAddMethodModels;
 	}
 	
-	public List<MethodModel> getRemovedMethodModels(){
+	public List<ConstructorMethodModel> getRemovedMethodModels(){
 		return removedMethodModels;
 	}
 	
-	public List<MethodModel> getUnchangedMethodModels(){
+	public List<ConstructorMethodModel> getUnchangedMethodModels(){
 		return unchangedMethodModels;
 	}
 
-	public Map<MethodModel, MethodModel> getModifiedMethodMap() {
+	public Map<ConstructorMethodModel, ConstructorMethodModel> getModifiedMethodMap() {
 		return modifiedMethodMap;
 	}
 	
 	public int getNewAddMehodNum(){
 		int count =0;
-		for (MethodModel methodModel : newAddMethodModels) {
+		for (ConstructorMethodModel methodModel : newAddMethodModels) {
 			if (methodModel.getModifier().isPUBLIC()) {
 				count++;
 			}
@@ -114,7 +114,7 @@ public class MethodRecoder {
 	
 	public int getRemovedMehodNum(){
 		int count =0;
-		for (MethodModel methodModel : removedMethodModels) {
+		for (ConstructorMethodModel methodModel : removedMethodModels) {
 			if (methodModel.getModifier().isPUBLIC()) {
 				count++;
 			}
@@ -124,7 +124,7 @@ public class MethodRecoder {
 	
 	public int getUnchangedMethodNum(){
 		int count =0;
-		for (MethodModel methodModel : unchangedMethodModels) {
+		for (ConstructorMethodModel methodModel : unchangedMethodModels) {
 			if (methodModel.getModifier().isPUBLIC()) {
 				count++;
 			}
@@ -135,32 +135,25 @@ public class MethodRecoder {
 
 	public int getModifiedMethodNum(){
 		int count =0;	
-		for (MethodModel methodModel : modifiedMethodMap.keySet()) {
-			if (methodModel.getModifier().isPUBLIC()&&modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
+		for (ConstructorMethodModel methodModel : modifiedMethodMap.keySet()) {
+			if (methodModel.getModifier().isPUBLIC()||modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
 				count++;
-			}			
+			}
+			
 		}
 		return count;
+	}
+
+	public CompatibilityStatus getCompatibilityStatus() {
+		return compatibilityStatus;
+	}
+
+	public void setCompatibilityStatus(CompatibilityStatus compatibilityStatus) {
+		this.compatibilityStatus = compatibilityStatus;
 	}
 	
 	public boolean isCompatibility(){
 		boolean flag = true;
-		for (MethodModel removedModel : removedMethodModels) {
-			flag = false;
-			for (MethodModel addmethodModel : newAddMethodModels) {
-				if(removedModel.getMethodName().equals(addmethodModel.getMethodName())) {
-					if (addmethodModel.canCompatibility(removedModel)) {
-						flag = true;
-					}
-				}
-			}
-			if (flag == false) {
-				return false;
-			}
-		}
-		return true;
-		 
-		
+		return flag;
 	}
-	
 }
