@@ -13,7 +13,7 @@ public class EnumModel extends AbstractClassModel{
 	private JModifier modifier = new JModifier();
 	
 	private List<String> enumConstant = new LinkedList<>();
-	
+	private List<ConstructorMethodModel> constructorMethodModels = new LinkedList<>();
 	private List<FieldModel> fieldModels = new LinkedList<>();
 	private List<MethodModel> methodModels = new LinkedList<>();
 
@@ -189,6 +189,14 @@ public class EnumModel extends AbstractClassModel{
 			}
 		}
 		return count;
+	}
+
+	public List<ConstructorMethodModel> getConstructorMethodModels() {
+		return constructorMethodModels;
+	}
+
+	public void setConstructorMethodModels(List<ConstructorMethodModel> constructorMethodModels) {
+		this.constructorMethodModels = constructorMethodModels;
 	}
 
 }

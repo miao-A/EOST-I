@@ -51,6 +51,10 @@ public class SingleVariableModel {
 			typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
 		}else if (type instanceof QualifiedType) {
 			System.out.println(type.getClass().getName());
+			typeModel = new QualifiedTypeModel();
+			typeModel.setTypeName(((QualifiedType) type).getName().toString());
+			((QualifiedTypeModel) typeModel).setQualifiedName(((QualifiedType) type).getQualifier().toString());
+			System.out.println(typeModel.getFullName());
 		}else if (type instanceof WildcardType) {
 			System.out.println(type.getClass().getName());
 		}else if (type instanceof ParameterizedType) {
@@ -74,8 +78,6 @@ public class SingleVariableModel {
 	public void setExtraDimensions(int extraDimensions) {
 		this.extraDimensions = extraDimensions;
 	}	
-	
-
 	
 	public boolean equals(Object obj){
 		if (this == obj) {

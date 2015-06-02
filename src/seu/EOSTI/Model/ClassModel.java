@@ -19,9 +19,8 @@ public class ClassModel extends AbstractClassModel {
 	private String superClass;
 	private JModifier modifier = new JModifier();
 	
-	
-	private List<ConstructorMethodModel> constructorMethodModels = new LinkedList<>();
 	private List<FieldModel> fieldModels = new LinkedList<>();
+	private List<ConstructorMethodModel> constructorMethodModels = new LinkedList<>();	
 	private List<MethodModel> methodModels = new LinkedList<>();
 	
 /*	private List<EnumModel> enumClassModels = new LinkedList<>();
@@ -99,15 +98,7 @@ public class ClassModel extends AbstractClassModel {
 		for (FieldModel fieldModel : fieldModels) {
 			this.fieldModels.add(fieldModel);
 		}
-	}
-
-	/*public List<EnumModel> getEnumClassModels() {
-		return enumClassModels;
-	}
-
-	public void addEnumClassModel(EnumModel enumModel) {
-		this.enumClassModels.add(enumModel);
-	}*/
+	}	
 
 	public List<String> getTypeParameters() {
 		return typeParameters;

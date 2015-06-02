@@ -1,6 +1,7 @@
 package seu.EOSTI.Model;
 
 public class PrimitiveTypeModel extends TypeModel {
+
 	public PrimitiveTypeModel(String typeName){
 		super(typeName);
 	}
@@ -32,7 +33,7 @@ public class PrimitiveTypeModel extends TypeModel {
 			}
 
 			if (typeModel.getTypeName().equals("int")) {
-				if (this.getTypeName().equals("long")||this.getTypeName().equals("int")) {
+				if (this.getTypeName().equals("long")||this.getTypeName().equals("int")||this.getTypeName().equals("float")||this.getTypeName().equals("double")) {
 					return true;
 				}
 			}

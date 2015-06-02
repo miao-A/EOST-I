@@ -1,13 +1,13 @@
 package seu.EOSTI.Model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class ConstructorMethodRecoder {
 	
-	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
 	private List<ConstructorMethodModel> oldMethodModels = new LinkedList<>();
 	private List<ConstructorMethodModel> newMethodModels = new LinkedList<>();
@@ -15,35 +15,28 @@ public class ConstructorMethodRecoder {
 	private List<ConstructorMethodModel> newAddMethodModels = new LinkedList<>();
 	private List<ConstructorMethodModel> removedMethodModels = new LinkedList<>();
 	private List<ConstructorMethodModel> unchangedMethodModels = new LinkedList<>();
+//	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
 
+	private Map<ConstructorMethodModel, ConstructorMethodModel> compatibilityMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
 	
 	private Map<ConstructorMethodModel, ConstructorMethodModel> modifiedMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
 	
-	/*
-	 * private String methodName;	
-	private boolean Constructor = false;	
-	private JModifier modifier = new JModifier();
-	private List<String> typeParameters = new LinkedList<>();
+	//private Map<MethodModel, MethodModel> uncompatibilityMethodMap = new HashMap<MethodModel, MethodModel>();
 	
-	private String returnType = null;
-	private int extraDimensions = 0;
+	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	
-	private List<SingleVariableModel> formalParameters = new LinkedList<>();
-	private List<String> thrownList = new LinkedList<>();*/
-	
-	
-	
+
 	public ConstructorMethodRecoder(List<ConstructorMethodModel> oldMethodModels,List<ConstructorMethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
 		this.newMethodModels = newMethodModels;
-		compareMethodModel();
+		compatibilityStatus = compareMethodModel();
 	}
 	
 	public ConstructorMethodRecoder() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void compareMethodModel(){
+	public CompatibilityStatus compareMethodModel(){
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
 			setChangeStatus(ChangeStatus.UNCHANGED);
@@ -62,22 +55,41 @@ public class ConstructorMethodRecoder {
 				}			
 			}
 			
-			for (ConstructorMethodModel newMethodModel : newMethodModels) {
-				if (oldMethodModels.contains(newMethodModel)){
-					int index = oldMethodModels.indexOf(newMethodModel);
-					ModifierRecoder mr = new ModifierRecoder(oldMethodModels.get(index).getModifier(), newMethodModel.getModifier());
-					if (mr.hasChange()) {
-						modifiedMethodMap.put(oldMethodModels.get(index), newMethodModel);
-
-					}else {
-						unchangedMethodModels.add(newMethodModel);
-					}
-								
-				}
-			}
 		}
+		
+
+		Iterator<ConstructorMethodModel> removedIterator = removedMethodModels.iterator();
+		while (removedIterator.hasNext()) {
+			ConstructorMethodModel reMethodModel = removedIterator.next();
+			Iterator<ConstructorMethodModel> addmethodIterator = newAddMethodModels.iterator();
+			while (addmethodIterator.hasNext()) {				
+				ConstructorMethodModel addMethodModel = addmethodIterator.next();
+				if (reMethodModel.getMethodName().equals(addMethodModel.getMethodName())) {
+					if (addMethodModel.canCompatibility(reMethodModel)) {
+						removedIterator.remove();
+						addmethodIterator.remove();
+						compatibilityMethodMap.put(reMethodModel,addMethodModel);
+						break;
+					}					
+				}				
+			}			
+		}		
+		
+		if (removedMethodModels.size() == 0) {
+			compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+		}else {
+			System.out.println(removedMethodModels.size());
+			System.out.println(unchangedMethodModels.size());
+			compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+		}	
+		
+		return compatibilityStatus;
 	}
 
+	public Map<ConstructorMethodModel, ConstructorMethodModel> getCompatibilityConstructorMethodMap(){
+		return compatibilityMethodMap;
+	}
+	
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
 	}
@@ -136,24 +148,17 @@ public class ConstructorMethodRecoder {
 	public int getModifiedMethodNum(){
 		int count =0;	
 		for (ConstructorMethodModel methodModel : modifiedMethodMap.keySet()) {
-			if (methodModel.getModifier().isPUBLIC()||modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
+			if (methodModel.getModifier().isPUBLIC()&&modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
 				count++;
-			}
-			
+			}			
 		}
 		return count;
 	}
-
-	public CompatibilityStatus getCompatibilityStatus() {
-		return compatibilityStatus;
-	}
-
-	public void setCompatibilityStatus(CompatibilityStatus compatibilityStatus) {
-		this.compatibilityStatus = compatibilityStatus;
-	}
+	
+	
 	
 	public boolean isCompatibility(){
-		boolean flag = true;
-		return flag;
+		return compatibilityStatus.equals(CompatibilityStatus.COMPATIBILITY);	 
+		
 	}
 }

@@ -1,17 +1,23 @@
 package seu.EOSTI.Model;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.security.auth.kerberos.KerberosKey;
 
+import org.eclipse.swt.internal.win32.INITCOMMONCONTROLSEX;
+
 //后添加父类或集成信息
 public class SimpleTypeModel extends TypeModel {
 
+	
+	
 	private String superClass = "Object";
 	
 	public SimpleTypeModel(String typeName){
 		super(typeName);		
 	}
+	
 	public String getSuperClass() {
 		return superClass;
 	}
@@ -20,7 +26,9 @@ public class SimpleTypeModel extends TypeModel {
 			return;
 		}
 		this.superClass = superClass;
+		
 	}
+		
 	
 	@Override
 	public boolean CanCompatibility(TypeModel typeModel) {
@@ -91,10 +99,16 @@ public class SimpleTypeModel extends TypeModel {
 	}
 	@Override
 	public String getFullName() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 		return this.getTypeName();
 	}
 	
 	
+}
+
+class A{
+	
+	class B{
+		
+	}
 }

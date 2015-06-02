@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 
@@ -136,34 +137,45 @@ public class MethodModel {
 		if (this == obj) {
 			return true;
 		}
-		if (obj instanceof MethodModel) {
-			if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
-				List<SingleVariableModel> oldList = this.getFormalParameters();
-				List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
-				if (oldList.size() != newList.size()) {
-					return false;
-				}
-				boolean flag = true;
-				for (int i = 0; i < oldList.size(); i++) {
-					if (!oldList.get(i).equals(newList.get(i))) {
-						flag = false;
-					};
-				}
-				return flag;
+		
+		
+		boolean flag = true;	
+		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
+			List<SingleVariableModel> oldList = this.getFormalParameters();
+			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
+			if (oldList.size() != newList.size()) {
+				return false;
 			}
+			
+			for (int i = 0; i < oldList.size(); i++) {
+				if (!oldList.get(i).equals(newList.get(i))) {
+					flag = false;					
+				};
+			}
+			
 		}
-		return false;
+			
+		if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
+			return false;
+		}
+		
+		return flag;
 	}
 	
 	public boolean canCompatibility(MethodModel methodModel){
-		
-		if(!this.getReturnType().CanCompatibility(methodModel.getReturnType())){
+		if(!methodModel.getModifier().CanCompatibility(this.getModifier())){
 			return false;
 		}
-			
-		if (this.getFormalParameters().size() == this.getFormalParameters().size()) {				
-			List<SingleVariableModel> removed = this.getFormalParameters();
-			List<SingleVariableModel> newadd = methodModel.getFormalParameters();
+		
+		if(!methodModel.getReturnType().CanCompatibility(this.getReturnType())){
+			return false;
+		}
+		
+		if (this.getFormalParameters().size() != methodModel.getFormalParameters().size()){
+			return false;
+		}else if (this.getFormalParameters().size() == methodModel.getFormalParameters().size()) {				
+			List<SingleVariableModel> removed = methodModel.getFormalParameters();
+			List<SingleVariableModel> newadd = this.getFormalParameters();
 			for (int i = 0; i < removed.size(); i++) {
 				if(!newadd.get(i).getType().CanCompatibility(removed.get(i).getType())){
 					return false;

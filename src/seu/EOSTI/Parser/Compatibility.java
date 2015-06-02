@@ -1,5 +1,7 @@
 package seu.EOSTI.Parser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,9 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import seu.EOSTI.ASTVisitor.ComponentRequertor;
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ChangeStatus;
+import seu.EOSTI.Model.ClassCompatibilityRecoder;
+import seu.EOSTI.Model.ClassModel;
+import seu.EOSTI.Model.CompatibilityStatus;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
@@ -24,10 +29,11 @@ public class Compatibility {
 	
 	private List<AbstractClassModel> removedType = new LinkedList<>();
 	private List<AbstractClassModel> newType = new LinkedList<>();
-	private List<ClassChangeRecoder> unchangedType = new LinkedList<>();
-	private List<ClassChangeRecoder> modifiedType = new LinkedList<>();
+	private List<ClassCompatibilityRecoder> compatibilityRecoders = new LinkedList<>();
+	private List<ClassCompatibilityRecoder> unCompatibilityRecoders = new LinkedList<>();
 	
-	private List<ClassChangeRecoder>  typeChangeRecoders = new LinkedList<>();
+	
+	private List<ClassChangeRecoder>  typeRecoders = new LinkedList<>();
 	
 	public Compatibility(String oldPathOfComponet,String newPathOfComponet) {
 		// TODO Auto-generated constructor stub
@@ -51,23 +57,17 @@ public class Compatibility {
 			}
 		}
 		
-		for (AbstractClassModel newTypeModel : newModels) {
-			if (oldModels.contains(newTypeModel)){
+		for(AbstractClassModel newTypeModel : newModels) {
+			if(oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				typeChangeRecoders.add(new ClassChangeRecoder(oldModels.get(index),newTypeModel));
+				ClassCompatibilityRecoder classCompatibilityRecoder = new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel);
+				if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.COMPATIBILITY)) {
+					compatibilityRecoders.add(classCompatibilityRecoder);
+				}else if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.UNCOMPATIBILITY)) {
+					unCompatibilityRecoders.add(classCompatibilityRecoder);
+				}
 			}
-		}
-		
-		for (ClassChangeRecoder tc : typeChangeRecoders) {
-			if (tc.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-				unchangedType.add(tc);			
-			}else if(tc.getChangeStatus().equals(ChangeStatus.MODIFIED)){
-				modifiedType.add(tc);
-			}
-		}
-		
-		this.getinfo();
-		
+		}		
 	}
 	
 	
@@ -79,7 +79,7 @@ public class Compatibility {
 		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
 		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
 		parser.setCompilerOptions(complierOptions);
-		parser.setEnvironment(null, null, null, true);
+		
 		
 		// enable binding	
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -87,17 +87,31 @@ public class Compatibility {
 		parser.setBindingsRecovery(true);
 		parser.setStatementsRecovery(true);
 		
-		ComponentRequertor ComponentRequertor = new ComponentRequertor();
+		
+		ComponentRequertor componentRequertor = new ComponentRequertor();
 		ReadFile readFile = new ReadFile(pathOfComponet);		
 		List<String> filelist = readFile.readJavaFiles();
+		
+		//////////////////////
+		List<String> jarfilelist = readFile.readJarFiles();		
+		String[] jarpathEntries = jarfilelist.toArray(new String[jarfilelist.size()]);
+//		String[] jarpathEntries = {pathOfProject};		
+		List<String> javafilelist =  readFile.readJavaFiles();
+		/////////////////////
+		
+		
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], ComponentRequertor, null);	
-		return ComponentRequertor.getTypeModels();
+		
+		//parser.setEnvironment(null, null, null, true);
+		parser.setEnvironment(jarpathEntries, null, null, true);
+		
+		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);	
+		return componentRequertor.getTypeModels();
 	}		
 	
-	public List<ClassChangeRecoder> getTypeChangeRecoders(){
-		return typeChangeRecoders;
+	public List<ClassCompatibilityRecoder> getTypeChangeRecoders(){
+		return unCompatibilityRecoders;
 	}
 	
 	
@@ -109,18 +123,13 @@ public class Compatibility {
 		return removedType;
 	}
 	
-	public List<ClassChangeRecoder> getUnchangedRecoders(){
-		return unchangedType;
+	public List<ClassCompatibilityRecoder> getUnchangedRecoders(){
+		return compatibilityRecoders;
 	}
-	
-	public List<ClassChangeRecoder> getModifiedRecoders(){
-		return modifiedType;
-	}
-	
-	
 	
 	
 	public void getinfo(){
+		
 		for(AbstractClassModel atm : newType){
 			System.out.println("newType:"+ atm.getPackage()+" " +atm.getClassName());
 			
@@ -138,21 +147,22 @@ public class Compatibility {
 			System.out.println(count);
 		}
 		
-		for(ClassChangeRecoder atm : unchangedType){
-			System.out.println("unchangedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+		for(ClassCompatibilityRecoder atm : compatibilityRecoders){
+			System.out.println("compatibilityType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			int count = 0;
-			List<MethodModel> list = mr.getUnchangedMethodModels();
-			for (MethodModel methodModel : list) {
-				if (methodModel.getModifier().isPUBLIC()) {
-					++count;
-				}
-			}
+			List<MethodModel> list = mr.getUnchangedMethodModels();			
 			System.out.println(count);
+			Map<MethodModel, MethodModel> map = atm.getMethodRecoder().getCompatibilityMethodMap();
+			for (MethodModel methodModel : map.keySet()) {
+				System.out.println("old:"+methodModel.getFullName());
+				System.out.println("new:"+map.get(methodModel).getFullName());
+				
+			}
 		}
 		
-		for(ClassChangeRecoder atm : modifiedType){
-			System.out.println("modifiedType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+		for(ClassCompatibilityRecoder atm : unCompatibilityRecoders){
+			System.out.println("unCompatibilityRecoders:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			
 			if (mr.getNewAddMethodModels().size()!=0) {
@@ -161,17 +171,8 @@ public class Compatibility {
 			
 
 			for (MethodModel methodModel : mr.getNewAddMethodModels()) {
-				System.out.print(methodModel.getModifier().getModifierInfo());
-				System.out.print(methodModel.getReturnType()+" ");
-				System.out.print(methodModel.getMethodName()+"(");
-				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-				for (int i = 0; i < tpList.size(); i++) {
-					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-					if (i!=tpList.size()-1) {
-						System.out.print(",");
-					}
-				}
-				System.out.println(")");						
+				System.out.println(methodModel.getFullName());
+										
 			}
 	
 			if (mr.getRemovedMethodModels().size()!=0) {
@@ -179,37 +180,18 @@ public class Compatibility {
 			}
 			
 			for (MethodModel methodModel : mr.getRemovedMethodModels()) {
-				System.out.print(methodModel.getModifier().getModifierInfo());
-				System.out.print(methodModel.getReturnType()+" ");
-				System.out.print(methodModel.getMethodName()+"(");
-				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-				for (int i = 0; i < tpList.size(); i++) {
-					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-					if (i!=tpList.size()-1) {
-						System.out.print(",");
-					}
-				}
-				System.out.println(")");						
+				System.out.println(methodModel.getFullName());						
 			}
 			
-			/*
-			if (mr.getUnchangedMethodModels().size()!=0) {
-				System.out.println("UnchangedMethod:");
+			if (mr.getCompatibilityMethodMap().size()!=0) {
+				System.out.println("Compatibility Method:");
 			}
-			for (MethodModel methodModel : mr.getUnchangedMethodModels()) {
-				System.out.print(methodModel.getModifier().getModifierInfo());
-				System.out.print(methodModel.getReturnType()+" ");
-				System.out.print(methodModel.getMethodName()+"(");
-				List<SingleVariableModel> tpList =  methodModel.getFormalParameters();
-				for (int i = 0; i < tpList.size(); i++) {
-					System.out.print(tpList.get(i).getType()+" "+tpList.get(i).getName());
-					if (i!=tpList.size()-1) {
-						System.out.print(",");
-					}
-				}
-				System.out.println(")");						
-			}*/
-								
+			
+			Map<MethodModel, MethodModel> map = mr.getCompatibilityMethodMap();
+			for (MethodModel methodModel : map.keySet()) {
+				System.out.println("old:"+methodModel.getFullName());
+				System.out.println("new:"+map.get(methodModel).getFullName());
+			}
 						
 		}
 	}

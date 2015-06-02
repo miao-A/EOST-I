@@ -11,15 +11,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableItem;
 
+import seu.EOSTI.ASTVisitor.ExtendsRequestor;
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.DBConnector;
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
+import seu.EOSTI.Parser.Compatibility;
 import seu.EOSTI.Parser.ComponentParser;
 import seu.EOSTI.Parser.ProjectParser;
+import seu.EOSTI.Parser.ReadFile;
 
 
 
@@ -28,15 +33,17 @@ public class IntergrationMain {
 	public static void main(String args[]) {
 		
 
-	String oldPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
-	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
+	/*String oldPath = "D:/ProjectOfHW/jEditor/jEditor0.4.1";
+	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
-/*	String oldPathOfComponet = "E:/git/japicmp-japicmp-base-0.3.1/japicmp/src/main";
-	String newPathOfComponet = "E:/git/japicmp-japicmp-base-0.3.1/japicmp/src/main";*/
+	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit3.4/src/junit/runner";
+	String newPathOfComponet = "D:/ProjectOfHW/junit/junit3.4/src/junit/runnerC";
 
 	
-	ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
-	componentParser.parser();
+	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
+	componentParser.parser();*/
+	Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
+	compatibility.getinfo();
 	
 /*	for (int i = 0; i < arrayOfProjects.length; i++) {
 		pathOfProject = arrayOfProjects[i];
@@ -75,6 +82,9 @@ public class IntergrationMain {
 
 		
 	}*/
+
+//	extensibilityRequestor.ShowInfoOfExitensibily();
+	
 	
 
 	

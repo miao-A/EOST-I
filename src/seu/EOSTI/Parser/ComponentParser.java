@@ -56,7 +56,7 @@ public class ComponentParser {
 		
 		
 		
-		ComponentRequertor ComponentRequertor = new ComponentRequertor();
+		ComponentRequertor componentRequertor = new ComponentRequertor();
 		ReadFile readFile = new ReadFile(pathOfComponet);	
 		
 		//////////////////////////////////////////////////////////////////////
@@ -74,13 +74,9 @@ public class ComponentParser {
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
-		parser.createASTs(sourceFilePaths,  null, new String[0], ComponentRequertor, null);	
+		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);	
 		
-		
-		
-		
-		
-		return ComponentRequertor.getTypeModels();
+		return componentRequertor.getTypeModels();
 	}	
 
 }

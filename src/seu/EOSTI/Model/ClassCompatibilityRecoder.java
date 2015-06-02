@@ -25,15 +25,13 @@ public class ClassCompatibilityRecoder {
 	private List<AbstractClassModel> newInnerTypeModels = new LinkedList<>();
 	private List<AbstractClassModel> removedInnerTypeModels = new LinkedList<>();
 	private List<AbstractClassModel> unchangedInnerTypeModels = new LinkedList<>();
-	private List<AbstractClassModel> modifiedInnerTypeModels = new LinkedList<>();
-	
+	private List<AbstractClassModel> modifiedInnerTypeModels = new LinkedList<>();	
 	
 	public ClassCompatibilityRecoder(AbstractClassModel oldModel,AbstractClassModel newModel){
 		this.oldTypeModel = oldModel;
 		this.newTypeModel = newModel;
 		compatibilityStatus = compareRun();
-	}
-	
+	}	
 	
 	public CompatibilityStatus compareRun(){
 		if ((oldTypeModel instanceof ClassModel)&&(newTypeModel instanceof ClassModel)) {
@@ -52,7 +50,7 @@ public class ClassCompatibilityRecoder {
 		
 		if (modifierRecoder.isCompatibility()&& methodRecoder.isCompatibility()&&constructorMethodRecoder.isCompatibility()&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
 				isUnchanged(superInterfaceClassRecoder.getChangeStatus())) {
-			this.compatibilityStatus = compatibilityStatus.COMPATIBILITY;
+			this.compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 		}else{
 		
 			this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
@@ -97,11 +95,9 @@ public class ClassCompatibilityRecoder {
 					this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
 				}
 			}
-		}
-		
+		}		
 		return this.compatibilityStatus;		
-	}	
-	
+	}		
 	
 	
 	private boolean isUnchanged(ChangeStatus changeStatus) {
@@ -142,7 +138,7 @@ public class ClassCompatibilityRecoder {
 	}
 
 
-	public CompatibilityStatus getChangeStatus() {
+	public CompatibilityStatus getCompatibilityStatus() {
 		return compatibilityStatus;
 	}
 

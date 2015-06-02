@@ -24,6 +24,7 @@ import java.util.List;
 
 
 
+
 import javassist.compiler.ast.Visitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -65,6 +66,7 @@ import seu.EOSTI.Model.JModifier;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.ParameterizedTypeModel;
 import seu.EOSTI.Model.PrimitiveTypeModel;
+import seu.EOSTI.Model.QualifiedTypeModel;
 import seu.EOSTI.Model.SimpleTypeModel;
 import seu.EOSTI.Model.SingleVariableModel;
 import seu.EOSTI.Model.ClassModel;
@@ -104,6 +106,13 @@ public class ComponentVisitor extends ASTVisitor {
 		if (node.isMemberTypeDeclaration()) {
 			return true;
 		}
+		
+		if (node.getSuperclassType() != null) {
+			if (node.getSuperclassType() instanceof SimpleType) {
+				((SimpleType) node.getSuperclassType()).getName();
+			}
+		}
+
 		
 		
 		classModel = getClassType(node);
@@ -151,8 +160,7 @@ public class ComponentVisitor extends ASTVisitor {
 		//处理method //记录函数签名
 		classModel.setMethodModels(getMethodModels(node));
 		classModel.setConstructorMethodModels(getConstructorMethodModels(node));
-		
-		
+			
 		//处理Body部分类型
 		List bd = node.bodyDeclarations();
 		for (Object object : bd) {
@@ -368,6 +376,11 @@ public class ComponentVisitor extends ASTVisitor {
 						}						
 					}else if (type instanceof QualifiedType) {
 						System.out.println(type.getClass().getName());
+						QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
+						qualifiedTypeModel.setTypeName(((QualifiedType) type).getName().toString());
+						qualifiedTypeModel.setQualifiedName(((QualifiedType) type).getQualifier().toString());
+						System.out.println(qualifiedTypeModel.getFullName());
+						
 					}else if (type instanceof WildcardType) {
 						System.out.println(type.getClass().getName());
 					}else if (type instanceof ParameterizedType) {
@@ -562,8 +575,7 @@ public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
 			atm = enumModel;
 		}
 		
-		return atm;
-		
+		return atm;		
 	}	
 	
 }

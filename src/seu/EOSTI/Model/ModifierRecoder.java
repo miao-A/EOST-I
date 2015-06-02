@@ -11,12 +11,18 @@ public class ModifierRecoder {
 	private JModifier newModifier;
 	private Map<String,ChangeStatus> modifierChangeStatus = new HashMap<>();
 	private ChangeStatus changeStatus = ChangeStatus.UNCHANGED;
+	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+	
 	private boolean changeflag = false; 
 	
 	public ModifierRecoder(JModifier oldJModifier,JModifier newModifier){
 		this.oldModifier = oldJModifier;
 		this.newModifier = newModifier;
-		compareModifier();
+		if(oldJModifier.CanCompatibility(newModifier)){
+			compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+		}else {
+			compatibilityStatus = compatibilityStatus.UNCOMPATIBILITY;
+		}
 	}
 	
 	public ModifierRecoder() {
@@ -25,7 +31,14 @@ public class ModifierRecoder {
 
 	
 	public boolean isCompatibility(){
-		if (!oldModifier.isABSTRACT()) {
+		
+		if(this.oldModifier.CanCompatibility(this.newModifier)){
+			return true;
+		}else {
+			return false;
+		}
+		
+		/*if (!oldModifier.isABSTRACT()) {
 			if (newModifier.isABSTRACT()) {
 				return false;
 			}
@@ -52,7 +65,7 @@ public class ModifierRecoder {
 		if (oldModifier.isPROTECTED()&&newModifier.isPRIVATE()) {
 			return false;
 		}		
-		return true;
+		return true;*/
 	}
 	
 	public void compareModifier() {

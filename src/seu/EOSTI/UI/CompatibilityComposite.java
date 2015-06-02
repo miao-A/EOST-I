@@ -135,7 +135,7 @@ public class CompatibilityComposite extends Composite {
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
 				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/junit/junit3.4/src/junit/runner");
+				folderDialog.setFilterPath("D:/ProjectOfHW/junit/junit3.5/src/junit/runner");
 				folderDialog.open();
 				
 				newComponentText.setText(folderDialog.getFilterPath());
@@ -306,9 +306,7 @@ public class CompatibilityComposite extends Composite {
 						}
 					}
 					myModels.add(myModel);
-				}
-				
-				
+				}				
 				
 
 				List<ClassChangeRecoder> unchangeType = compatibility.getUnchangedRecoders();

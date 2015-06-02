@@ -1,9 +1,12 @@
 package seu.EOSTI.Model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+
 
 
 public class MethodRecoder {
@@ -16,34 +19,27 @@ public class MethodRecoder {
 	private List<MethodModel> removedMethodModels = new LinkedList<>();
 	private List<MethodModel> unchangedMethodModels = new LinkedList<>();
 //	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
+
+	private Map<MethodModel, MethodModel> compatibilityMethodMap = new HashMap<MethodModel, MethodModel>();
 	
 	private Map<MethodModel, MethodModel> modifiedMethodMap = new HashMap<MethodModel, MethodModel>();
 	
-	/*
-	 * private String methodName;	
-	private boolean Constructor = false;	
-	private JModifier modifier = new JModifier();
-	private List<String> typeParameters = new LinkedList<>();
+	//private Map<MethodModel, MethodModel> uncompatibilityMethodMap = new HashMap<MethodModel, MethodModel>();
 	
-	private String returnType = null;
-	private int extraDimensions = 0;
+	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	
-	private List<SingleVariableModel> formalParameters = new LinkedList<>();
-	private List<String> thrownList = new LinkedList<>();*/
-	
-	
-	
+
 	public MethodRecoder(List<MethodModel> oldMethodModels,List<MethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
 		this.newMethodModels = newMethodModels;
-		compareMethodModel();
+		compatibilityStatus = compareMethodModel();
 	}
 	
 	public MethodRecoder() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void compareMethodModel(){
+	public CompatibilityStatus compareMethodModel(){
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
 			setChangeStatus(ChangeStatus.UNCHANGED);
@@ -62,22 +58,69 @@ public class MethodRecoder {
 				}			
 			}
 			
-			for (MethodModel newMethodModel : newMethodModels) {
+			/*for (MethodModel newMethodModel : newMethodModels) {
 				if (oldMethodModels.contains(newMethodModel)){
 					int index = oldMethodModels.indexOf(newMethodModel);
 					ModifierRecoder mr = new ModifierRecoder(oldMethodModels.get(index).getModifier(), newMethodModel.getModifier());
 					if (!mr.isCompatibility()) {
-						modifiedMethodMap.put(oldMethodModels.get(index), newMethodModel);
+						uncompatibilityMethodMap.put(oldMethodModels.get(index), newMethodModel);
 
 					}else {
 						unchangedMethodModels.add(newMethodModel);
 					}
 								
 				}
-			}
+			}*/
 		}
+		
+
+		Iterator<MethodModel> removedIterator = removedMethodModels.iterator();
+		while (removedIterator.hasNext()) {
+			MethodModel reMethodModel = removedIterator.next();
+			Iterator<MethodModel> addmethodIterator = newAddMethodModels.iterator();
+			while (addmethodIterator.hasNext()) {				
+				MethodModel addMethodModel = addmethodIterator.next();
+				if (reMethodModel.getMethodName().equals(addMethodModel.getMethodName())) {
+					if (addMethodModel.canCompatibility(reMethodModel)) {
+						removedIterator.remove();
+						addmethodIterator.remove();
+						compatibilityMethodMap.put(reMethodModel,addMethodModel);
+						break;
+					}					
+				}				
+			}			
+		}
+		
+		/*for (MethodModel removedModel : removedMethodModels) {			
+			for (MethodModel addmethodModel : newAddMethodModels) {
+				if(removedModel.getMethodName().equals(addmethodModel.getMethodName())) {
+					if (addmethodModel.canCompatibility(removedModel)) {
+						System.out.println("chu cuo le");
+						removedMethodModels.remove(removedModel);
+						newAddMethodModels.remove(addmethodModel);
+						compatibilityMethodMap.put(removedModel, addmethodModel);
+						
+					}
+				}
+			}			
+		}*/
+		
+		
+		if (removedMethodModels.size() == 0) {
+			compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+		}else {
+			System.out.println(removedMethodModels.size());
+			System.out.println(unchangedMethodModels.size());
+			compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+		}	
+		
+		return compatibilityStatus;
 	}
 
+	public Map<MethodModel, MethodModel> getCompatibilityMethodMap(){
+		return compatibilityMethodMap;
+	}
+	
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
 	}
@@ -143,23 +186,10 @@ public class MethodRecoder {
 		return count;
 	}
 	
+	
+	
 	public boolean isCompatibility(){
-		boolean flag = true;
-		for (MethodModel removedModel : removedMethodModels) {
-			flag = false;
-			for (MethodModel addmethodModel : newAddMethodModels) {
-				if(removedModel.getMethodName().equals(addmethodModel.getMethodName())) {
-					if (addmethodModel.canCompatibility(removedModel)) {
-						flag = true;
-					}
-				}
-			}
-			if (flag == false) {
-				return false;
-			}
-		}
-		return true;
-		 
+		return compatibilityStatus.equals(CompatibilityStatus.COMPATIBILITY);	 
 		
 	}
 	

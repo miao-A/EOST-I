@@ -102,6 +102,62 @@ public class JModifier {
 		STRICTFP = sTRICTFP;
 	}
 	
+	public boolean equals(Object obj){
+		if (obj instanceof JModifier) {
+			if(this.isABSTRACT()^((JModifier) obj).isABSTRACT())
+			{
+				return false;
+			}
+			
+			if(this.isFINAL()^((JModifier) obj).isFINAL())
+			{
+				return false;
+			}
+			
+			if(this.isNATIVE()^((JModifier) obj).isNATIVE())
+			{
+				return false;
+			}
+			if(this.isPRIVATE()^((JModifier) obj).isPRIVATE())
+			{
+				return false;
+			}
+			if(this.isPROTECTED()^((JModifier) obj).isPROTECTED())
+			{
+				return false;
+			}
+			if(this.isPUBLIC()^((JModifier) obj).isPUBLIC())
+			{
+				return false;
+			}
+			if(this.isSTATIC()^((JModifier) obj).isSTATIC())
+			{
+				return false;
+			}
+			if(this.isSTRICTFP()^((JModifier) obj).isSTRICTFP())
+			{
+				return false;
+			}
+			if(this.isSYNCHRONIZED()^((JModifier) obj).isSYNCHRONIZED())
+			{
+				return false;
+			}
+			if(this.isTRANSIENT()^((JModifier) obj).isTRANSIENT())
+			{
+				return false;
+			}
+			if(this.isVOLATILE()^((JModifier) obj).isVOLATILE())
+			{
+				return false;
+			}
+				
+		}	
+		
+		return true;
+		
+	}
+	
+	
 	public String getModifierInfo(){
 		String string = new String();
 		if (isPRIVATE()) {
@@ -147,12 +203,42 @@ public class JModifier {
 		}
 		
 		if (isVOLATILE()) {
-			string += "volatile";
+			string += "volatile ";
 		}	
 
 		return string;
 	}
 
+	public boolean CanCompatibility(JModifier newModifier){
+		if (!this.isABSTRACT()) {
+			if (newModifier.isABSTRACT()) {
+				return false;
+			}
+		}
+		
+		if (!this.isFINAL()) {
+			if (newModifier.isFINAL()) {
+				return false;
+			}
+		}
+		
+		if (this.isPUBLIC()) {
+			if (!newModifier.isPUBLIC()) {
+				return false;
+			}
+		}
+		
+		if ((!this.isPRIVATE())&&(this.isSTATIC())) {
+			if (!newModifier.isSTATIC()) {
+				return false;
+			}
+		}
+		
+		if (this.isPROTECTED()&&newModifier.isPRIVATE()) {
+			return false;
+		}		
+		return true;
+	}
 
 
 }

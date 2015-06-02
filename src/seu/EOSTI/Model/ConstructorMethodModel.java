@@ -6,11 +6,11 @@ import java.util.List;
 
 public class ConstructorMethodModel {
 	
-	private String methodName;	
+private String methodName;	
+	
 	private JModifier modifier = new JModifier();
 	private List<String> typeParameters = new LinkedList<>();
 	
-	private String returnType = "";
 	private int extraDimensions = 0;
 	
 	private ArrayList<SingleVariableModel> formalParameters = new ArrayList<SingleVariableModel>();
@@ -34,7 +34,7 @@ public class ConstructorMethodModel {
 	}
 
 	
-
+	
 	public List<String> getTypeParameters() {
 		return typeParameters;
 	}
@@ -47,12 +47,7 @@ public class ConstructorMethodModel {
 		this.typeParameters.add(typeParameter);
 	}
 
-	public String getReturnType() {
-		return returnType;
-	}
-
 	
-
 	public List<SingleVariableModel> getFormalParameters() {
 		return formalParameters;
 	}
@@ -86,41 +81,74 @@ public class ConstructorMethodModel {
 	}
 	
 	public String getFullName(){
+		try{
 		String string = new String();
-		string += this.getModifier().getModifierInfo()+this.getReturnType()+" "
+		string += this.getModifier().getModifierInfo()+" "
 				+this.getMethodName()+"(";
 		List<SingleVariableModel> tpList =  this.getFormalParameters();
 		for (int i = 0; i < tpList.size(); i++) {
-			string += tpList.get(i).getType()+" "+tpList.get(i).getName();
+			string += tpList.get(i).getType().getTypeName()+" "+tpList.get(i).getName();
 			if (i!=tpList.size()-1) {
 				string +=",";
 			}
 		}
 		string += ")";
 		return string;
+		}catch(NullPointerException n)
+		{
+			System.out.println("");
+			return "";
+		}
+		
+		
+		
 	}
 
 	public boolean equals(Object obj){
 		if (this == obj) {
 			return true;
 		}
-		if (obj instanceof MethodModel) {
-			if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
-				List<SingleVariableModel> oldList = this.getFormalParameters();
-				List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
-				if (oldList.size() != newList.size()) {
+		
+		
+		boolean flag = true;	
+		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
+			List<SingleVariableModel> oldList = this.getFormalParameters();
+			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
+			if (oldList.size() != newList.size()) {
+				return false;
+			}
+			
+			for (int i = 0; i < oldList.size(); i++) {
+				if (!oldList.get(i).equals(newList.get(i))) {
+					flag = false;					
+				};
+			}
+			
+		}
+			
+		if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
+			return false;
+		}
+		
+		return flag;
+	}
+	
+	public boolean canCompatibility(ConstructorMethodModel removedModel){		
+		
+		if (this.getFormalParameters().size() != removedModel.getFormalParameters().size()){
+			return false;
+		}else if (this.getFormalParameters().size() == removedModel.getFormalParameters().size()) {				
+			List<SingleVariableModel> removed = removedModel.getFormalParameters();
+			List<SingleVariableModel> newadd = this.getFormalParameters();
+			for (int i = 0; i < removed.size(); i++) {
+				if(!newadd.get(i).getType().CanCompatibility(removed.get(i).getType())){
 					return false;
 				}
-				boolean flag = true;
-				for (int i = 0; i < oldList.size(); i++) {
-					if (!oldList.get(i).equals(newList.get(i))) {
-						flag = false;
-					};
-				}
-				return flag;
 			}
-		}
-		return false;
+		}		
+		
+		return true;		
 	}
+
 
 }
