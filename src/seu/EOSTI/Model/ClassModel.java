@@ -188,6 +188,12 @@ public class ClassModel extends AbstractClassModel {
 	public void setConstructorMethodModels(List<ConstructorMethodModel> constructorMethodModels) {
 		this.constructorMethodModels = constructorMethodModels;
 	}
+
+	@Override
+	public List<ConstructorMethodModel> getConstructorModel() {
+		// TODO Auto-generated method stub
+		return constructorMethodModels;
+	}
 	
 	
 

@@ -23,8 +23,8 @@ public class EnumModel extends AbstractClassModel{
 	private List<AbstractClassModel> innerClassModels = new LinkedList<>();
 	private List<String> typeParameters = new LinkedList<>(); 
 	
-	private boolean empty = true;
-
+	private boolean empty = true;	
+	
 	public void setPackage(String name){
 		if (name == null) {
 			packageName = "";
@@ -58,6 +58,7 @@ public class EnumModel extends AbstractClassModel{
 		return modifier;
 	}
 
+	
 
 	public List<String> getSuperInterfaceTypes() {
 		return superInterfaceTypes;
@@ -190,13 +191,20 @@ public class EnumModel extends AbstractClassModel{
 		}
 		return count;
 	}
-
-	public List<ConstructorMethodModel> getConstructorMethodModels() {
-		return constructorMethodModels;
-	}
+		
 
 	public void setConstructorMethodModels(List<ConstructorMethodModel> constructorMethodModels) {
 		this.constructorMethodModels = constructorMethodModels;
 	}
+	
+	public void addMethodModel(MethodModel methodModel){
+		this.methodModels.add(methodModel);
+	}
 
+	@Override
+	public List<ConstructorMethodModel> getConstructorModel() {
+		// TODO Auto-generated method stub
+		return constructorMethodModels;
+	}
+	
 }

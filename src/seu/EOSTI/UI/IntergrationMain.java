@@ -37,7 +37,7 @@ public class IntergrationMain {
 	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
 	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit3.4/src/junit/runner";
-	String newPathOfComponet = "D:/ProjectOfHW/junit/junit3.4/src/junit/runnerC";
+	String newPathOfComponet = "D:/ProjectOfHW/junit/junit3.5/src/junit/runner";
 
 	
 	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);

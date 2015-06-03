@@ -44,4 +44,7 @@ public abstract class TypeModel {
 	public abstract boolean CanCompatibility(TypeModel typeModel);
 	
 	public abstract String getFullName();
+	
+	public abstract boolean equals(Object obj);
+	
 }

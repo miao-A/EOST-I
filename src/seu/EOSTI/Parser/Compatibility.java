@@ -16,6 +16,8 @@ import seu.EOSTI.Model.ChangeStatus;
 import seu.EOSTI.Model.ClassCompatibilityRecoder;
 import seu.EOSTI.Model.ClassModel;
 import seu.EOSTI.Model.CompatibilityStatus;
+import seu.EOSTI.Model.ConstructorMethodModel;
+import seu.EOSTI.Model.ConstructorMethodRecoder;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
@@ -31,6 +33,7 @@ public class Compatibility {
 	private List<AbstractClassModel> newType = new LinkedList<>();
 	private List<ClassCompatibilityRecoder> compatibilityRecoders = new LinkedList<>();
 	private List<ClassCompatibilityRecoder> unCompatibilityRecoders = new LinkedList<>();
+//	private List<AbstractClassModel> unchangedClassModels = new LinkedList<>();
 	
 	
 	private List<ClassChangeRecoder>  typeRecoders = new LinkedList<>();
@@ -123,10 +126,13 @@ public class Compatibility {
 		return removedType;
 	}
 	
-	public List<ClassCompatibilityRecoder> getUnchangedRecoders(){
+	public List<ClassCompatibilityRecoder> getCompatibilityRecoders(){
 		return compatibilityRecoders;
 	}
 	
+	public List<ClassCompatibilityRecoder> getUncompatibilityRecoders(){
+		return unCompatibilityRecoders;
+	}
 	
 	public void getinfo(){
 		
@@ -149,6 +155,18 @@ public class Compatibility {
 		
 		for(ClassCompatibilityRecoder atm : compatibilityRecoders){
 			System.out.println("compatibilityType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+			
+			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
+			//int count = 0;
+			Map<ConstructorMethodModel, ConstructorMethodModel> cmap = cmr.getCompatibilityConstructorMethodMap();			
+			//System.out.println(count);			
+			for (ConstructorMethodModel methodModel : cmap.keySet()) {
+				System.out.println("old:"+methodModel.getFullName());
+				System.out.println("new:"+cmap.get(methodModel).getFullName());
+				
+			}
+			
+			
 			MethodRecoder mr = atm.getMethodRecoder();
 			int count = 0;
 			List<MethodModel> list = mr.getUnchangedMethodModels();			
@@ -156,8 +174,7 @@ public class Compatibility {
 			Map<MethodModel, MethodModel> map = atm.getMethodRecoder().getCompatibilityMethodMap();
 			for (MethodModel methodModel : map.keySet()) {
 				System.out.println("old:"+methodModel.getFullName());
-				System.out.println("new:"+map.get(methodModel).getFullName());
-				
+				System.out.println("new:"+map.get(methodModel).getFullName());				
 			}
 		}
 		
@@ -183,15 +200,42 @@ public class Compatibility {
 				System.out.println(methodModel.getFullName());						
 			}
 			
-			if (mr.getCompatibilityMethodMap().size()!=0) {
+			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
+			if (cmr.getCompatibilityConstructorMethodMap().size()!=0) {
 				System.out.println("Compatibility Method:");
+				Map<ConstructorMethodModel, ConstructorMethodModel> map = cmr.getCompatibilityConstructorMethodMap();
+				for (ConstructorMethodModel methodModel : map.keySet()) {
+					System.out.println("old:"+methodModel.getFullName());
+					System.out.println("new:"+map.get(methodModel).getFullName());
+				}			
 			}
 			
-			Map<MethodModel, MethodModel> map = mr.getCompatibilityMethodMap();
-			for (MethodModel methodModel : map.keySet()) {
-				System.out.println("old:"+methodModel.getFullName());
-				System.out.println("new:"+map.get(methodModel).getFullName());
+			if (cmr.getRemovedMethodModels().size()!=0) {
+				System.out.println("RemovedConstructorMethod:");
 			}
+			
+			for (ConstructorMethodModel methodModel : cmr.getRemovedMethodModels()) {
+				System.out.println(methodModel.getFullName());						
+			}
+			
+			if (cmr.getNewAddMethodModels().size()!=0) {
+				System.out.println("newConstructorMethod:");
+			}
+			
+			for (ConstructorMethodModel methodModel : cmr.getNewAddMethodModels()) {
+				System.out.println(methodModel.getFullName());						
+			}
+			
+			
+			
+			if (mr.getCompatibilityMethodMap().size()!=0) {
+				System.out.println("Compatibility Method:");
+				Map<MethodModel, MethodModel> map = mr.getCompatibilityMethodMap();
+				for (MethodModel methodModel : map.keySet()) {
+					System.out.println("old:"+methodModel.getFullName());
+					System.out.println("new:"+map.get(methodModel).getFullName());
+				}			
+			}		
 						
 		}
 	}

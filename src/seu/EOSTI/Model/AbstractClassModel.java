@@ -54,6 +54,8 @@ public abstract class AbstractClassModel {
 	public abstract void addInnerClassModel(AbstractClassModel innerClassModel);	
 	
 	public abstract boolean equals(Object obj);
+	
+	public abstract List<ConstructorMethodModel> getConstructorModel();
 
 	
 }

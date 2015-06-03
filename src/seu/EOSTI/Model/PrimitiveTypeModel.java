@@ -68,4 +68,17 @@ public class PrimitiveTypeModel extends TypeModel {
 		// TODO Auto-generated method stub
 		return this.getTypeName();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (obj instanceof PrimitiveTypeModel) {
+			if (this.getFullName().equals(((PrimitiveTypeModel) obj).getFullName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
 }

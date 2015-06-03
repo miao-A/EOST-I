@@ -26,6 +26,10 @@ public class ArrayTypeModel extends TypeModel {
 		
 		return false;
 	}
+	
+	public int getDimiensions(){
+		return dimiensions;
+	}
 
 
 	@Override
@@ -37,6 +41,18 @@ public class ArrayTypeModel extends TypeModel {
 			string += "[]";
 		}
 		return string;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (obj instanceof ArrayTypeModel) {
+			if (this.getTypeName().equals(((ArrayTypeModel) obj).getTypeName())&&(this.getDimiensions() == ((ArrayTypeModel) obj).getDimiensions())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	

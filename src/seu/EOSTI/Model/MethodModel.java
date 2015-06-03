@@ -136,10 +136,8 @@ public class MethodModel {
 	public boolean equals(Object obj){
 		if (this == obj) {
 			return true;
-		}
-		
-		
-		boolean flag = true;	
+		}		
+	
 		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
 			List<SingleVariableModel> oldList = this.getFormalParameters();
 			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
@@ -149,28 +147,57 @@ public class MethodModel {
 			
 			for (int i = 0; i < oldList.size(); i++) {
 				if (!oldList.get(i).equals(newList.get(i))) {
-					flag = false;					
+					return false;
 				};
 			}
 			
-		}
+			if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
+				return false;
+			}
 			
-		if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
+			if (!this.getReturnType().equals(((MethodModel) obj).getReturnType())) {
+				return false;
+			}
+			
+			return true;
+			
+		}else {
 			return false;
-		}
-		
-		return flag;
+		}			
+
+	}
+	
+	public boolean sameSignature(Object obj){
+		if (this == obj) {
+			return true;
+		}		
+	
+		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
+			List<SingleVariableModel> oldList = this.getFormalParameters();
+			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
+			if (oldList.size() != newList.size()) {
+				return false;
+			}
+			
+			for (int i = 0; i < oldList.size(); i++) {
+				if (!oldList.get(i).equals(newList.get(i))) {
+					return false;
+				};
+			}
+			
+			
+			return true;			
+		}else {
+			return false;
+		}			
+
 	}
 	
 	public boolean canCompatibility(MethodModel methodModel){
 		if(!methodModel.getModifier().CanCompatibility(this.getModifier())){
 			return false;
 		}
-		
-		if(!methodModel.getReturnType().CanCompatibility(this.getReturnType())){
-			return false;
-		}
-		
+				
 		if (this.getFormalParameters().size() != methodModel.getFormalParameters().size()){
 			return false;
 		}else if (this.getFormalParameters().size() == methodModel.getFormalParameters().size()) {				
@@ -180,6 +207,10 @@ public class MethodModel {
 				if(!newadd.get(i).getType().CanCompatibility(removed.get(i).getType())){
 					return false;
 				}
+			}			
+			
+			if (!methodModel.getReturnType().CanCompatibility(this.getReturnType())) {
+				return false;
 			}
 		}		
 		

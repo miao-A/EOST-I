@@ -21,7 +21,8 @@ public class QualifiedTypeModel extends TypeModel {
 	@Override
 	public String getFullName() {
 		// TODO Auto-generated method stub
-		return qualifiedString+"."+this.getTypeName();
+		String string = qualifiedString+"."+this.getTypeName();
+		return this.getTypeName();
 	}
 	
 	

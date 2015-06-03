@@ -47,12 +47,12 @@ public class ClassCompatibilityRecoder {
 		superInterfaceClassRecoder = new SuperInterfaceClassRecoder(oldTypeModel.getSuperInterfaceTypes(), newTypeModel.getSuperInterfaceTypes());
 		fieldRecoder = new FieldRecoder(oldTypeModel.getFieldModels(), newTypeModel.getFieldModels());
 		methodRecoder = new MethodRecoder(oldTypeModel.getMethodModels(), newTypeModel.getMethodModels());
+		constructorMethodRecoder = new ConstructorMethodRecoder(oldTypeModel.getConstructorModel(),newTypeModel.getConstructorModel());
 		
 		if (modifierRecoder.isCompatibility()&& methodRecoder.isCompatibility()&&constructorMethodRecoder.isCompatibility()&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
 				isUnchanged(superInterfaceClassRecoder.getChangeStatus())) {
 			this.compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
-		}else{
-		
+		}else{		
 			this.compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
 			if (superClassRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
 				superClassCompatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
@@ -163,5 +163,8 @@ public class ClassCompatibilityRecoder {
 		return modifierRecoder;
 	}
 	
+	public ConstructorMethodRecoder getConstructorMethodRecoder(){
+		return constructorMethodRecoder;
+	}
 
 }

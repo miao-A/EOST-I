@@ -25,6 +25,7 @@ import java.util.List;
 
 
 
+
 import javassist.compiler.ast.Visitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -45,6 +46,7 @@ import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
@@ -344,6 +346,10 @@ public class ComponentVisitor extends ASTVisitor {
 		}		
 		return list;
 	}
+	
+	public java.net.URL id(){
+		return null;
+	}
 
 	public List<MethodModel> getMethodModels(ASTNode node){
 		
@@ -367,7 +373,15 @@ public class ComponentVisitor extends ASTVisitor {
 						typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
 					}else if (type instanceof SimpleType) {
 						System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
-						typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
+						Name name = ((SimpleType) type).getName();
+						if (name instanceof QualifiedName) {
+							((QualifiedName) name).getQualifier();
+							typeModel = new SimpleTypeModel(((QualifiedName) name).getName().toString());
+						}else {
+							typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
+						}
+						
+						
 						if (type.resolveBinding()!=null) {
 							if (type.resolveBinding().getSuperclass() != null) {
 								System.out.println(((SimpleType) type).resolveBinding().getSuperclass().getName());

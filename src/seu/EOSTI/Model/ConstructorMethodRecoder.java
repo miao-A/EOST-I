@@ -55,6 +55,14 @@ public class ConstructorMethodRecoder {
 				}			
 			}
 			
+			for (ConstructorMethodModel newMethodModel : newMethodModels) {
+				if (oldMethodModels.contains(newMethodModel)){
+					//int index = oldMethodModels.indexOf(newMethodModel);
+					unchangedMethodModels.add(newMethodModel);	
+								
+				}
+			}
+			
 		}
 		
 

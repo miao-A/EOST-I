@@ -58,19 +58,13 @@ public class MethodRecoder {
 				}			
 			}
 			
-			/*for (MethodModel newMethodModel : newMethodModels) {
+			for (MethodModel newMethodModel : newMethodModels) {
 				if (oldMethodModels.contains(newMethodModel)){
 					int index = oldMethodModels.indexOf(newMethodModel);
-					ModifierRecoder mr = new ModifierRecoder(oldMethodModels.get(index).getModifier(), newMethodModel.getModifier());
-					if (!mr.isCompatibility()) {
-						uncompatibilityMethodMap.put(oldMethodModels.get(index), newMethodModel);
-
-					}else {
-						unchangedMethodModels.add(newMethodModel);
-					}
+					unchangedMethodModels.add(newMethodModel);	
 								
 				}
-			}*/
+			}
 		}
 		
 
@@ -89,22 +83,7 @@ public class MethodRecoder {
 					}					
 				}				
 			}			
-		}
-		
-		/*for (MethodModel removedModel : removedMethodModels) {			
-			for (MethodModel addmethodModel : newAddMethodModels) {
-				if(removedModel.getMethodName().equals(addmethodModel.getMethodName())) {
-					if (addmethodModel.canCompatibility(removedModel)) {
-						System.out.println("chu cuo le");
-						removedMethodModels.remove(removedModel);
-						newAddMethodModels.remove(addmethodModel);
-						compatibilityMethodMap.put(removedModel, addmethodModel);
-						
-					}
-				}
-			}			
-		}*/
-		
+		}				
 		
 		if (removedMethodModels.size() == 0) {
 			compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
@@ -172,6 +151,7 @@ public class MethodRecoder {
 				count++;
 			}
 		}
+		
 		return count;
 	}
 

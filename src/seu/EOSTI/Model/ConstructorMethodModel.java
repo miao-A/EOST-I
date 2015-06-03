@@ -107,33 +107,37 @@ private String methodName;
 	public boolean equals(Object obj){
 		if (this == obj) {
 			return true;
-		}
-		
-		
-		boolean flag = true;	
-		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
+		}		
+	
+		if( this.getMethodName().equals(((ConstructorMethodModel) obj).getMethodName())){
 			List<SingleVariableModel> oldList = this.getFormalParameters();
-			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
+			List<SingleVariableModel> newList = ((ConstructorMethodModel) obj).getFormalParameters();
 			if (oldList.size() != newList.size()) {
 				return false;
 			}
 			
 			for (int i = 0; i < oldList.size(); i++) {
 				if (!oldList.get(i).equals(newList.get(i))) {
-					flag = false;					
+					return false;
 				};
 			}
 			
-		}
+			if (!this.getModifier().equals(((ConstructorMethodModel) obj).getModifier())) {
+				return false;
+			}
 			
-		if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
+			return true;
+			
+		}else {
 			return false;
-		}
-		
-		return flag;
+		}			
+
 	}
 	
 	public boolean canCompatibility(ConstructorMethodModel removedModel){		
+		if(!removedModel.getModifier().CanCompatibility(this.getModifier())){
+			return false;
+		}
 		
 		if (this.getFormalParameters().size() != removedModel.getFormalParameters().size()){
 			return false;

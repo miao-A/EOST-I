@@ -102,13 +102,18 @@ public class SimpleTypeModel extends TypeModel {
 		// TODO Auto-generated method stub		
 		return this.getTypeName();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (obj instanceof SimpleTypeModel) {
+			if (this.getTypeName().equals(((SimpleTypeModel) obj).getTypeName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	
 }
 
-class A{
-	
-	class B{
-		
-	}
-}

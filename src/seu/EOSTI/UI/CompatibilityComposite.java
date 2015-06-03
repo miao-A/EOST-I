@@ -30,6 +30,9 @@ import org.eclipse.ui.internal.dnd.SwtUtil;
 
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ChangeStatus;
+import seu.EOSTI.Model.ClassCompatibilityRecoder;
+import seu.EOSTI.Model.ConstructorMethodModel;
+import seu.EOSTI.Model.ConstructorMethodRecoder;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
@@ -49,21 +52,23 @@ public class CompatibilityComposite extends Composite {
 	
 	class MyModel{
 		
+		
+		String identifierString = new String();
+		List<String> newAddList = null;
+		List<String> removedList = null;
+		List<String> unchangedList = null;
+		List<String> compatibilitynewList = null;
+		List<String> compatibilityoldList = null;
+		
 		public MyModel(String id) {
 			// TODO Auto-generated constructor stub
 			identifierString = id;
 			newAddList = new LinkedList<>();
 			removedList = new LinkedList<>();
 			unchangedList = new LinkedList<>();
-			modifiednewList = new LinkedList<>();
-			modifiedoldList = new LinkedList<>();
+			compatibilitynewList = new LinkedList<>();
+			compatibilityoldList = new LinkedList<>();
 		}
-		String identifierString = new String();
-		List<String> newAddList = null;
-		List<String> removedList = null;
-		List<String> unchangedList = null;
-		List<String> modifiednewList = null;
-		List<String> modifiedoldList = null;
 		
 		public boolean equals(Object o){
 
@@ -155,7 +160,7 @@ public class CompatibilityComposite extends Composite {
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		String[] tableHeader = {"        包+类名        ","        新增方法         ", "        删除方法         ","        修改方法         ","        未变更方法         "};		
+		String[] tableHeader = {"        包+类名        ","        新增方法         ", "        删除方法         ","        兼容的方法         ","        未变更方法         "};		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
 			TableColumn tableColumn = new TableColumn(changeTypeTable, SWT.NONE);
@@ -185,16 +190,16 @@ public class CompatibilityComposite extends Composite {
 				int unchangeCount = 0;
 				int newCount = 0;
 				int removedCount = 0;
-				int modifiedCount = 0;					
+				int compatibilityCount = 0;		
 
 				
 			
-				List<ClassChangeRecoder> modifiedType = compatibility.getModifiedRecoders();					
-				if (modifiedType.size()!=0) {
+				List<ClassCompatibilityRecoder> unCompatibilityRecoders = compatibility.getUncompatibilityRecoders();					
+				if (unCompatibilityRecoders.size()!=0) {
 					TableItem uItem = new TableItem(changeTypeTable, SWT.NONE);
 					uItem.setText(new String[] {"修改的类","------","------","------","------"});
 				}
-				for(ClassChangeRecoder tcr : modifiedType){					
+				for(ClassCompatibilityRecoder tcr : unCompatibilityRecoders){					
 	
 					if (!tcr.getModifierRecoder().isCompatibility()){
 						System.out.println("not compatibility");
@@ -202,21 +207,23 @@ public class CompatibilityComposite extends Composite {
 					
 					
 					//仅统计与public相关类
-					int thenewCount = tcr.getMethodRecoder().getNewAddMehodNum();
-					int theunchangeCount = tcr.getMethodRecoder().getUnchangedMethodNum();
-					int theremovedCount = tcr.getMethodRecoder().getRemovedMehodNum();
-					int themodifiedCount = tcr.getMethodRecoder().getModifiedMethodNum();
+					int thenewCount = tcr.getMethodRecoder().getNewAddMehodNum()+tcr.getConstructorMethodRecoder().getNewAddMehodNum();
+					int theunchangeCount = tcr.getMethodRecoder().getUnchangedMethodNum()+tcr.getConstructorMethodRecoder().getUnchangedMethodNum();
+					int theremovedCount = tcr.getMethodRecoder().getRemovedMehodNum()+tcr.getConstructorMethodRecoder().getNewAddMehodNum();
+					int thecompatibilityCount = tcr.getMethodRecoder().getCompatibilityMethodMap().size()+tcr.getConstructorMethodRecoder().getCompatibilityConstructorMethodMap().size();
+					
+					
 					
 					newCount += thenewCount;
 					unchangeCount += theunchangeCount;
 					removedCount += theremovedCount;
-					//modifiedCount += themodifiedCount;
+					compatibilityCount += thecompatibilityCount;
 					
 					MyModel myModel = null;
 				
 				    final TableItem item = new TableItem(changeTypeTable, SWT.NONE);
 					if (tcr.getMethodChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," modified:"+themodifiedCount," unchange:"+theunchangeCount};
+						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};
 						myModel = new MyModel(string[0]);
 						item.setText(string);
 						
@@ -225,11 +232,18 @@ public class CompatibilityComposite extends Composite {
 							if (methodModel.getModifier().isPUBLIC()) {
 								myModel.unchangedList.add(methodModel.getFullName());
 							}
-						}				
+						}
+						
+						List<ConstructorMethodModel> coldlist = tcr.getConstructorMethodRecoder().getUnchangedMethodModels();
+						for (ConstructorMethodModel methodModel : coldlist) {						
+							if (methodModel.getModifier().isPUBLIC()) {
+								myModel.unchangedList.add(methodModel.getFullName());
+							}
+						}						
 						myModels.add(myModel);
 						continue;
 					}else {
-						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," modified:"+themodifiedCount," unchange:"+theunchangeCount};	
+						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};	
 						myModel = new MyModel(string[0]);
 						item.setText(string);
 					}
@@ -237,17 +251,16 @@ public class CompatibilityComposite extends Composite {
 					
 							
 					String itemString ="***"+ tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName() + " Method Count"+
-							" new:"+thenewCount + " removed:" + theremovedCount +" unchange:"+theunchangeCount +" modified:"+themodifiedCount;
+							" new:"+thenewCount + " removed:" + theremovedCount +" compatibility:" + theunchangeCount +" modified:"+thecompatibilityCount;
 					
-					System.out.println(itemString);
-					
+					System.out.println(itemString);					
 					
 					MethodRecoder mRecoder = tcr.getMethodRecoder();				
-					Map<MethodModel, MethodModel> modifiedMap = mRecoder.getModifiedMethodMap();	
+					Map<MethodModel, MethodModel> modifiedMap = mRecoder.getCompatibilityMethodMap();//getModifiedMethodMap();	
 					for (MethodModel methodModel : modifiedMap.keySet()) {
 						if (methodModel.getModifier().isPUBLIC()||modifiedMap.get(methodModel).getModifier().isPUBLIC()) {
-							myModel.modifiedoldList.add("old:" + methodModel.getFullName());
-							myModel.modifiednewList.add("new:" + modifiedMap.get(methodModel).getFullName());
+							myModel.compatibilityoldList.add("old:" + methodModel.getFullName());
+							myModel.compatibilitynewList.add("new:" + modifiedMap.get(methodModel).getFullName());
 							if (methodModel.getModifier().isPUBLIC()&&modifiedMap.get(methodModel).getModifier().isPUBLIC()){
 								unchangeCount++;
 							}else if (methodModel.getModifier().isPUBLIC()&&modifiedMap.get(methodModel).getModifier().isPRIVATE()){
@@ -255,7 +268,7 @@ public class CompatibilityComposite extends Composite {
 							}else if(methodModel.getModifier().isPRIVATE()&&modifiedMap.get(methodModel).getModifier().isPUBLIC()){
 								newCount++;
 							}else {
-								modifiedCount++;
+								compatibilityCount++;
 							}
 						}						
 					}
@@ -295,7 +308,7 @@ public class CompatibilityComposite extends Composite {
 					int theremovedCount =  atm.getPublicMethodNum();
 					removedCount += theremovedCount;
 
-					String string[] = {atm.getPackage() + " " + atm.getClassName()," new:"+ "0" , " removed:" + theremovedCount," modified:"+"0"," unchange:"+"0"};
+					String string[] = {atm.getPackage() + " " + atm.getClassName()," new:"+ "0" , " removed:" + theremovedCount," compatibility:"+"0"," unchange:"+"0"};
 					item.setText(string);
 					MyModel myModel = new MyModel(string[0]);
 					List<MethodModel> list = atm.getMethodModels();
@@ -309,28 +322,67 @@ public class CompatibilityComposite extends Composite {
 				}				
 				
 
-				List<ClassChangeRecoder> unchangeType = compatibility.getUnchangedRecoders();
+				List<ClassCompatibilityRecoder> unchangeType = compatibility.getCompatibilityRecoders();
 				if (unchangeType.size()!=0) {
 					TableItem uItem = new TableItem(changeTypeTable, SWT.NONE);
-					uItem.setText(new String[] {"未变更的类","------","------","------","------"});
+					uItem.setText(new String[] {"可兼容的类","------","------","------","------"});
 				}
-				for(ClassChangeRecoder tcr : unchangeType){
+				for(ClassCompatibilityRecoder tcr : unchangeType){
 					final TableItem item = new TableItem(changeTypeTable, SWT.NONE);					
 					MethodRecoder mRecoder = tcr.getMethodRecoder();
-					int theunchangeCount = mRecoder.getUnchangedMethodNum();
+					ConstructorMethodRecoder cmRecoder = tcr.getConstructorMethodRecoder();
+					
+					int theunchangeCount = mRecoder.getUnchangedMethodNum()+cmRecoder.getUnchangedMethodNum()+cmRecoder.getUnchangedMethodNum();
+					int thecompatibilityCount = mRecoder.getCompatibilityMethodMap().size()+cmRecoder.getCompatibilityConstructorMethodMap().size();
+
+					
 					unchangeCount += theunchangeCount;
-					String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+"0" , " removed:" + "0"," modified:"+"0"," unchange:"+theunchangeCount};
+					compatibilityCount += thecompatibilityCount;
+					String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+"0" , " removed:" + "0"," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};
 					item.setText(string);
 					MyModel myModel = new MyModel(string[0]);
+					
+					List<ConstructorMethodModel> clist = tcr.getConstructorMethodRecoder().getUnchangedMethodModels();
+					for (ConstructorMethodModel methodModel : clist) {						
+						if (methodModel.getModifier().isPUBLIC()) {
+							myModel.unchangedList.add(methodModel.getFullName());
+						}
+					}
+					
 					List<MethodModel> list = mRecoder.getUnchangedMethodModels();
 					for (MethodModel methodModel : list) {						
-						if (methodModel.getModifier().isPUBLIC()) {
-							if (methodModel.getModifier().isPUBLIC()) {
-								myModel.unchangedList.add(methodModel.getFullName());
-								
-							}
+						if (methodModel.getModifier().isPUBLIC()) {							
+								myModel.unchangedList.add(methodModel.getFullName());								
+							
 						}
-					}				
+					}		
+					
+					
+					ConstructorMethodRecoder cmr = tcr.getConstructorMethodRecoder();
+					//int count = 0;
+					Map<ConstructorMethodModel, ConstructorMethodModel> cmap = cmr.getCompatibilityConstructorMethodMap();			
+					//System.out.println(count);			
+					for (ConstructorMethodModel methodModel : cmap.keySet()) {
+						myModel.compatibilityoldList.add("old:"+methodModel.getFullName());
+						myModel.compatibilitynewList.add("new:"+cmap.get(methodModel).getFullName());
+						System.out.println("old:"+methodModel.getFullName());
+						System.out.println("new:"+cmap.get(methodModel).getFullName());
+						
+					}
+					
+					
+					MethodRecoder mr = tcr.getMethodRecoder();
+					int count = 0;		
+					System.out.println(count);
+					Map<MethodModel, MethodModel> map = tcr.getMethodRecoder().getCompatibilityMethodMap();
+					for (MethodModel methodModel : map.keySet()) {
+						myModel.compatibilityoldList.add("old:"+methodModel.getFullName());
+						myModel.compatibilitynewList.add("new:"+map.get(methodModel).getFullName());
+						System.out.println("old:"+methodModel.getFullName());
+						System.out.println("new:"+map.get(methodModel).getFullName());				
+					}
+					
+					
 					
 					myModels.add(myModel);
 				}		
@@ -372,112 +424,117 @@ public class CompatibilityComposite extends Composite {
 					        if (rec.contains(point))
 					        	column = i;
 					    }
-					    
-						final int col1 = column;
-						final int row1 = changeTypeTable.getSelectionIndex();
-					    
-					    if (col1 == 1) {
-					    	final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
-					    	
-					    	String id = changeTypeTable.getItem(row1).getText(0);
-					    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).newAddList;
-					    	
-					    	if (list.size() == 0) {
-								return;
-							}
-					    	
-						    comb.setItems( (String[]) list.toArray(new String[list.size()]));
-						    comb.add("new:"+list.size(), 0);
+					    try {
+					    	final int col1 = column;
+							final int row1 = changeTypeTable.getSelectionIndex();
 						    
-						    comb.addSelectionListener(new SelectionAdapter() {
-						    	@Override
-						    	public void widgetSelected(SelectionEvent e) {
-						    		tableitem.setText(col1, comb.getText());
-						    		comb.dispose();
-						    		super.widgetSelected(e);
-						    	}
-						    });
-						    editor.setEditor(comb, tableitem, col1);
-						}else if (col1 == 2) {
-							final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
-							String id = changeTypeTable.getItem(row1).getText(0);
-					    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).removedList;
-					    	
-					    	if (list.size() == 0) {
-								return;
-							}
-					    	
-						    comb.setItems( (String[]) list.toArray(new String[list.size()]));
-						    comb.add("removed:"+list.size(), 0);
-						    comb.addSelectionListener(new SelectionAdapter() {
-						    	@Override
-						    	public void widgetSelected(SelectionEvent e) {
-						    		tableitem.setText(col1, comb.getText());
-						    		comb.dispose();
-						    		super.widgetSelected(e);
-						    	}
-						    });
-						    editor.setEditor(comb, tableitem, col1);
-						}else if (col1 == 3) {
-							final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
-							
-							String id = changeTypeTable.getItem(row1).getText(0);
-					    	List<String> newlist = myModels.get(myModels.indexOf(new MyModel(id))).modifiednewList;
-					    	List<String> oldlist = myModels.get(myModels.indexOf(new MyModel(id))).modifiedoldList;
+						    if (col1 == 1) {
+						    	final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
+						    	
+						    	String id = changeTypeTable.getItem(row1).getText(0);
+						    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).newAddList;
+						    	
+						    	if (list.size() == 0) {
+									return;
+								}
+						    	
+							    comb.setItems( (String[]) list.toArray(new String[list.size()]));
+							    comb.add("new:"+list.size(), 0);
+							    
+							    comb.addSelectionListener(new SelectionAdapter() {
+							    	@Override
+							    	public void widgetSelected(SelectionEvent e) {
+							    		tableitem.setText(col1, comb.getText());
+							    		comb.dispose();
+							    		super.widgetSelected(e);
+							    	}
+							    });
+							    editor.setEditor(comb, tableitem, col1);
+							}else if (col1 == 2) {
+								final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
+								String id = changeTypeTable.getItem(row1).getText(0);
+						    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).removedList;
+						    	
+						    	if (list.size() == 0) {
+									return;
+								}
+						    	
+							    comb.setItems( (String[]) list.toArray(new String[list.size()]));
+							    comb.add("removed:"+list.size(), 0);
+							    comb.addSelectionListener(new SelectionAdapter() {
+							    	@Override
+							    	public void widgetSelected(SelectionEvent e) {
+							    		tableitem.setText(col1, comb.getText());
+							    		comb.dispose();
+							    		super.widgetSelected(e);
+							    	}
+							    });
+							    editor.setEditor(comb, tableitem, col1);
+							}else if (col1 == 3) {
+								final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
+								
+								String id = changeTypeTable.getItem(row1).getText(0);
+						    	List<String> newlist = myModels.get(myModels.indexOf(new MyModel(id))).compatibilitynewList;
+						    	List<String> oldlist = myModels.get(myModels.indexOf(new MyModel(id))).compatibilityoldList;
 
-					    	if (newlist.size() == 0||oldlist.size() == 0) {
-								return;
-							}
-					    	//newlist.addAll(oldlist);
-						    comb.setItems( (String[]) newlist.toArray(new String[newlist.size()]));
-						    int begin = newlist.size();
-						    for (int i = 0; i < oldlist.size(); i++) {
-								comb.add(oldlist.get(i),i+begin);
-							}
-						    comb.add("modified:"+newlist.size(), 0);
-						    comb.addSelectionListener(new SelectionAdapter() {
-						    	@Override
-						    	public void widgetSelected(SelectionEvent e) {
-						    		tableitem.setText(col1, comb.getText());
-						    		comb.dispose();
-						    		super.widgetSelected(e);
-						    	}
-						    });
-						    editor.setEditor(comb, tableitem, col1);
-						}else if (col1 == 4) {
-							final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
+						    	if (newlist.size() == 0||oldlist.size() == 0) {
+									return;
+								}
+						    	//newlist.addAll(oldlist);
+							    comb.setItems( (String[]) newlist.toArray(new String[newlist.size()]));
+							    int begin = newlist.size();
+							    for (int i = 0; i < oldlist.size(); i++) {
+									comb.add(oldlist.get(i),i+begin);
+								}
+							    comb.add("compatibility:"+newlist.size(), 0);
+							    comb.addSelectionListener(new SelectionAdapter() {
+							    	@Override
+							    	public void widgetSelected(SelectionEvent e) {
+							    		tableitem.setText(col1, comb.getText());
+							    		comb.dispose();
+							    		super.widgetSelected(e);
+							    	}
+							    });
+							    editor.setEditor(comb, tableitem, col1);
+							}else if (col1 == 4) {
+								final Combo comb = new Combo(changeTypeTable, SWT.READ_ONLY);
+								
+								String id = changeTypeTable.getItem(row1).getText(0);
+						    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).unchangedList;
 							
-							String id = changeTypeTable.getItem(row1).getText(0);
-					    	List<String> list = myModels.get(myModels.indexOf(new MyModel(id))).unchangedList;
+						    	
+						    	if (list.size() == 0) {
+									return;
+								}					    	
+						    	
+							    comb.setItems( (String[]) list.toArray(new String[list.size()]));
+							    comb.add("unchange:"+list.size(), 0);
+							    comb.addSelectionListener(new SelectionAdapter() {
+							    	@Override
+							    	public void widgetSelected(SelectionEvent e) {
+							    		tableitem.setText(col1, comb.getText());
+							    		
+							    		comb.dispose();
+							    		super.widgetSelected(e);
+							    	}
+							    });
+							    editor.setEditor(comb, tableitem, col1);
+							}				
 						
-					    	
-					    	if (list.size() == 0) {
-								return;
-							}					    	
-					    	
-						    comb.setItems( (String[]) list.toArray(new String[list.size()]));
-						    comb.add("unchange:"+list.size(), 0);
-						    comb.addSelectionListener(new SelectionAdapter() {
-						    	@Override
-						    	public void widgetSelected(SelectionEvent e) {
-						    		tableitem.setText(col1, comb.getText());
-						    		
-						    		comb.dispose();
-						    		super.widgetSelected(e);
-						    	}
-						    });
-						    editor.setEditor(comb, tableitem, col1);
-						}				
+						} catch (Exception e2) {
+							// TODO: handle exception
+							System.out.println("out off index");
+						}
 					}
 				});	
 				
 				if (unchangeCount+removedCount>0) {
 					TableItem lastItem = new TableItem(changeTypeTable, SWT.NONE);
-					Double double1 = new Double(1.0*unchangeCount/(unchangeCount+removedCount+modifiedCount));
-					lastItem.setText(new String[] {"新版本的构件与旧版本相兼容的接口个数:"+unchangeCount,"旧版本软件构件的接口数:"+(unchangeCount+removedCount),double1.toString()});
+					Double double1 = new Double(1.0*(unchangeCount+compatibilityCount)/(unchangeCount+removedCount+compatibilityCount));
+					lastItem.setText(new String[] {"新版本的构件与旧版本相兼容的接口个数:"+(unchangeCount+compatibilityCount),"旧版本软件构件的接口数:"+(unchangeCount+removedCount+compatibilityCount),double1.toString()});
 				}
 				
-				System.out.println(newCount +"\t"+removedCount+"\t"+modifiedCount+"\t"+unchangeCount);
+				System.out.println(newCount +"\t"+removedCount+"\t"+compatibilityCount+"\t"+unchangeCount);
 			}
 		});
 		
