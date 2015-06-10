@@ -42,7 +42,7 @@ public class ProjectConnector extends DBConnector {
 		ArrayList<String> versionList = new ArrayList<String>();
 		
 		String sqlstr = "SELECT verID FROM eosti.projectinfo where projName = '"
-				+ projectName +"'";
+				+ projectName +"' order by verID asc";
 		Statement stmt;
 		try {
 			stmt = connect.createStatement();

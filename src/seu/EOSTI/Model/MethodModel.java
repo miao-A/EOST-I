@@ -30,7 +30,7 @@ public class MethodModel {
 	private String methodName;	
 	
 	private JModifier modifier = new JModifier();
-	private List<String> typeParameters = new LinkedList<>();
+	//private List<String> typeParameters = new LinkedList<>();
 	
 	private TypeModel returnType;
 	private int extraDimensions = 0;
@@ -57,7 +57,7 @@ public class MethodModel {
 
 	
 	
-	public List<String> getTypeParameters() {
+	/*public List<String> getTypeParameters() {
 		return typeParameters;
 	}
 
@@ -67,7 +67,7 @@ public class MethodModel {
 	
 	public void addTypeParameter(String typeParameter){
 		this.typeParameters.add(typeParameter);
-	}
+	}*/
 
 	public TypeModel getReturnType() {
 		return returnType;
@@ -116,7 +116,7 @@ public class MethodModel {
 				+this.getMethodName()+"(";
 		List<SingleVariableModel> tpList =  this.getFormalParameters();
 		for (int i = 0; i < tpList.size(); i++) {
-			string += tpList.get(i).getType().getTypeName()+" "+tpList.get(i).getName();
+			string += tpList.get(i).getFullName();
 			if (i!=tpList.size()-1) {
 				string +=",";
 			}
@@ -148,7 +148,7 @@ public class MethodModel {
 			for (int i = 0; i < oldList.size(); i++) {
 				if (!oldList.get(i).equals(newList.get(i))) {
 					return false;
-				};
+				}
 			}
 			
 			if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
@@ -167,31 +167,6 @@ public class MethodModel {
 
 	}
 	
-	public boolean sameSignature(Object obj){
-		if (this == obj) {
-			return true;
-		}		
-	
-		if( this.getMethodName().equals(((MethodModel) obj).getMethodName())){
-			List<SingleVariableModel> oldList = this.getFormalParameters();
-			List<SingleVariableModel> newList = ((MethodModel) obj).getFormalParameters();
-			if (oldList.size() != newList.size()) {
-				return false;
-			}
-			
-			for (int i = 0; i < oldList.size(); i++) {
-				if (!oldList.get(i).equals(newList.get(i))) {
-					return false;
-				};
-			}
-			
-			
-			return true;			
-		}else {
-			return false;
-		}			
-
-	}
 	
 	public boolean canCompatibility(MethodModel methodModel){
 		if(!methodModel.getModifier().CanCompatibility(this.getModifier())){

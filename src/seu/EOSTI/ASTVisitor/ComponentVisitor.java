@@ -379,8 +379,7 @@ public class ComponentVisitor extends ASTVisitor {
 							typeModel = new SimpleTypeModel(((QualifiedName) name).getName().toString());
 						}else {
 							typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
-						}
-						
+						}					
 						
 						if (type.resolveBinding()!=null) {
 							if (type.resolveBinding().getSuperclass() != null) {
@@ -397,6 +396,7 @@ public class ComponentVisitor extends ASTVisitor {
 						
 					}else if (type instanceof WildcardType) {
 						System.out.println(type.getClass().getName());
+						typeModel = new WildCardTypeModel(((WildcardType) type).isUpperBound(), ((WildcardType) type).getBound());
 					}else if (type instanceof ParameterizedType) {
 						System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
 						typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
@@ -409,11 +409,11 @@ public class ComponentVisitor extends ASTVisitor {
 					methodModel.setReturnType(typeModel);					
 				
 				
-				List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
+				/*List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
 				for (TypeParameter typeParameter : typeParameters) {
 					System.out.println("typeParameter:"+typeParameter.getName());
 					methodModel.addTypeParameter(typeParameter.getName().toString());					
-				}
+				}*/
 				
 				List<SingleVariableDeclaration> singleVariableDeclarations = methodDeclaration.parameters();
 				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
@@ -458,6 +458,7 @@ public class ComponentVisitor extends ASTVisitor {
 							System.out.println(type.getClass().getName());
 						}else if (type instanceof WildcardType) {
 							System.out.println(type.getClass().getName());
+							typeModel = new WildCardTypeModel(((WildcardType)type).isUnionType(),((WildcardType)type).getBound());
 						}else if (type instanceof ParameterizedType) {
 							System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
 							typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
@@ -470,11 +471,11 @@ public class ComponentVisitor extends ASTVisitor {
 						methodModel.setReturnType(typeModel);										
 					}
 					
-					List<TypeParameter> typeParameters = ((MethodDeclaration)bodyDeclaration).typeParameters();
+				/*	List<TypeParameter> typeParameters = ((MethodDeclaration)bodyDeclaration).typeParameters();
 					for (TypeParameter typeParameter : typeParameters) {
 						System.out.println("typeParameter:"+typeParameter.getName());
 						methodModel.addTypeParameter(typeParameter.getName().toString());					
-					}
+					}*/
 					
 					List<SingleVariableDeclaration> singleVariableDeclarations = ((MethodDeclaration)bodyDeclaration).parameters();
 					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
@@ -483,6 +484,7 @@ public class ComponentVisitor extends ASTVisitor {
 						svm.setType(singleVariableDeclaration.getType());
 						svm.setVarargs(singleVariableDeclaration.isVarargs());
 						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+						svm.setName(singleVariableDeclaration.getName().toString());
 						methodModel.addFormalParameters(svm);
 					}
 					methodModel.setExtraDimensions(((MethodDeclaration)bodyDeclaration).getExtraDimensions());
@@ -562,6 +564,7 @@ public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
 						svm.setType(singleVariableDeclaration.getType());
 						svm.setVarargs(singleVariableDeclaration.isVarargs());
 						svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+						svm.setName(singleVariableDeclaration.getName().toString());
 						methodModel.addFormalParameters(svm);
 					}
 					methodModel.setExtraDimensions(((MethodDeclaration)bodyDeclaration).getExtraDimensions());

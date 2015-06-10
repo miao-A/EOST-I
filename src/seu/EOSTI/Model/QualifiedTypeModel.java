@@ -24,6 +24,13 @@ public class QualifiedTypeModel extends TypeModel {
 		String string = qualifiedString+"."+this.getTypeName();
 		return this.getTypeName();
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 	

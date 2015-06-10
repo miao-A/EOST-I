@@ -1,16 +1,15 @@
-package seu.EOSTI.Parser;
+package seu.EOSTI.Chart;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import seu.EOSTI.DBConnect.ChangeabilityInfoConnector;
-import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 
-public class ChangeabilityBarChart extends BarChart {
+public class ChangeabilityLineChart  extends LineChart {
 
-	public ChangeabilityBarChart(String title){
+	public ChangeabilityLineChart(String title){
 		super(title);
 	}
 	@Override
@@ -19,19 +18,25 @@ public class ChangeabilityBarChart extends BarChart {
 		ProjectConnector pConnector = new ProjectConnector();
 		List<String> versionlist = pConnector.getVersion(projectName);
 		
-		Map<String, HashMap<String, Double>> dataMap = new HashMap<String, HashMap<String, Double>>();
-		HashMap<String, Double> map = new HashMap<String, Double>();
+		LinkedHashMap<String, HashMap<String, Double>> dataMap = new LinkedHashMap<String, HashMap<String, Double>>();
+		
 		
 		for (String version : versionlist) {
 			ChangeabilityInfoConnector dbConnector = new ChangeabilityInfoConnector(projectName, version);
-			List<String> pkgNameList = dbConnector.getpackageName();
+			HashMap<String, Double> map = new HashMap<String, Double>();
+			List<String> pkgNameList = dbConnector.getpackageName();			
 			for (String pkgName : pkgNameList) {
+
+				if (pkgName.equals("junit.awtui")) {
+					int i=0;
+					i=1;
+				}
 				double ratio = dbConnector.getChangeabilityRatio(pkgName);
 				map.put(pkgName, new Double(ratio));
+				
 			}
 			dataMap.put(projectName+version, map);			
 		}
 		this.setDataSet(dataMap);
 	}
-
 }

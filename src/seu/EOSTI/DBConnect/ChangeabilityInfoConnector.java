@@ -121,7 +121,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				
 				rs= stmt.executeQuery(str);			
 				while (rs.next()) {					
-					ratio = rs.getDouble("result");					
+					ratio = rs.getDouble("result");
 				}
 				
 				

@@ -22,10 +22,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabFolder;
 
+import seu.EOSTI.Chart.BarChart;
+import seu.EOSTI.Chart.ChangeabilityBarChart;
+import seu.EOSTI.Chart.ExtensibilityBarChart;
 import seu.EOSTI.DBConnect.ProjectConnector;
-import seu.EOSTI.Parser.BarChart;
-import seu.EOSTI.Parser.ChangeabilityBarChart;
-import seu.EOSTI.Parser.ExtensibilityBarChart;
 
 public class ShowComposite extends Composite {
 
@@ -50,11 +50,7 @@ public class ShowComposite extends Composite {
 		ArrayList<String> rStrings = pcConnector.getProject();
 		for (String string : rStrings) {
 			projectSelectCombo.add(string);
-		}
-		
-		
-		
-		
+		}		
 		
 		final CTabFolder tabFolder = new CTabFolder(this, SWT.BORDER);
 		tabFolder.setLocation(13, 53);
@@ -63,9 +59,7 @@ public class ShowComposite extends Composite {
 		
 		final CTabItem extenTabItem = new CTabItem(tabFolder, SWT.NONE);
 		extenTabItem.setText("\u53EF\u6269\u5C55\u6027");
-		
-		
-		
+				
 		final CTabItem changeTabItem = new CTabItem(tabFolder, SWT.NONE);
 		changeTabItem.setText("\u53EF\u66FF\u4EE3\u6027");
 			
@@ -76,6 +70,7 @@ public class ShowComposite extends Composite {
 				String projName = projectSelectCombo.getItem(index);
 				
 				{
+					System.out.println("可扩展性指示图");
 					BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");		
 					extensibilityChart.creatDataSet(projName);		
 					JFreeChart chart = null;
@@ -103,7 +98,7 @@ public class ShowComposite extends Composite {
 				///
 				{
 				
-					//dfsfd;
+					System.out.println("可替代性指示图");
 					BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");		
 					changeabilityChart.creatDataSet(projName);		
 					JFreeChart chart = null;
@@ -129,7 +124,6 @@ public class ShowComposite extends Composite {
 				}
 			}
 		});
-		
 	
 	}
 

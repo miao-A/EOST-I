@@ -13,12 +13,22 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 public class SingleVariableModel {
 
-	private String name;
+	private String name="";
 	private JModifier modifier;
 	private TypeModel typeModel;
 	private boolean varargs = false;
 	private int extraDimensions = 0;
 	
+	public SingleVariableModel(Type type, String name){
+		setType(type);
+		this.name = name;
+			
+	}
+	
+	public SingleVariableModel() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -28,18 +38,24 @@ public class SingleVariableModel {
 	
 	public JModifier getModifier() {
 		return modifier;
-	}
-	
-	
+	}	
 	
 	public void setModifier(JModifier modifier) {
 		this.modifier = modifier;
 	}
 	public TypeModel getType() {
+		
 		return typeModel;
 	}
+	
+	public String getFullName() {
+		// TODO Auto-generated method stub
+		String string = typeModel.getFullName()+" "+name; 
+		return string;
+	}
+	
 	public void setType(Type type) {
-
+		
 		if (type instanceof PrimitiveType) {
 			System.out.println(type.getClass().getName()+" "+type.toString());
 			typeModel = new PrimitiveTypeModel(type.toString());
@@ -47,7 +63,7 @@ public class SingleVariableModel {
 			System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
 			typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
 		}else if (type instanceof SimpleType) {
-			System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
+			System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());			
 			typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
 		}else if (type instanceof QualifiedType) {
 			System.out.println(type.getClass().getName());
@@ -56,7 +72,9 @@ public class SingleVariableModel {
 			((QualifiedTypeModel) typeModel).setQualifiedName(((QualifiedType) type).getQualifier().toString());
 			System.out.println(typeModel.getFullName());
 		}else if (type instanceof WildcardType) {
-			System.out.println(type.getClass().getName());
+			System.out.println(type.getClass().getName());			
+			typeModel = new WildCardTypeModel(((WildcardType)type).isUnionType(),((WildcardType)type).getBound());
+			
 		}else if (type instanceof ParameterizedType) {
 			System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
 			typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
@@ -64,7 +82,8 @@ public class SingleVariableModel {
 			((ParameterizedTypeModel) typeModel).setTypeArguments(types);						
 		}else if (type instanceof UnionType) {
 			System.out.println("Union");
-		}
+		}		
+		
 	}
 	public boolean isVarargs() {
 		return varargs;
@@ -78,18 +97,23 @@ public class SingleVariableModel {
 	public void setExtraDimensions(int extraDimensions) {
 		this.extraDimensions = extraDimensions;
 	}	
+    
 	
 	public boolean equals(Object obj){
 		if (this == obj) {
 			return true;
 		}
-		if (obj instanceof SingleVariableModel) {
-			if (this.getType().getTypeName().equals(((SingleVariableModel) obj).getType().getTypeName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
-				return true;
-			}
-		}
 		
+		if (obj instanceof SingleVariableModel) {
+			if (this.getName().equals(((SingleVariableModel) obj).getName())&&this.getType().getTypeName().equals(((SingleVariableModel) obj).getType().getTypeName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
+				return true;
+			}		
+			
+		}		
 		return false;
 	}
 
 }
+
+
+

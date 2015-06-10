@@ -1,10 +1,11 @@
-package seu.EOSTI.Parser;
+package seu.EOSTI.Chart;
 
 import java.awt.Font;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -85,7 +86,7 @@ public abstract class BarChart {
     * @return 
     */ 
 
-	public void setDataSet(Map<String, HashMap<String, Double>> dataMap){		
+	public void setDataSet(LinkedHashMap<String, HashMap<String, Double>> dataMap){		
 		Iterator<Entry<String, HashMap<String, Double>>> it = dataMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, HashMap<String, Double>> entry1 = it.next();

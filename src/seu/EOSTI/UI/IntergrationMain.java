@@ -36,8 +36,8 @@ public class IntergrationMain {
 	/*String oldPath = "D:/ProjectOfHW/jEditor/jEditor0.4.1";
 	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
-	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit3.4/src/junit/runner";
-	String newPathOfComponet = "D:/ProjectOfHW/junit/junit3.5/src/junit/runner";
+	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit3.9/src/junit";
+	String newPathOfComponet = "D:/ProjectOfHW/junit/junit4.0/src/junit";
 
 	
 	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
@@ -88,7 +88,7 @@ public class IntergrationMain {
 	
 
 	
-	System.out.println("end!");
+	System.out.println("end!!");
 	}
 
 

@@ -130,7 +130,7 @@ public class ExtensibilityInfoConnector extends DBConnector {
 				
 				rs= stmt.executeQuery(str);			
 				while (rs.next()) {					
-					ratio = rs.getInt("result");					
+					ratio = rs.getDouble("result");				
 				}
 				
 				
