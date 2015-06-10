@@ -43,7 +43,7 @@ public abstract class LineChart {
 		
 	}
 	
-	public JFreeChart createChart(String string) throws IOException{ 
+	public JFreeChart createChart() throws IOException{ 
 	    
         CategoryDataset dataset = getDataSet();
         
@@ -87,14 +87,14 @@ public abstract class LineChart {
        
         chart.getLegend().setItemFont(new Font("宋体", Font.PLAIN, 12));
         
-        // 创建文件输出流
+        /*// 创建文件输出流
         File fos_jpg = new File("E://"+string+".jpg ");
         // 输出到哪个输出流
         ChartUtilities.saveChartAsJPEG(fos_jpg, chart, // 统计图表对象
                       700, // 宽
                       500 // 高
                       );
-        
+        */
         
         
 	                       

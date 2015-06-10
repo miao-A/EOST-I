@@ -273,12 +273,23 @@ public class CompatibilityComposite extends Composite {
 						}						
 					}
 					
+					
 					List<MethodModel> newlist = mRecoder.getNewAddMethodModels();					
 					for (MethodModel methodModel : newlist) {						
 						if (methodModel.getModifier().isPUBLIC()) {
 							myModel.newAddList.add(methodModel.getFullName());							
 						}
-					}	
+					}
+					
+					ConstructorMethodRecoder cmRecoder = tcr.getConstructorMethodRecoder();	
+					List<ConstructorMethodModel> cnewlist = cmRecoder.getNewAddMethodModels();					
+					for (ConstructorMethodModel methodModel : cnewlist) {						
+						if (methodModel.getModifier().isPUBLIC()) {
+							myModel.newAddList.add(methodModel.getFullName());							
+						}
+					}
+					
+					
 					
 					List<MethodModel> removedlist = mRecoder.getRemovedMethodModels();					
 					for (MethodModel methodModel : removedlist) {
@@ -287,14 +298,30 @@ public class CompatibilityComposite extends Composite {
 							myModel.removedList.add(methodModel.getFullName());
 
 						}
-					}					
+					}
+					
+					List<ConstructorMethodModel> cremovedlist = cmRecoder.getRemovedMethodModels();					
+					for (ConstructorMethodModel methodModel : cremovedlist) {
+						
+						if (methodModel.getModifier().isPUBLIC()) {
+							myModel.removedList.add(methodModel.getFullName());
+
+						}
+					}
 					
 					List<MethodModel> unlist = mRecoder.getUnchangedMethodModels();
 					for (MethodModel methodModel : unlist) {						
 						if (methodModel.getModifier().isPUBLIC()) {
 							myModel.unchangedList.add(methodModel.getFullName());
 						}
-					}				
+					}
+					
+					List<ConstructorMethodModel> cunlist = cmRecoder.getUnchangedMethodModels();
+					for (ConstructorMethodModel methodModel : cunlist) {						
+						if (methodModel.getModifier().isPUBLIC()) {
+							myModel.unchangedList.add(methodModel.getFullName());
+						}
+					}
 					myModels.add(myModel);				
 				}									
 				

@@ -87,7 +87,7 @@ private String methodName;
 				+this.getMethodName()+"(";
 		List<SingleVariableModel> tpList =  this.getFormalParameters();
 		for (int i = 0; i < tpList.size(); i++) {
-			string += tpList.get(i).getType().getTypeName()+" "+tpList.get(i).getName();
+			string += tpList.get(i).getFullName();
 			if (i!=tpList.size()-1) {
 				string +=",";
 			}

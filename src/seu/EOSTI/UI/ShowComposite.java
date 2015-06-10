@@ -24,7 +24,10 @@ import org.eclipse.swt.widgets.TabFolder;
 
 import seu.EOSTI.Chart.BarChart;
 import seu.EOSTI.Chart.ChangeabilityBarChart;
+import seu.EOSTI.Chart.ChangeabilityLineChart;
 import seu.EOSTI.Chart.ExtensibilityBarChart;
+import seu.EOSTI.Chart.ExtensibilityLineChart;
+import seu.EOSTI.Chart.LineChart;
 import seu.EOSTI.DBConnect.ProjectConnector;
 
 public class ShowComposite extends Composite {
@@ -71,7 +74,8 @@ public class ShowComposite extends Composite {
 				
 				{
 					System.out.println("可扩展性指示图");
-					BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");		
+					//BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");	
+					LineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图");	
 					extensibilityChart.creatDataSet(projName);		
 					JFreeChart chart = null;
 					try {
@@ -99,7 +103,8 @@ public class ShowComposite extends Composite {
 				{
 				
 					System.out.println("可替代性指示图");
-					BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");		
+					//BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");
+					LineChart changeabilityChart = new ChangeabilityLineChart("可替代性指示图");
 					changeabilityChart.creatDataSet(projName);		
 					JFreeChart chart = null;
 					try {

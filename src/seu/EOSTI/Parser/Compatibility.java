@@ -43,6 +43,7 @@ public class Compatibility {
 		this.oldPathOfComponet = oldPathOfComponet;
 		this.newPathOfComponet = newPathOfComponet;
 		changeRecoder = new LinkedList<>();
+		
 		compatibilityParser(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));		
 	}
 	
@@ -109,7 +110,8 @@ public class Compatibility {
 		//parser.setEnvironment(null, null, null, true);
 		parser.setEnvironment(jarpathEntries, null, null, true);
 		
-		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);	
+		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);
+		System.out.println("comparing... ...");
 		return componentRequertor.getTypeModels();
 	}		
 	
