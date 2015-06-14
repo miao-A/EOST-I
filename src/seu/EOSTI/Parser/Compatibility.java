@@ -1,6 +1,7 @@
 package seu.EOSTI.Parser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,6 +65,9 @@ public class Compatibility {
 		for(AbstractClassModel newTypeModel : newModels) {
 			if(oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
+				if (oldModels.get(index) == null) {
+					System.out.println();
+				}
 				ClassCompatibilityRecoder classCompatibilityRecoder = new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel);
 				if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.COMPATIBILITY)) {
 					compatibilityRecoders.add(classCompatibilityRecoder);
@@ -74,7 +78,12 @@ public class Compatibility {
 		}		
 	}
 	
-	
+	public static Collection<Object[]> eachOne(Object... params) {
+		List<Object[]> results= new ArrayList<Object[]>();
+		for (Object param : params)
+			results.add(new Object[] { param });
+		return results;
+	}
 	public List<AbstractClassModel> parserComponet(String pathOfComponet)  {
 		// create a AST parser
 		ASTParser parser;

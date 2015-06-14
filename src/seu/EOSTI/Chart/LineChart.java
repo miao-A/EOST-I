@@ -63,12 +63,12 @@ public abstract class LineChart {
         CategoryPlot categoryplot = (CategoryPlot) chart.getPlot();
         NumberAxis numberaxis = (NumberAxis) categoryplot.getRangeAxis();  
         CategoryAxis domainAxis = categoryplot.getDomainAxis();
+        categoryplot.setRenderer(new LineAndShapeRenderer());
         
-        LineAndShapeRenderer renderer = (LineAndShapeRenderer) categoryplot.getRenderer();
-        renderer.setShapesVisible(true);
+        //LineAndShapeRenderer renderer = (LineAndShapeRenderer) categoryplot.getRenderer();
+        /*renderer.setShapesVisible(true);
         renderer.setDrawOutlines(true);
-        renderer.setUseFillPaint(true);
-        //renderer.setFillPaint(java.awt.Color.white);
+        renderer.setUseFillPaint(true);*/
         
         
         TextTitle textTitle = chart.getTitle();

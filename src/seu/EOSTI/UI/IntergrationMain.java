@@ -36,16 +36,16 @@ public class IntergrationMain {
 	/*String oldPath = "D:/ProjectOfHW/jEditor/jEditor0.4.1";
 	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
-	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit3.9/src/junit";
-	String newPathOfComponet = "D:/ProjectOfHW/junit/junit4.0/src/junit";
+	String oldPathOfComponet = "D:/ProjectOfHW/japicmp-master/japicmp/src/main";
+	String newPathOfComponet = "D:/ProjectOfHW/japicmp-master/japicmp/src/main";
 
 	
 	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
 	componentParser.parser();*/
 	Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
 	compatibility.getinfo();
-	
-/*	for (int i = 0; i < arrayOfProjects.length; i++) {
+
+	/*	for (int i = 0; i < arrayOfProjects.length; i++) {
 		pathOfProject = arrayOfProjects[i];
 		File file = new File(pathOfProject);
 		if (!file.isDirectory()) {

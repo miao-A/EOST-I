@@ -1,5 +1,6 @@
 package seu.EOSTI.Model;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +26,12 @@ public class ParameterizedTypeModel extends TypeModel {
 		super(typeName);
 		simpletype = new SimpleTypeModel(typeName);
 	}
+	
+	public SimpleTypeModel getSimpleType(){
+		return simpletype;
+	}
 
-	public List<? extends TypeModel> getTypeArguments() {
+	public List<TypeModel> getTypeArguments() {
 		return typeArguments;
 	}
 
@@ -94,18 +99,23 @@ public class ParameterizedTypeModel extends TypeModel {
 		if (this == typeModel) {
 			return true;
 		}
+		
+		
 		if (typeModel instanceof ParameterizedTypeModel) {
-			if (this.getTypeArguments().size() == ((ParameterizedTypeModel) typeModel).getTypeArguments().size()) {
-				for (int i = 0; i < this.getTypeArguments().size(); i++) {
-					if (!this.getTypeArguments().get(i).CanCompatibility(((ParameterizedTypeModel) typeModel).getTypeArguments().get(i))) {
+			this.getSimpleType().getTypeName().equals(((ParameterizedTypeModel) typeModel).getSimpleType().getTypeName());
+			List<TypeModel> thisList = this.getTypeArguments();
+			List<TypeModel> otherList = ((ParameterizedTypeModel) typeModel).getTypeArguments();
+			if (thisList.size() != otherList.size()) {
+				return false;
+			}else {
+				for (int i = 0; i < thisList.size(); i++) {
+					if(!thisList.get(i).CanCompatibility(otherList.get(i))){
 						return false;
 					}
 				}
 				return true;
 			}
-			
-			
-		}
+		}		
 		return false;
 	}
 
@@ -129,6 +139,25 @@ public class ParameterizedTypeModel extends TypeModel {
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
+		if(this == obj){
+			return true;
+		}
+		
+		if (obj instanceof ParameterizedTypeModel) {
+			this.getSimpleType().getTypeName().equals(((ParameterizedTypeModel) obj).getSimpleType().getTypeName());
+			List<TypeModel> thisList = this.getTypeArguments();
+			List<TypeModel> otherList = ((ParameterizedTypeModel) obj).getTypeArguments();
+			if (thisList.size() != otherList.size()) {
+				return false;
+			}else {
+				for (int i = 0; i < thisList.size(); i++) {
+					if(thisList.get(i).equals(otherList.get(i))){
+						return true;
+					}
+				}
+			}
+		}
+		
 		return false;
 	}	
 	

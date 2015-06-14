@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class ComponentRequertor extends FileASTRequestor {
 		ComponentVisitor visitor = new ComponentVisitor();
 		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
-		typeModels.add(visitor.getTypeModel());
+		if (visitor.getTypeModel()!=null) {
+			typeModels.add(visitor.getTypeModel());
+		}
+		
 	}
 	
 	public List<AbstractClassModel> getTypeModels(){
 		return typeModels;
-	}
+	}	
 	
-
 }

@@ -4,26 +4,43 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 
 public class ArrayTypeModel extends TypeModel {
 	private int dimiensions;
-	private String elementType;
+	private SimpleTypeModel elementType;
 	
 	public ArrayTypeModel(String typeName){
 		super(typeName);
 		dimiensions = 0;
-		elementType = new String();
+		elementType = new SimpleTypeModel(typeName);
 	}
 	
 	
-	public ArrayTypeModel(String typeName,int dimiensions,String elementType){
+	public ArrayTypeModel(String typeName,int dimiensions,String element){
 		super(typeName);
 		this.dimiensions = dimiensions;
-		elementType = new String();
+		elementType = new SimpleTypeModel(element);
+	}
+	
+	public SimpleTypeModel getElementType(){
+		return elementType;
 	}
 
 
 	@Override
 	public boolean CanCompatibility(TypeModel typeModel) {
 		// TODO Auto-generated method stub
+		if (this == typeModel) {
+			return true;
+		}
 		
+		if (typeModel instanceof SimpleTypeModel) {
+			if (elementType.CanCompatibility(typeModel)) {
+				return true;
+			}
+		}
+		if (typeModel instanceof ArrayTypeModel) {
+			if (this.getElementType().CanCompatibility(((ArrayTypeModel) typeModel).getElementType())&&(this.getDimiensions() == ((ArrayTypeModel) typeModel).getDimiensions())) {
+				return true;
+			}
+		}
 		return false;
 	}
 	

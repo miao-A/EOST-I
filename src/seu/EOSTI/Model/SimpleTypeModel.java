@@ -34,7 +34,7 @@ public class SimpleTypeModel extends TypeModel {
 	public boolean CanCompatibility(TypeModel typeModel) {
 		// TODO Auto-generated method stub
 		if (typeModel instanceof SimpleTypeModel) {
-			if (typeModel.getTypeName().equals("Object")){
+			if (this.getTypeName().equals("Object")){
 				return true;
 			}
 			if (this.getTypeName().equals(((SimpleTypeModel) typeModel).getTypeName())||this.getTypeName().equals(((SimpleTypeModel) typeModel).getSuperClass())) {

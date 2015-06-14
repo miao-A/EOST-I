@@ -40,7 +40,8 @@ public class ClassCompatibilityRecoder {
 		
 		if ((oldTypeModel instanceof EnumModel)&&(newTypeModel instanceof EnumModel)) {
 			enumConstantRecoder =new EnumConstantRecoder(((EnumModel)oldTypeModel).getEnumConstant(),((EnumModel)newTypeModel).getEnumConstant());
-		}	
+		}
+		
 		
 		modifierRecoder = new ModifierRecoder(oldTypeModel.getModifier(),newTypeModel.getModifier());
 		typeParameterRecoder = new TypeParameterRecoder(oldTypeModel.getSuperInterfaceTypes(), newTypeModel.getSuperInterfaceTypes());

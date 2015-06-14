@@ -28,7 +28,6 @@ public class MethodRecoder {
 	
 	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
 	
-
 	public MethodRecoder(List<MethodModel> oldMethodModels,List<MethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
 		this.newMethodModels = newMethodModels;
@@ -40,6 +39,7 @@ public class MethodRecoder {
 	}
 
 	public CompatibilityStatus compareMethodModel(){
+		
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
 			setChangeStatus(ChangeStatus.UNCHANGED);
@@ -150,8 +150,7 @@ public class MethodRecoder {
 			if (methodModel.getModifier().isPUBLIC()) {
 				count++;
 			}
-		}
-		
+		}		
 		return count;
 	}
 
@@ -164,9 +163,7 @@ public class MethodRecoder {
 			}			
 		}
 		return count;
-	}
-	
-	
+	}	
 	
 	public boolean isCompatibility(){
 		return compatibilityStatus.equals(CompatibilityStatus.COMPATIBILITY);	 

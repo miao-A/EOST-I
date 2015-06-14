@@ -154,7 +154,9 @@ public class MethodModel {
 			if (!this.getModifier().equals(((MethodModel) obj).getModifier())) {
 				return false;
 			}
-			
+			if (this.getReturnType() == null) {
+				System.out.println();
+			}
 			if (!this.getReturnType().equals(((MethodModel) obj).getReturnType())) {
 				return false;
 			}
@@ -172,6 +174,10 @@ public class MethodModel {
 		if(!methodModel.getModifier().CanCompatibility(this.getModifier())){
 			return false;
 		}
+		if(methodModel.getMethodName().equals("eachOne")){
+			System.out.println();
+		}
+		
 				
 		if (this.getFormalParameters().size() != methodModel.getFormalParameters().size()){
 			return false;
