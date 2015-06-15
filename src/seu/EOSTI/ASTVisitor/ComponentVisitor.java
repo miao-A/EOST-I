@@ -113,9 +113,7 @@ public class ComponentVisitor extends ASTVisitor {
 			if (node.getSuperclassType() instanceof SimpleType) {
 				((SimpleType) node.getSuperclassType()).getName();
 			}
-		}
-
-		
+		}		
 		
 		classModel = getClassType(node);
 		classModel.setPackage(packageName);
@@ -172,6 +170,7 @@ public class ComponentVisitor extends ASTVisitor {
 			} else if(object instanceof TypeDeclaration){
 				classModel.addInnerClassModel(getClassType((TypeDeclaration)object));
 			} else if (object instanceof MethodDeclaration) {
+				// already handle
 
 			} else if (object instanceof FieldDeclaration) {
 //				System.out.println("FieldDeclarationType:\t"+((FieldDeclaration) object).getType());
@@ -304,14 +303,11 @@ public class ComponentVisitor extends ASTVisitor {
 				
 				if (((Modifier) modifier).isVolatile()) {
 					jm.setVOLATILE(true);
-				}
-				
-			}
-			
+				}				
+			}			
 		}		
 		return jm;		
-	}
-	
+	}	
 
 	private List<FieldModel> getFieldModels(ASTNode node){
 		
@@ -346,170 +342,211 @@ public class ComponentVisitor extends ASTVisitor {
 			}	
 		}		
 		return list;
-	}
+	}	
 	
-	public java.net.URL id(){
-		return null;
-	}
 
-	public List<MethodModel> getMethodModels(ASTNode node){
-		
-		List<MethodModel> list = new LinkedList<>(); 	
+	public List<MethodModel> getMethodModels(ASTNode node) {
+
+		List<MethodModel> list = new LinkedList<>();
 		if (node instanceof TypeDeclaration) {
 			MethodDeclaration[] methods = ((TypeDeclaration) node).getMethods();
 			for (MethodDeclaration methodDeclaration : methods) {
 				MethodModel methodModel = new MethodModel();
-				methodModel.setMethodName(methodDeclaration.getName().getIdentifier());				
+				methodModel.setMethodName(methodDeclaration.getName()
+						.getIdentifier());
 				methodModel.setModifier(getJModifier(methodDeclaration));
-				if (methodDeclaration.isConstructor()){
-					continue ;
+				if (methodDeclaration.isConstructor()) {
+					continue;
 				}
-					TypeModel typeModel = null;
-					Type type = methodDeclaration.getReturnType2();
-					if (type instanceof PrimitiveType) {
-						System.out.println(type.getClass().getName()+" "+type.toString());
-						typeModel = new PrimitiveTypeModel(type.toString());						
-					}else if (type instanceof ArrayType) {
-						System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
-						typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
-					}else if (type instanceof SimpleType) {
-						System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
-						Name name = ((SimpleType) type).getName();
-						if (name instanceof QualifiedName) {
-							((QualifiedName) name).getQualifier();
-							typeModel = new SimpleTypeModel(((QualifiedName) name).getName().toString());
-						}else {
-							typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
-						}					
-						
-						if (type.resolveBinding()!=null) {
-							if (type.resolveBinding().getSuperclass() != null) {
-								System.out.println(((SimpleType) type).resolveBinding().getSuperclass().getName());
-								((SimpleTypeModel) typeModel).setSuperClass(((SimpleType) type).resolveBinding().getSuperclass().getName());
-							}							
-						}						
-					}else if (type instanceof QualifiedType) {
-						System.out.println(type.getClass().getName());
-						QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
-						qualifiedTypeModel.setTypeName(((QualifiedType) type).getName().toString());
-						qualifiedTypeModel.setQualifiedName(((QualifiedType) type).getQualifier().toString());
-						System.out.println(qualifiedTypeModel.getFullName());
-						
-					}else if (type instanceof WildcardType) {
-						System.out.println(type.getClass().getName());
-						typeModel = new WildCardTypeModel(((WildcardType) type).isUpperBound(), ((WildcardType) type).getBound());
-					}else if (type instanceof ParameterizedType) {
-						System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
-						typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
-						List<Type> types = ((ParameterizedType) type).typeArguments();
-						((ParameterizedTypeModel) typeModel).setTypeArguments(types);						
-					}else if (type instanceof UnionType) {
-						System.out.println("Union");
+				TypeModel typeModel = null;
+				Type type = methodDeclaration.getReturnType2();
+				if (type instanceof PrimitiveType) {
+					System.out.println(type.getClass().getName() + " "
+							+ type.toString());
+					typeModel = new PrimitiveTypeModel(type.toString());
+				} else if (type instanceof ArrayType) {
+					System.out.println(type.getClass().getName() + " "
+							+ ((ArrayType) type).getComponentType().toString()
+							+ " " + ((ArrayType) type).getDimensions() + " "
+							+ ((ArrayType) type).getElementType().toString());
+					typeModel = new ArrayTypeModel(((ArrayType) type)
+							.getComponentType().toString(),
+							((ArrayType) type).getDimensions(),
+							((ArrayType) type).getElementType().toString());
+				} else if (type instanceof SimpleType) {
+					System.out.println(type.getClass().getName() + " "
+							+ ((SimpleType) type).getName());
+					Name name = ((SimpleType) type).getName();
+					if (name instanceof QualifiedName) {
+						((QualifiedName) name).getQualifier();
+						typeModel = new SimpleTypeModel(((QualifiedName) name)
+								.getName().toString());
+					} else {
+						typeModel = new SimpleTypeModel(((SimpleType) type)
+								.getName().toString());
 					}
-					
-					methodModel.setReturnType(typeModel);					
-				
-				
-			
-				
+
+					if (type.resolveBinding() != null) {
+						if (type.resolveBinding().getSuperclass() != null) {
+							System.out
+									.println(((SimpleType) type)
+											.resolveBinding().getSuperclass()
+											.getName());
+							((SimpleTypeModel) typeModel)
+									.setSuperClass(((SimpleType) type)
+											.resolveBinding().getSuperclass()
+											.getName());
+						}
+					}
+				} else if (type instanceof QualifiedType) {
+					System.out.println(type.getClass().getName());
+					QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
+					qualifiedTypeModel.setTypeName(((QualifiedType) type)
+							.getName().toString());
+					qualifiedTypeModel.setQualifiedName(((QualifiedType) type)
+							.getQualifier().toString());
+					System.out.println(qualifiedTypeModel.getFullName());
+
+				} else if (type instanceof WildcardType) {
+					System.out.println(type.getClass().getName());
+					typeModel = new WildCardTypeModel(
+							((WildcardType) type).isUpperBound(),
+							((WildcardType) type).getBound());
+				} else if (type instanceof ParameterizedType) {
+					System.out.println(type.getClass().getName() + " "
+							+ ((ParameterizedType) type).getType().toString()
+							+ " ");
+					typeModel = new ParameterizedTypeModel(
+							((ParameterizedType) type).getType().toString());
+					List<Type> types = ((ParameterizedType) type).typeArguments();
+					((ParameterizedTypeModel) typeModel)
+							.setTypeArguments(types);
+				} else if (type instanceof UnionType) {
+					System.out.println("Union");
+				}
+
+				methodModel.setReturnType(typeModel);
+
 				List<SingleVariableDeclaration> singleVariableDeclarations = methodDeclaration.parameters();
 				for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
 					SingleVariableModel svm = new SingleVariableModel();
 					svm.setModifier(getJModifier(singleVariableDeclaration));
 					svm.setType(singleVariableDeclaration.getType());
 					svm.setVarargs(singleVariableDeclaration.isVarargs());
-					svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
+					svm.setExtraDimensions(singleVariableDeclaration
+							.getExtraDimensions());
 					svm.setName(singleVariableDeclaration.getName().toString());
 					methodModel.addFormalParameters(svm);
 				}
-				methodModel.setExtraDimensions(methodDeclaration.getExtraDimensions());
+				methodModel.setExtraDimensions(methodDeclaration
+						.getExtraDimensions());
 				List<Name> throwList = methodDeclaration.thrownExceptions();
 				for (Name name : throwList) {
 					methodModel.addThrownList(name.getFullyQualifiedName());
 				}
 				list.add(methodModel);
-			}		
+			}
 
-		}else if (node instanceof EnumDeclaration) {			  
-			  List<BodyDeclaration> list2= ((EnumDeclaration) node).bodyDeclarations();
-			  for (BodyDeclaration bodyDeclaration : list2) {
+		} else if (node instanceof EnumDeclaration) {
+			List<BodyDeclaration> list2 = ((EnumDeclaration) node).bodyDeclarations();
+			for (BodyDeclaration bodyDeclaration : list2) {
 				if (bodyDeclaration instanceof MethodDeclaration) {
 					MethodModel methodModel = new MethodModel();
-					
+
 					methodModel.setMethodName(((MethodDeclaration) bodyDeclaration).getName().toString());
-					methodModel.setModifier(getJModifier((MethodDeclaration)bodyDeclaration));
-					if (((MethodDeclaration)bodyDeclaration).isConstructor()){
-						continue ;
+					methodModel.setModifier(getJModifier((MethodDeclaration) bodyDeclaration));
+					if (((MethodDeclaration) bodyDeclaration).isConstructor()) {
+						continue;
 					}
-						TypeModel typeModel = null;
-						Type type = ((MethodDeclaration)bodyDeclaration).getReturnType2();
-						if (type instanceof PrimitiveType) {
-							System.out.println(type.getClass().getName()+" "+type.toString());
-							typeModel = new PrimitiveTypeModel(type.toString());						
-						}else if (type instanceof ArrayType) {
-							System.out.println(type.getClass().getName()+" "+((ArrayType) type).getComponentType().toString()+" "+((ArrayType) type).getDimensions()+" "+((ArrayType) type).getElementType().toString());						
-							typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(), ((ArrayType) type).getDimensions(), ((ArrayType) type).getElementType().toString());
-						}else if (type instanceof SimpleType) {
-							System.out.println(type.getClass().getName()+" "+((SimpleType) type).getName());
-							Name name = ((SimpleType) type).getName();
-							if (name instanceof QualifiedName) {
-								((QualifiedName) name).getQualifier();
-								typeModel = new SimpleTypeModel(((QualifiedName) name).getName().toString());
-							}else {
-								typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
-							}					
-							
-							if (type.resolveBinding()!=null) {
-								if (type.resolveBinding().getSuperclass() != null) {
-									System.out.println(((SimpleType) type).resolveBinding().getSuperclass().getName());
-									((SimpleTypeModel) typeModel).setSuperClass(((SimpleType) type).resolveBinding().getSuperclass().getName());
-								}							
-							}						
-						}else if (type instanceof QualifiedType) {
-							System.out.println(type.getClass().getName());
-							QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
-							qualifiedTypeModel.setTypeName(((QualifiedType) type).getName().toString());
-							qualifiedTypeModel.setQualifiedName(((QualifiedType) type).getQualifier().toString());
-							System.out.println(qualifiedTypeModel.getFullName());
-							
-						}else if (type instanceof WildcardType) {
-							System.out.println(type.getClass().getName());
-							typeModel = new WildCardTypeModel(((WildcardType) type).isUpperBound(), ((WildcardType) type).getBound());
-						}else if (type instanceof ParameterizedType) {
-							System.out.println(type.getClass().getName()+" "+((ParameterizedType) type).getType().toString()+" ");
-							typeModel = new ParameterizedTypeModel(((ParameterizedType) type).getType().toString());
-							List<Type> types = ((ParameterizedType) type).typeArguments();
-							((ParameterizedTypeModel) typeModel).setTypeArguments(types);						
-						}else if (type instanceof UnionType) {
-							System.out.println("Union");
+					TypeModel typeModel = null;
+					Type type = ((MethodDeclaration) bodyDeclaration).getReturnType2();
+					if (type instanceof PrimitiveType) {
+						System.out.println(type.getClass().getName() + " "
+								+ type.toString());
+						typeModel = new PrimitiveTypeModel(type.toString());
+					} else if (type instanceof ArrayType) {
+						System.out.println(type.getClass().getName()
+								+ " "
+								+ ((ArrayType) type).getComponentType().toString()
+								+ " "
+								+ ((ArrayType) type).getDimensions()
+								+ " "
+								+ ((ArrayType) type).getElementType().toString());
+						typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(),
+								((ArrayType) type).getDimensions(),
+								((ArrayType) type).getElementType().toString());
+					} else if (type instanceof SimpleType) {
+						System.out.println(type.getClass().getName() + " "
+								+ ((SimpleType) type).getName());
+						Name name = ((SimpleType) type).getName();
+						if (name instanceof QualifiedName) {
+							((QualifiedName) name).getQualifier();
+							typeModel = new SimpleTypeModel(((QualifiedName) name).getName().toString());
+						} else {
+							typeModel = new SimpleTypeModel(((SimpleType) type).getName().toString());
 						}
-						
-						methodModel.setReturnType(typeModel);					
-				
-					
-						List<SingleVariableDeclaration> singleVariableDeclarations = ((MethodDeclaration)bodyDeclaration).parameters();
-						for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
-							SingleVariableModel svm = new SingleVariableModel();
-							svm.setModifier(getJModifier(singleVariableDeclaration));
-							svm.setType(singleVariableDeclaration.getType());
-							svm.setVarargs(singleVariableDeclaration.isVarargs());
-							svm.setExtraDimensions(singleVariableDeclaration.getExtraDimensions());
-							svm.setName(singleVariableDeclaration.getName().toString());
-							methodModel.addFormalParameters(svm);
+
+						if (type.resolveBinding() != null) {
+							if (type.resolveBinding().getSuperclass() != null) {
+								System.out.println(((SimpleType) type).resolveBinding().getSuperclass().getName());
+								((SimpleTypeModel) typeModel).setSuperClass(((SimpleType) type).resolveBinding().getSuperclass().getName());
+							}
 						}
-						methodModel.setExtraDimensions(((MethodDeclaration)bodyDeclaration).getExtraDimensions());
-						List<Name> throwList = ((MethodDeclaration)bodyDeclaration).thrownExceptions();
-						for (Name name : throwList) {
-							methodModel.addThrownList(name.getFullyQualifiedName());
-						}
-						list.add(methodModel);
+					} else if (type instanceof QualifiedType) {
+						System.out.println(type.getClass().getName());
+						QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
+						qualifiedTypeModel.setTypeName(((QualifiedType) type)
+								.getName().toString());
+						qualifiedTypeModel
+								.setQualifiedName(((QualifiedType) type)
+										.getQualifier().toString());
+						System.out.println(qualifiedTypeModel.getFullName());
+
+					} else if (type instanceof WildcardType) {
+						System.out.println(type.getClass().getName());
+						typeModel = new WildCardTypeModel(
+								((WildcardType) type).isUpperBound(),
+								((WildcardType) type).getBound());
+					} else if (type instanceof ParameterizedType) {
+						System.out.println(type.getClass().getName()
+								+ " "
+								+ ((ParameterizedType) type).getType()
+										.toString() + " ");
+						typeModel = new ParameterizedTypeModel(
+								((ParameterizedType) type).getType().toString());
+						List<Type> types = ((ParameterizedType) type).typeArguments();
+						((ParameterizedTypeModel) typeModel)
+								.setTypeArguments(types);
+					} else if (type instanceof UnionType) {
+						System.out.println("Union");
 					}
-			  	}			
-					
-		}		
+
+					methodModel.setReturnType(typeModel);
+
+					List<SingleVariableDeclaration> singleVariableDeclarations = ((MethodDeclaration) bodyDeclaration).parameters();
+					for (SingleVariableDeclaration singleVariableDeclaration : singleVariableDeclarations) {
+						SingleVariableModel svm = new SingleVariableModel();
+						svm.setModifier(getJModifier(singleVariableDeclaration));
+						svm.setType(singleVariableDeclaration.getType());
+						svm.setVarargs(singleVariableDeclaration.isVarargs());
+						svm.setExtraDimensions(singleVariableDeclaration
+								.getExtraDimensions());
+						svm.setName(singleVariableDeclaration.getName()
+								.toString());
+						methodModel.addFormalParameters(svm);
+					}
+					methodModel.setExtraDimensions(((MethodDeclaration) bodyDeclaration).getExtraDimensions());
+					List<Name> throwList = ((MethodDeclaration) bodyDeclaration).thrownExceptions();
+					for (Name name : throwList) {
+						methodModel.addThrownList(name.getFullyQualifiedName());
+					}
+					list.add(methodModel);
+				}
+
+			}
+		}
 		return list;
 	}
-	
 	
 public List<ConstructorMethodModel> getConstructorMethodModels(ASTNode node){
 		

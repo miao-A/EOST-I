@@ -1,10 +1,12 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.modelcompatibilityrecoder;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import seu.EOSTI.Model.ConstructorMethodModel;
 
 public class ConstructorMethodRecoder {
 	

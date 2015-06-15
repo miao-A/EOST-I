@@ -40,6 +40,8 @@ public class ArrayTypeModel extends TypeModel {
 			if (this.getElementType().CanCompatibility(((ArrayTypeModel) typeModel).getElementType())&&(this.getDimiensions() == ((ArrayTypeModel) typeModel).getDimiensions())) {
 				return true;
 			}
+			
+			
 		}
 		return false;
 	}

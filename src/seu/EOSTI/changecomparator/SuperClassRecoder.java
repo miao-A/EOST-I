@@ -1,4 +1,5 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.changecomparator;
+
 
 public class SuperClassRecoder {
 	

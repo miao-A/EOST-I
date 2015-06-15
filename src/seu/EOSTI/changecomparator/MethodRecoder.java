@@ -1,10 +1,12 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.changecomparator;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import seu.EOSTI.Model.MethodModel;
 
 
 
@@ -24,21 +26,17 @@ public class MethodRecoder {
 	
 	private Map<MethodModel, MethodModel> modifiedMethodMap = new HashMap<MethodModel, MethodModel>();
 	
-	//private Map<MethodModel, MethodModel> uncompatibilityMethodMap = new HashMap<MethodModel, MethodModel>();
-	
-	private CompatibilityStatus compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
-	
 	public MethodRecoder(List<MethodModel> oldMethodModels,List<MethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
 		this.newMethodModels = newMethodModels;
-		compatibilityStatus = compareMethodModel();
+		changeStatus = compareMethodModel();
 	}
 	
 	public MethodRecoder() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CompatibilityStatus compareMethodModel(){
+	public ChangeStatus compareMethodModel(){
 		
 		
 		if (oldMethodModels.containsAll(newMethodModels)&&newMethodModels.containsAll(oldMethodModels)) {
@@ -86,14 +84,14 @@ public class MethodRecoder {
 		}				
 		
 		if (removedMethodModels.size() == 0) {
-			compatibilityStatus = CompatibilityStatus.COMPATIBILITY;
+			changeStatus = ChangeStatus.UNCHANGED;
 		}else {
 			System.out.println(removedMethodModels.size());
 			System.out.println(unchangedMethodModels.size());
-			compatibilityStatus = CompatibilityStatus.UNCOMPATIBILITY;
+			changeStatus = ChangeStatus.MODIFIED;
 		}	
 		
-		return compatibilityStatus;
+		return changeStatus;
 	}
 
 	public Map<MethodModel, MethodModel> getCompatibilityMethodMap(){
@@ -165,9 +163,8 @@ public class MethodRecoder {
 		return count;
 	}	
 	
-	public boolean isCompatibility(){
-		return compatibilityStatus.equals(CompatibilityStatus.COMPATIBILITY);	 
-		
+	public boolean isUnchanged(){
+		return changeStatus.equals(ChangeStatus.UNCHANGED);	 		
 	}
 	
 }

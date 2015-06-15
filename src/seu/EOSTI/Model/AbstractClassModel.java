@@ -5,16 +5,8 @@ import java.util.List;
 
 public abstract class AbstractClassModel {
 	
-/*	private String packageName = null;
-	private String className = null;	
-	private List<String> superInterfaceTypes = new LinkedList<>();
-	private JModifier modifier = new JModifier();	
-	private List<FieldModel> fieldModels = new LinkedList<>();
-	private List<MethodModel> methodModels = new LinkedList<>();
-	private List<EnumModel> enumClassModels = new LinkedList<>();
-	private List<TypeModel> innerClassModels = new LinkedList<>();
 
-	*/
+	
 	public abstract void setPackage(String name);
 	
 	public abstract String getPackage();
@@ -36,10 +28,6 @@ public abstract class AbstractClassModel {
 	public abstract List<FieldModel> getFieldModels();
 	
 	public abstract void setFieldModels(List<FieldModel> fieldModels);
-	
-	/*public abstract List<EnumModel> getEnumClassModels();
-
-	public abstract void addEnumClassModel(EnumModel enumModel);*/
 	
 	public abstract List<MethodModel> getMethodModels();
 	

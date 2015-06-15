@@ -1,8 +1,5 @@
 package seu.EOSTI.Parser;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,39 +10,34 @@ import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ComponentRequertor;
 import seu.EOSTI.Model.AbstractClassModel;
-
 import seu.EOSTI.Model.ConstructorMethodModel;
 import seu.EOSTI.Model.MethodModel;
-import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.CompatibilityStatus;
-import seu.EOSTI.modelcompatibilityrecoder.ConstructorMethodRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
+import seu.EOSTI.changecomparator.ChangeStatus;
+import seu.EOSTI.changecomparator.ClassChangeRecoder;
+import seu.EOSTI.changecomparator.ConstructorMethodRecoder;
+import seu.EOSTI.changecomparator.MethodRecoder;
 
-public class Compatibility {
-	
-	private String oldPathOfComponet;
-	private String newPathOfComponet;
+
+public class ChangeComparator {
+	private String oldPathOfProject;
+	private String newPathOfProject;
 	private List<AbstractClassModel> changeRecoder;
 	
 	private List<AbstractClassModel> removedType = new LinkedList<>();
 	private List<AbstractClassModel> newType = new LinkedList<>();
-	private List<ClassCompatibilityRecoder> compatibilityRecoders = new LinkedList<>();
-	private List<ClassCompatibilityRecoder> unCompatibilityRecoders = new LinkedList<>();
-//	private List<AbstractClassModel> unchangedClassModels = new LinkedList<>();
+	private List<ClassChangeRecoder> unchangeRecoders = new LinkedList<>();
+	private List<ClassChangeRecoder> changeRecoders = new LinkedList<>();
 	
-	
-	private List<ClassCompatibilityRecoder>  typeRecoders = new LinkedList<>();
-	
-	public Compatibility(String oldPathOfComponet,String newPathOfComponet) {
+	public ChangeComparator(String oldPathOfProject,String newPathOfProject) {
 		// TODO Auto-generated constructor stub
-		this.oldPathOfComponet = oldPathOfComponet;
-		this.newPathOfComponet = newPathOfComponet;
-		changeRecoder = new LinkedList<>();
-		
-		compatibilityParser(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));		
-	}
+		this.oldPathOfProject = oldPathOfProject;
+		this.newPathOfProject = newPathOfProject;
+		changeRecoder = new LinkedList<>();		
+		changeParser(this.parserComponet(oldPathOfProject),this.parserComponet(newPathOfProject));		
+	}	
 	
-	public void compatibilityParser(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
+	
+	public void changeParser(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
 
 		for (AbstractClassModel oldTypeModel : oldModels) {
 			if (!newModels.contains(oldTypeModel)) {
@@ -65,11 +57,11 @@ public class Compatibility {
 				if (oldModels.get(index) == null) {
 					System.out.println();
 				}
-				ClassCompatibilityRecoder classCompatibilityRecoder = new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel);
-				if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.COMPATIBILITY)) {
-					compatibilityRecoders.add(classCompatibilityRecoder);
-				}else if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.UNCOMPATIBILITY)) {
-					unCompatibilityRecoders.add(classCompatibilityRecoder);
+				ClassChangeRecoder changeRecoder = new ClassChangeRecoder(oldModels.get(index),newTypeModel); 
+				if (changeRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
+					changeRecoders.add(changeRecoder);
+				}else if (changeRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
+					unchangeRecoders.add(changeRecoder);
 				}
 			}
 		}		
@@ -115,8 +107,8 @@ public class Compatibility {
 		return componentRequertor.getTypeModels();
 	}		
 	
-	public List<ClassCompatibilityRecoder> getTypeChangeRecoders(){
-		return unCompatibilityRecoders;
+	public List<ClassChangeRecoder> getTypeChangeRecoders(){
+		return changeRecoders;
 	}
 	
 	
@@ -128,13 +120,9 @@ public class Compatibility {
 		return removedType;
 	}
 	
-	public List<ClassCompatibilityRecoder> getCompatibilityRecoders(){
-		return compatibilityRecoders;
-	}
-	
-	public List<ClassCompatibilityRecoder> getUncompatibilityRecoders(){
-		return unCompatibilityRecoders;
-	}
+	public List<ClassChangeRecoder> getUnchangeRecoders(){
+		return unchangeRecoders;
+	}		
 	
 	public void getinfo(){
 		
@@ -155,8 +143,8 @@ public class Compatibility {
 			System.out.println(count);
 		}
 		
-		for(ClassCompatibilityRecoder atm : compatibilityRecoders){
-			System.out.println("compatibilityType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+		for(ClassChangeRecoder atm : unchangeRecoders){
+			System.out.println("unchangeType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			
 			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
 			//int count = 0;
@@ -180,8 +168,8 @@ public class Compatibility {
 			}
 		}
 		
-		for(ClassCompatibilityRecoder atm : unCompatibilityRecoders){
-			System.out.println("unCompatibilityRecoders:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+		for(ClassChangeRecoder atm : changeRecoders){
+			System.out.println("changeRecoders:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			
 			if (mr.getNewAddMethodModels().size()!=0) {
@@ -204,7 +192,7 @@ public class Compatibility {
 			
 			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
 			if (cmr.getCompatibilityConstructorMethodMap().size()!=0) {
-				System.out.println("Compatibility Method:");
+				System.out.println("unchange Method:");
 				Map<ConstructorMethodModel, ConstructorMethodModel> map = cmr.getCompatibilityConstructorMethodMap();
 				for (ConstructorMethodModel methodModel : map.keySet()) {
 					System.out.println("old:"+methodModel.getFullName());
@@ -231,7 +219,7 @@ public class Compatibility {
 			
 			
 			if (mr.getCompatibilityMethodMap().size()!=0) {
-				System.out.println("Compatibility Method:");
+				System.out.println("unchange Method:");
 				Map<MethodModel, MethodModel> map = mr.getCompatibilityMethodMap();
 				for (MethodModel methodModel : map.keySet()) {
 					System.out.println("old:"+methodModel.getFullName());

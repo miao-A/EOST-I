@@ -2,12 +2,12 @@ package seu.EOSTI.Model;
 
 import java.util.HashMap;
 
-public class JudgeCompatibility {
+public class TypeJudgeCompatibility {
 
-	HashMap<String, String> relationmMap = new HashMap<>();
+	static HashMap<String, String> relationmMap = new HashMap<>();
 	
 	
-	public JudgeCompatibility(TypeModel oldtype, TypeModel newtype){
+	public TypeJudgeCompatibility(TypeModel oldtype, TypeModel newtype){
 		initRelationMap();
 	}
 	
@@ -29,7 +29,7 @@ public class JudgeCompatibility {
 		relationmMap.put(oldtype.getTypeName(), newtype.get)
 	}*/
 	
-	public boolean isCompatibility(TypeModel oldtype, TypeModel newtype){
+	public static boolean isCompatibility(TypeModel oldtype, TypeModel newtype){
 		if (newtype.getTypeName().equals("Object")) {
 			return true;
 		}

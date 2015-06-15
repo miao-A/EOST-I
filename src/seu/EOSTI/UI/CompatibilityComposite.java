@@ -29,15 +29,14 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.internal.dnd.SwtUtil;
 
 import seu.EOSTI.Model.AbstractClassModel;
-import seu.EOSTI.Model.ChangeStatus;
-import seu.EOSTI.Model.ClassCompatibilityRecoder;
 import seu.EOSTI.Model.ConstructorMethodModel;
-import seu.EOSTI.Model.ConstructorMethodRecoder;
 import seu.EOSTI.Model.MethodModel;
-import seu.EOSTI.Model.MethodRecoder;
 import seu.EOSTI.Model.SingleVariableModel;
-import seu.EOSTI.Model.ClassChangeRecoder;
 import seu.EOSTI.Parser.Compatibility;
+import seu.EOSTI.modelcompatibilityrecoder.ChangeStatus;
+import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
+import seu.EOSTI.modelcompatibilityrecoder.ConstructorMethodRecoder;
+import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
 
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;

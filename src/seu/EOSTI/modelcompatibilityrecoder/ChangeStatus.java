@@ -1,4 +1,5 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.modelcompatibilityrecoder;
+
 
 public enum ChangeStatus {
 	UNCHANGED,MODIFIED

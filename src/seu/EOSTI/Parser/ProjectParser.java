@@ -28,8 +28,7 @@ public class ProjectParser {
 		this.projectName = projectName;
 		this.version = version;	
 		
-	}
-	
+	}	
 	
 	public void parser()  {
 		// create a AST parser

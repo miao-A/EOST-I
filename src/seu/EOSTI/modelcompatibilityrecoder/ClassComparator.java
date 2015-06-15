@@ -1,16 +1,18 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.modelcompatibilityrecoder;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
+import seu.EOSTI.Model.AbstractClassModel;
+
 public class ClassComparator {
 	
 	private List<AbstractClassModel> removedType = new LinkedList<>();
 	private List<AbstractClassModel> newType = new LinkedList<>();
 	
-	private List<ClassChangeRecoder>  typeChangeRecoders = new LinkedList<>();
+	private List<ClassCompatibilityRecoder>  typeChangeRecoders = new LinkedList<>();
 	
 	public ClassComparator(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
 
@@ -29,12 +31,12 @@ public class ClassComparator {
 		for (AbstractClassModel newTypeModel : newModels) {
 			if (oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				typeChangeRecoders.add(new ClassChangeRecoder(oldModels.get(index),newTypeModel));
+				typeChangeRecoders.add(new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel));
 			}
 		}		
 	}
 	
-	public List<ClassChangeRecoder> getTypeChangeRecoders(){
+	public List<ClassCompatibilityRecoder> getTypeChangeRecoders(){
 
 		return typeChangeRecoders;
 	}	

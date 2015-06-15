@@ -1,4 +1,4 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.changecomparator;
 
 import java.util.LinkedList;
 import java.util.List;

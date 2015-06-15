@@ -21,8 +21,8 @@ import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.DBConnector;
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
+import seu.EOSTI.Parser.ChangeComparator;
 import seu.EOSTI.Parser.Compatibility;
-import seu.EOSTI.Parser.ComponentParser;
 import seu.EOSTI.Parser.ProjectParser;
 import seu.EOSTI.Parser.ReadFile;
 
@@ -36,14 +36,20 @@ public class IntergrationMain {
 	/*String oldPath = "D:/ProjectOfHW/jEditor/jEditor0.4.1";
 	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
-	String oldPathOfComponet = "D:/ProjectOfHW/japicmp-master/japicmp/src/main";
-	String newPathOfComponet = "D:/ProjectOfHW/japicmp-master/japicmp/src/main";
+	/*String oldPathOfComponet = "D:/ProjectOfHW/junit/junit4.0";
+	String newPathOfComponet = "D:/ProjectOfHW/junit/junit4.1";*/
 
 	
 	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
 	componentParser.parser();*/
-	Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
-	compatibility.getinfo();
+	/*Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
+	compatibility.getinfo();*/
+		
+		
+	String oldPathOfProject = "D:/ProjectOfHW/junit/junit4.0";
+	String newPathOfProject = "D:/ProjectOfHW/junit/junit4.1";
+	ChangeComparator changeComparator = new ChangeComparator(oldPathOfProject, newPathOfProject);
+	changeComparator.getinfo();
 
 	/*	for (int i = 0; i < arrayOfProjects.length; i++) {
 		pathOfProject = arrayOfProjects[i];

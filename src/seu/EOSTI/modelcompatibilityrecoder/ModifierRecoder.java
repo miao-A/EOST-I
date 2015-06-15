@@ -1,10 +1,12 @@
-package seu.EOSTI.Model;
+package seu.EOSTI.modelcompatibilityrecoder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.Flags;
+
+import seu.EOSTI.Model.JModifier;
 
 public class ModifierRecoder {
 	private JModifier oldModifier;
