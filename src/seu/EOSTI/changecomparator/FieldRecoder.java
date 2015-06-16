@@ -18,11 +18,7 @@ public class FieldRecoder {
 	private List<FieldModel> unchangedFieldModels = new LinkedList<>();
 	private List<FieldModel> modifiedFieldModels = new LinkedList<>();
 	
-	private Map<FieldModel, ChangeStatus> modifierRecoderMap = new HashMap<FieldModel, ChangeStatus>();	
-	
-	/*private String fieldName;
-	private String type;
-	private JModifier modifier = new JModifier();*/
+	private Map<FieldModel, ChangeStatus> modifierRecoderMap = new HashMap<FieldModel, ChangeStatus>();		
 	
 	public FieldRecoder(List<FieldModel> oldFieldModels,List<FieldModel> newFieldModels) {
 		this.oldFieldModels = oldFieldModels;

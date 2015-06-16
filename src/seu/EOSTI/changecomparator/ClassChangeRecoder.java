@@ -1,5 +1,6 @@
 package seu.EOSTI.changecomparator;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ClassChangeRecoder {
 	private List<AbstractClassModel> newInnerTypeModels = new LinkedList<>();
 	private List<AbstractClassModel> removedInnerTypeModels = new LinkedList<>();
 	private List<AbstractClassModel> unchangedInnerTypeModels = new LinkedList<>();
-	private List<AbstractClassModel> modifiedInnerTypeModels = new LinkedList<>();
+	private Map<AbstractClassModel,AbstractClassModel> modifiedInnerTypeModels = new HashMap<>();
 	
 	
 	public ClassChangeRecoder(AbstractClassModel oldModel,AbstractClassModel newModel){
@@ -55,9 +56,11 @@ public class ClassChangeRecoder {
 		superInterfaceClassRecoder = new SuperInterfaceClassRecoder(oldTypeModel.getSuperInterfaceTypes(), newTypeModel.getSuperInterfaceTypes());
 		fieldRecoder = new FieldRecoder(oldTypeModel.getFieldModels(), newTypeModel.getFieldModels());
 		methodRecoder = new MethodRecoder(oldTypeModel.getMethodModels(), newTypeModel.getMethodModels());
+		constructorMethodRecoder = new ConstructorMethodRecoder(oldTypeModel.getConstructorModel(), newTypeModel.getConstructorModel());
 		
 		if (isUnchanged(modifierRecoder.getChangeStatus())&&isUnchanged(superClassRecoder.getChangeStatus())&&isUnchanged(typeParameterRecoder.getChangeStatus())&&
-				isUnchanged(superInterfaceClassRecoder.getChangeStatus())&&isUnchanged(fieldRecoder.getChangeStatus())&&isUnchanged(methodRecoder.getChangeStatus())) {
+				isUnchanged(superInterfaceClassRecoder.getChangeStatus())&&isUnchanged(fieldRecoder.getChangeStatus())&&isUnchanged(methodRecoder.getChangeStatus())&&
+				isUnchanged(constructorMethodRecoder.getChangeStatus())) {
 			this.changeStatus = ChangeStatus.UNCHANGED;
 		}else {
 			this.changeStatus = ChangeStatus.MODIFIED;			
@@ -92,12 +95,11 @@ public class ClassChangeRecoder {
 				if (isUnchanged(innertypeChangeRecoder.getChangeStatus())) {
 					unchangedInnerTypeModels.add(newInner);
 				}else {
-					modifiedInnerTypeModels.add(newInner);
+					modifiedInnerTypeModels.put(oldInners.get(index), newInner);
 					this.changeStatus = ChangeStatus.MODIFIED;
 				}
 			}
-		}
-		
+		}		
 		return this.changeStatus;		
 	}	
 	
@@ -165,7 +167,6 @@ public class ClassChangeRecoder {
 	public ModifierRecoder getModifierRecoder(){
 		return modifierRecoder;
 	}
-
 
 	public ConstructorMethodRecoder getConstructorMethodRecoder() {
 		// TODO Auto-generated method stub

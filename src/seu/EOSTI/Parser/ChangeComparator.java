@@ -26,7 +26,7 @@ public class ChangeComparator {
 	private List<AbstractClassModel> removedType = new LinkedList<>();
 	private List<AbstractClassModel> newType = new LinkedList<>();
 	private List<ClassChangeRecoder> unchangeRecoders = new LinkedList<>();
-	private List<ClassChangeRecoder> changeRecoders = new LinkedList<>();
+	private List<ClassChangeRecoder> modifiedRecoders = new LinkedList<>();
 	
 	public ChangeComparator(String oldPathOfProject,String newPathOfProject) {
 		// TODO Auto-generated constructor stub
@@ -54,14 +54,12 @@ public class ChangeComparator {
 		for(AbstractClassModel newTypeModel : newModels) {
 			if(oldModels.contains(newTypeModel)){
 				int index = oldModels.indexOf(newTypeModel);
-				if (oldModels.get(index) == null) {
-					System.out.println();
-				}
+				
 				ClassChangeRecoder changeRecoder = new ClassChangeRecoder(oldModels.get(index),newTypeModel); 
 				if (changeRecoder.getChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-					changeRecoders.add(changeRecoder);
-				}else if (changeRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
 					unchangeRecoders.add(changeRecoder);
+				}else if (changeRecoder.getChangeStatus().equals(ChangeStatus.MODIFIED)) {
+					modifiedRecoders.add(changeRecoder);
 				}
 			}
 		}		
@@ -108,7 +106,7 @@ public class ChangeComparator {
 	}		
 	
 	public List<ClassChangeRecoder> getTypeChangeRecoders(){
-		return changeRecoders;
+		return modifiedRecoders;
 	}
 	
 	
@@ -148,12 +146,11 @@ public class ChangeComparator {
 			
 			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
 			//int count = 0;
-			Map<ConstructorMethodModel, ConstructorMethodModel> cmap = cmr.getCompatibilityConstructorMethodMap();			
+			Map<ConstructorMethodModel, ConstructorMethodModel> cmap = cmr.getModifiedMethodMap();			
 			//System.out.println(count);			
 			for (ConstructorMethodModel methodModel : cmap.keySet()) {
 				System.out.println("old:"+methodModel.getFullName());
-				System.out.println("new:"+cmap.get(methodModel).getFullName());
-				
+				System.out.println("new:"+cmap.get(methodModel).getFullName());				
 			}
 			
 			
@@ -161,14 +158,14 @@ public class ChangeComparator {
 			int count = 0;
 			List<MethodModel> list = mr.getUnchangedMethodModels();			
 			System.out.println(count);
-			Map<MethodModel, MethodModel> map = atm.getMethodRecoder().getCompatibilityMethodMap();
+			Map<MethodModel, MethodModel> map = atm.getMethodRecoder().getModifiedMethodMap();
 			for (MethodModel methodModel : map.keySet()) {
 				System.out.println("old:"+methodModel.getFullName());
 				System.out.println("new:"+map.get(methodModel).getFullName());				
 			}
 		}
 		
-		for(ClassChangeRecoder atm : changeRecoders){
+		for(ClassChangeRecoder atm : modifiedRecoders){
 			System.out.println("changeRecoders:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
 			MethodRecoder mr = atm.getMethodRecoder();
 			
@@ -190,10 +187,19 @@ public class ChangeComparator {
 				System.out.println(methodModel.getFullName());						
 			}
 			
+			if (mr.getModifiedMethodMap().size()!=0) {
+				System.out.println("modified Method:");
+				Map<MethodModel, MethodModel> map = mr.getModifiedMethodMap();
+				for (MethodModel methodModel : map.keySet()) {
+					System.out.println("old:"+methodModel.getFullName());
+					System.out.println("new:"+map.get(methodModel).getFullName());
+				}			
+			}
+			
 			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
-			if (cmr.getCompatibilityConstructorMethodMap().size()!=0) {
-				System.out.println("unchange Method:");
-				Map<ConstructorMethodModel, ConstructorMethodModel> map = cmr.getCompatibilityConstructorMethodMap();
+			if (cmr.getModifiedMethodMap().size()!=0) {
+				System.out.println("modified Method:");
+				Map<ConstructorMethodModel, ConstructorMethodModel> map = cmr.getModifiedMethodMap();
 				for (ConstructorMethodModel methodModel : map.keySet()) {
 					System.out.println("old:"+methodModel.getFullName());
 					System.out.println("new:"+map.get(methodModel).getFullName());
@@ -214,17 +220,6 @@ public class ChangeComparator {
 			
 			for (ConstructorMethodModel methodModel : cmr.getNewAddMethodModels()) {
 				System.out.println(methodModel.getFullName());						
-			}
-			
-			
-			
-			if (mr.getCompatibilityMethodMap().size()!=0) {
-				System.out.println("unchange Method:");
-				Map<MethodModel, MethodModel> map = mr.getCompatibilityMethodMap();
-				for (MethodModel methodModel : map.keySet()) {
-					System.out.println("old:"+methodModel.getFullName());
-					System.out.println("new:"+map.get(methodModel).getFullName());
-				}			
 			}		
 						
 		}

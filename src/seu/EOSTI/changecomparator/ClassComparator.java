@@ -1,4 +1,4 @@
-package seu.EOSTI.changecomparator;
+/*package seu.EOSTI.changecomparator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,3 +43,4 @@ public class ClassComparator {
 	
 	
 }
+*/

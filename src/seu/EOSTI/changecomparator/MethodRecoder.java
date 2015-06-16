@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import seu.EOSTI.Model.MethodModel;
+import seu.EOSTI.Model.SingleVariableModel;
 
 
 
@@ -22,9 +23,8 @@ public class MethodRecoder {
 	private List<MethodModel> unchangedMethodModels = new LinkedList<>();
 //	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
 
-	private Map<MethodModel, MethodModel> compatibilityMethodMap = new HashMap<MethodModel, MethodModel>();
-	
 	private Map<MethodModel, MethodModel> modifiedMethodMap = new HashMap<MethodModel, MethodModel>();
+	
 	
 	public MethodRecoder(List<MethodModel> oldMethodModels,List<MethodModel> newMethodModels) {
 		this.oldMethodModels = oldMethodModels;
@@ -72,31 +72,34 @@ public class MethodRecoder {
 			Iterator<MethodModel> addmethodIterator = newAddMethodModels.iterator();
 			while (addmethodIterator.hasNext()) {				
 				MethodModel addMethodModel = addmethodIterator.next();
-				if (reMethodModel.getMethodName().equals(addMethodModel.getMethodName())) {
-					if (addMethodModel.canCompatibility(reMethodModel)) {
-						removedIterator.remove();
-						addmethodIterator.remove();
-						compatibilityMethodMap.put(reMethodModel,addMethodModel);
-						break;
-					}					
+				if (reMethodModel.getMethodName().equals(addMethodModel.getMethodName())) {					
+					List<SingleVariableModel> oldList = reMethodModel.getFormalParameters();
+					List<SingleVariableModel> newList = addMethodModel.getFormalParameters();
+					if (oldList.size() == newList.size()) {						
+						boolean flag = true;
+						for (int i = 0; i < oldList.size(); i++) {
+							if (oldList.get(i).getName().equals("theClass")&&newList.get(i).getName().equals("theClass")) {
+								System.out.println();
+							}
+							if (!oldList.get(i).equals(newList.get(i))) {
+								flag = false;
+							}
+						}
+						
+						if (flag) {
+							removedIterator.remove();
+							addmethodIterator.remove();
+							modifiedMethodMap.put(reMethodModel,addMethodModel);
+							break;
+						}						
+					}									
 				}				
 			}			
-		}				
-		
-		if (removedMethodModels.size() == 0) {
-			changeStatus = ChangeStatus.UNCHANGED;
-		}else {
-			System.out.println(removedMethodModels.size());
-			System.out.println(unchangedMethodModels.size());
-			changeStatus = ChangeStatus.MODIFIED;
-		}	
-		
+		}			
+			
 		return changeStatus;
 	}
 
-	public Map<MethodModel, MethodModel> getCompatibilityMethodMap(){
-		return compatibilityMethodMap;
-	}
 	
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;
@@ -125,9 +128,7 @@ public class MethodRecoder {
 	public int getNewAddMehodNum(){
 		int count =0;
 		for (MethodModel methodModel : newAddMethodModels) {
-			if (methodModel.getModifier().isPUBLIC()) {
-				count++;
-			}
+			count++;
 		}
 		return count;
 	}
@@ -135,9 +136,7 @@ public class MethodRecoder {
 	public int getRemovedMehodNum(){
 		int count =0;
 		for (MethodModel methodModel : removedMethodModels) {
-			if (methodModel.getModifier().isPUBLIC()) {
-				count++;
-			}
+			count++;
 		}
 		return count;
 	}
@@ -145,9 +144,7 @@ public class MethodRecoder {
 	public int getUnchangedMethodNum(){
 		int count =0;
 		for (MethodModel methodModel : unchangedMethodModels) {
-			if (methodModel.getModifier().isPUBLIC()) {
-				count++;
-			}
+			count++;
 		}		
 		return count;
 	}
@@ -156,9 +153,8 @@ public class MethodRecoder {
 	public int getModifiedMethodNum(){
 		int count =0;	
 		for (MethodModel methodModel : modifiedMethodMap.keySet()) {
-			if (methodModel.getModifier().isPUBLIC()&&modifiedMethodMap.get(methodModel).getModifier().isPUBLIC()) {
-				count++;
-			}			
+			count++;
+						
 		}
 		return count;
 	}	

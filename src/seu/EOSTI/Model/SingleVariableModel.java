@@ -21,8 +21,7 @@ public class SingleVariableModel {
 	
 	public SingleVariableModel(Type type, String name){
 		setType(type);
-		this.name = name;
-			
+		this.name = name;			
 	}
 	
 	public SingleVariableModel() {
@@ -105,10 +104,12 @@ public class SingleVariableModel {
 		}
 		
 		if (obj instanceof SingleVariableModel) {
-			if (this.getName().equals(((SingleVariableModel) obj).getName())&&this.getType().getTypeName().equals(((SingleVariableModel) obj).getType().getTypeName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
+			/*if (this.getName().equals(((SingleVariableModel) obj).getName())&&this.getType().getTypeName().equals(((SingleVariableModel) obj).getType().getTypeName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
 				return true;
-			}		
-			
+			}*/		
+			if (this.getType().equals(((SingleVariableModel) obj).getType())&&this.getName().equals(((SingleVariableModel) obj).getName())&&(this.isVarargs()==((SingleVariableModel) obj).isVarargs())) {
+				return true;
+			}
 		}		
 		return false;
 	}

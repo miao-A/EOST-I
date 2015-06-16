@@ -61,10 +61,7 @@ public class Compatibility {
 		
 		for(AbstractClassModel newTypeModel : newModels) {
 			if(oldModels.contains(newTypeModel)){
-				int index = oldModels.indexOf(newTypeModel);
-				if (oldModels.get(index) == null) {
-					System.out.println();
-				}
+				int index = oldModels.indexOf(newTypeModel);				
 				ClassCompatibilityRecoder classCompatibilityRecoder = new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel);
 				if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.COMPATIBILITY)) {
 					compatibilityRecoders.add(classCompatibilityRecoder);

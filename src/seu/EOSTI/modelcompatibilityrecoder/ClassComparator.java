@@ -7,7 +7,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 
 import seu.EOSTI.Model.AbstractClassModel;
 
-public class ClassComparator {
+/*public class ClassComparator {
 	
 	private List<AbstractClassModel> removedType = new LinkedList<>();
 	private List<AbstractClassModel> newType = new LinkedList<>();
@@ -43,3 +43,4 @@ public class ClassComparator {
 	
 	
 }
+*/

@@ -36,63 +36,20 @@ public class IntergrationMain {
 	/*String oldPath = "D:/ProjectOfHW/jEditor/jEditor0.4.1";
 	String newPathOfComponet = "D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";*/
 		
-	/*String oldPathOfComponet = "D:/ProjectOfHW/junit/junit4.0";
-	String newPathOfComponet = "D:/ProjectOfHW/junit/junit4.1";*/
-
+/*	String oldPathOfComponet = "D:/ProjectOfHW/junit/junit4.0";
+	String newPathOfComponet = "D:/ProjectOfHW/junit/junit4.1";
+	Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
+	compatibility.getinfo();*/
 	
 	/*ComponentParser componentParser = new ComponentParser(oldPathOfComponet, newPathOfComponet);
 	componentParser.parser();*/
-	/*Compatibility compatibility = new Compatibility(oldPathOfComponet, newPathOfComponet);
-	compatibility.getinfo();*/
+
 		
 		
-	String oldPathOfProject = "D:/ProjectOfHW/junit/junit4.0";
-	String newPathOfProject = "D:/ProjectOfHW/junit/junit4.1";
+	String oldPathOfProject = "D:/ProjectOfHW/junit/junit3.9";
+	String newPathOfProject = "D:/ProjectOfHW/junit/junit4.0";
 	ChangeComparator changeComparator = new ChangeComparator(oldPathOfProject, newPathOfProject);
 	changeComparator.getinfo();
-
-	/*	for (int i = 0; i < arrayOfProjects.length; i++) {
-		pathOfProject = arrayOfProjects[i];
-		File file = new File(pathOfProject);
-		if (!file.isDirectory()) {
-			System.out.println("Path of Project not EXIST:\t"+pathOfProject);
-			continue;
-		}
-		
-		System.out.println("Project:\t"+pathOfProject);
-			
-		ProjectParser projectFileUtil = new ProjectParser(pathOfProject, null,null);
-		projectFileUtil.parser();
-		projectFileUtil.getExtensibilityInfo();
-
-	
-		//以包级别分析易替代性 
-		ChangeabilityConnector dbConnector = new ChangeabilityConnector();
- 		ArrayList<String> packageNameList= dbConnector.getpackageName();
-
-        for (String string : packageNameList) { 
-        
-        	ArrayList<String> al = dbConnector.packageChangeabilityInfo(string, "EOSTI", "1.0");
-//        	item.setText((String[])al.toArray(new String[al.size()]));
-        }
-		
-		//以类级别分析易替代性
-		ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector();
-		ArrayList<String> classNameList= dbConnector.getClassName("EOSTI", "1.0");
-        for (String string : classNameList) {
-        	String[] pc = string.split("[$]"); 
-            
-        	dbConnector.ClassChangeabilityInfo(pc[0],pc[1], "EOSTI", "1.0");
-//        	item.setText((String[])al.toArray(new String[al.size()]));
-        }
-
-		
-	}*/
-
-//	extensibilityRequestor.ShowInfoOfExitensibily();
-	
-	
-
 	
 	System.out.println("end!!");
 	}

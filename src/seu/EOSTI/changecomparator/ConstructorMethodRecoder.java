@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import seu.EOSTI.Model.ConstructorMethodModel;
+import seu.EOSTI.Model.SingleVariableModel;
 
 public class ConstructorMethodRecoder {
 	
@@ -19,7 +20,7 @@ public class ConstructorMethodRecoder {
 	private List<ConstructorMethodModel> unchangedMethodModels = new LinkedList<>();
 //	private List<MethodModel> modifiedMethodModels = new LinkedList<>();
 
-	private Map<ConstructorMethodModel, ConstructorMethodModel> compatibilityMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
+//	private Map<ConstructorMethodModel, ConstructorMethodModel> compatibilityMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
 	
 	private Map<ConstructorMethodModel, ConstructorMethodModel> modifiedMethodMap = new HashMap<ConstructorMethodModel, ConstructorMethodModel>();
 	
@@ -72,30 +73,32 @@ public class ConstructorMethodRecoder {
 			while (addmethodIterator.hasNext()) {				
 				ConstructorMethodModel addMethodModel = addmethodIterator.next();
 				if (reMethodModel.getMethodName().equals(addMethodModel.getMethodName())) {
-					if (addMethodModel.canCompatibility(reMethodModel)) {
-						removedIterator.remove();
-						addmethodIterator.remove();
-						compatibilityMethodMap.put(reMethodModel,addMethodModel);
-						break;
-					}					
+					List<SingleVariableModel> oldList = reMethodModel.getFormalParameters();
+					List<SingleVariableModel> newList = addMethodModel.getFormalParameters();
+					if (oldList.size() == newList.size()) {
+						boolean flag = true;
+						for (int i = 0; i < oldList.size(); i++) {
+							if (!oldList.get(i).equals(newList.get(i))) {
+								flag = false;
+							}
+						}
+						
+						if (flag) {
+							removedIterator.remove();
+							addmethodIterator.remove();
+							modifiedMethodMap.put(reMethodModel,addMethodModel);
+							break;
+						}						
+					}								
 				}				
 			}			
 		}		
-		
-		if (removedMethodModels.size() == 0) {
-			changeStatus = ChangeStatus.UNCHANGED;
-		}else {
-			System.out.println(removedMethodModels.size());
-			System.out.println(unchangedMethodModels.size());
-			changeStatus = ChangeStatus.MODIFIED;
-		}	
-		
 		return changeStatus;
 	}
 
-	public Map<ConstructorMethodModel, ConstructorMethodModel> getCompatibilityConstructorMethodMap(){
+	/*public Map<ConstructorMethodModel, ConstructorMethodModel> getCompatibilityConstructorMethodMap(){
 		return compatibilityMethodMap;
-	}
+	}*/
 	
 	public ChangeStatus getChangeStatus() {
 		return changeStatus;

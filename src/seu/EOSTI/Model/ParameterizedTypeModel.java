@@ -124,11 +124,15 @@ public class ParameterizedTypeModel extends TypeModel {
 		// TODO Auto-generated method stub
 		String string = "";
 		string +=this.simpletype.getFullName();
-		string += "<";
+		if (typeArguments.size()!=1) {
+			string += "<";
+		}		
 		for (int i = 0; i < typeArguments.size(); i++) {
 			string += typeArguments.get(i).getFullName();
 			if (i == typeArguments.size()-1) {
-				string += ">";
+				if (typeArguments.size()!=1) {
+					string += ">";
+				}
 			}else {
 				string += ",";
 			}
