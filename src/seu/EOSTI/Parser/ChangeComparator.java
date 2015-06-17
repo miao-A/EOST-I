@@ -4,13 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javassist.compiler.ast.Stmnt;
+
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ComponentRequertor;
 import seu.EOSTI.Model.AbstractClassModel;
+import seu.EOSTI.Model.ClassModel;
 import seu.EOSTI.Model.ConstructorMethodModel;
+import seu.EOSTI.Model.EnumModel;
 import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.changecomparator.ChangeStatus;
 import seu.EOSTI.changecomparator.ClassChangeRecoder;
@@ -123,14 +127,36 @@ public class ChangeComparator {
 	}		
 	
 	public void getinfo(){
-		
+
 		for(AbstractClassModel atm : newType){
-			System.out.println("newType:"+ atm.getPackage()+" " +atm.getClassName());
 			
+			System.out.print("newType:"+ atm.getPackage()+" " +atm.getClassName()+" ");
+			if (atm instanceof EnumModel) {
+				System.out.println("Enum");
+			}else if (atm instanceof ClassModel) {
+				if (((ClassModel) atm).isINTERFACE()) {
+					System.out.println("Interface");
+				}else {
+					System.out.println("Class");
+				}
+			}
+			System.out.println("ImportPackages num:"+atm.getImportPackages().size());			
 		}
 		
+		
 		for(AbstractClassModel atm : removedType){
-			System.out.println("removedType:"+ atm.getPackage()+" " +atm.getClassName());
+			System.out.print("removedType:"+ atm.getPackage()+" " +atm.getClassName()+" ");
+			if (atm instanceof EnumModel) {
+				System.out.println("Enum");
+			}else if (atm instanceof ClassModel) {
+				if (((ClassModel) atm).isINTERFACE()) {
+					System.out.println("Interface");
+				}else {
+					System.out.println("Class");
+				}
+			}
+			System.out.println("ImportPackages num:"+atm.getImportPackages().size());
+			
 			List<MethodModel> list = atm.getMethodModels();
 			int count = 0;
 			for (MethodModel methodModel : list) {
@@ -138,11 +164,25 @@ public class ChangeComparator {
 					++count;
 				}
 			}
-			System.out.println(count);
+//			System.out.println(count);
 		}
 		
+		
 		for(ClassChangeRecoder atm : unchangeRecoders){
-			System.out.println("unchangeType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+			System.out.print("unchangeType:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName()
+					+" ");
+			if (atm.getNewTypeModel() instanceof EnumModel) {
+				System.out.println("Enum");
+			}else if (atm.getNewTypeModel() instanceof ClassModel) {
+				if (((ClassModel) atm.getNewTypeModel()).isINTERFACE()) {
+					System.out.println("Interface");
+				}else {
+					System.out.println("Class");
+				}
+			}
+			
+			System.out.println("ImportPackages num:"+atm.getOldTypeModel().getImportPackages().size());
+			System.out.println("ImportPackages num:"+atm.getNewTypeModel().getImportPackages().size());
 			
 			ConstructorMethodRecoder cmr = atm.getConstructorMethodRecoder();
 			//int count = 0;
@@ -157,16 +197,40 @@ public class ChangeComparator {
 			MethodRecoder mr = atm.getMethodRecoder();
 			int count = 0;
 			List<MethodModel> list = mr.getUnchangedMethodModels();			
-			System.out.println(count);
+//			System.out.println(count);
 			Map<MethodModel, MethodModel> map = atm.getMethodRecoder().getModifiedMethodMap();
 			for (MethodModel methodModel : map.keySet()) {
 				System.out.println("old:"+methodModel.getFullName());
 				System.out.println("new:"+map.get(methodModel).getFullName());				
 			}
 		}
-		
+		System.out.println("begin");
 		for(ClassChangeRecoder atm : modifiedRecoders){
-			System.out.println("changeRecoders:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName());
+			
+			System.out.print("changeRecoders old:"+ atm.getOldTypeModel().getPackage()+" " +atm.getOldTypeModel().getClassName()+" ");
+			if (atm.getOldTypeModel() instanceof EnumModel) {
+				System.out.println("Enum");
+			}else if (atm.getOldTypeModel() instanceof ClassModel) {
+				if (((ClassModel) atm.getOldTypeModel()).isINTERFACE()) {
+					System.out.println("Interface");
+				}else {
+					System.out.println("Class");
+				}
+			}
+			
+			/*System.out.println("ImportPackages num:"+atm.getOldTypeModel().getImportPackages().size());
+			System.out.println("ImportPackages num:"+atm.getNewTypeModel().getImportPackages().size());
+			*/
+			System.out.print("changeRecoders new:"+ atm.getNewTypeModel().getPackage()+" " +atm.getNewTypeModel().getClassName()+" ");
+			if (atm.getNewTypeModel() instanceof EnumModel) {
+				System.out.println("Enum");
+			}else if (atm.getNewTypeModel() instanceof ClassModel) {
+				if (((ClassModel) atm.getNewTypeModel()).isINTERFACE()) {
+					System.out.println("Interface");
+				}else {
+					System.out.println("Class");
+				}
+			}
 			MethodRecoder mr = atm.getMethodRecoder();
 			
 			if (mr.getNewAddMethodModels().size()!=0) {

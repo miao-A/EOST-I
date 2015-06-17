@@ -1,5 +1,6 @@
 package seu.EOSTI.Model;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,10 @@ public abstract class AbstractClassModel {
 	public abstract boolean equals(Object obj);
 	
 	public abstract List<ConstructorMethodModel> getConstructorModel();
+	
+	public abstract void setImportPackages(HashSet<String> importPackages);
+	public abstract HashSet<String> getImportPackages();
+	
 
 	
 }

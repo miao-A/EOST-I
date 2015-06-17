@@ -1,8 +1,12 @@
 package seu.EOSTI.ASTVisitor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+
+
+
 
 
 
@@ -38,9 +42,11 @@ import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -59,6 +65,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
+import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ArrayTypeModel;
 import seu.EOSTI.Model.ConstructorMethodModel;
@@ -80,10 +87,12 @@ public class ComponentVisitor extends ASTVisitor {
 	private ClassModel classModel;
 	private EnumModel enumModel;
 	private String packageName = null;
+	private HashSet<String> importPackageStrings;
 	
 	public ComponentVisitor(){
 		classModel = new ClassModel();
 		enumModel = new EnumModel();
+		importPackageStrings = new HashSet<String>();
 	}	
 	
 	public boolean visit(PackageDeclaration node){
@@ -100,8 +109,60 @@ public class ComponentVisitor extends ASTVisitor {
 		enumModel.setPackage(packageName);
 		return true;		
 	}
+	///////////////////////////////////////////////////////////////////
+	public boolean visit(SimpleType node){
+
+		ITypeBinding binding = node.resolveBinding();
+
+		if (binding == null) {
+			System.out.println("simpleType binding is null in class:"  );
+			return true;
+		}
+
+		String importpackageName = binding.getPackage().getName();
+		if (!importpackageName.equals(packageName)) {
+			importPackageStrings.add(importpackageName);
+		}
+				
+		return true;
+	}
+	
+
+	public boolean visit(MethodInvocation  node){
+		IMethodBinding binding = node.resolveMethodBinding();
+		if (binding == null) {
+//				System.out.println("MethodInvocation binding is null in class:" +classString );				
+				return true;
+		}
+	
+		String importpackageName = binding.getDeclaringClass().getPackage().getName();
+		if (!importpackageName.equals(packageName)) {
+			importPackageStrings.add(importpackageName);
+		}
+				
+		return true;
+	}
+
 	
 	
+	public void endVisit(CompilationUnit node){
+		//可用于数据库插入，数据库建成后上述get方法可删除
+	
+		System.out.println("----------------------------------------------------------");
+		System.out.println("package "+ packageName );
+		
+		if (!classModel.isEmpty()) {
+			classModel.setImportPackages(importPackageStrings);			
+		}
+
+		if (!enumModel.isEmpty()) {
+			enumModel.setImportPackages(importPackageStrings);			
+		}	
+		System.out.println("----------------------------------------------------------");
+		
+//		importPackageStrings.clear();
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////
 	public boolean visit(TypeDeclaration node){
 	
 		//内部类或匿名类

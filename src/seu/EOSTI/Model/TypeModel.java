@@ -39,7 +39,7 @@ public abstract class TypeModel {
 
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
-	}	
+	}
 	
 	public abstract boolean CanCompatibility(TypeModel typeModel);
 	

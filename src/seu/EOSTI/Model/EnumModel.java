@@ -1,5 +1,6 @@
 package seu.EOSTI.Model;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class EnumModel extends AbstractClassModel{
 	private List<AbstractClassModel> innerClassModels = new LinkedList<>();
 	private List<String> typeParameters = new LinkedList<>(); 
 	
-	private boolean empty = true;	
+	private boolean empty = true;
+	private HashSet<String> importPackageList = new HashSet();
 	
 	public void setPackage(String name){
 		if (name == null) {
@@ -205,6 +207,19 @@ public class EnumModel extends AbstractClassModel{
 	public List<ConstructorMethodModel> getConstructorModel() {
 		// TODO Auto-generated method stub
 		return constructorMethodModels;
+	}
+	
+	@Override
+	public void setImportPackages(HashSet<String> list) {
+		// TODO Auto-generated method stub
+		importPackageList = list;
+		
+	}
+
+	@Override
+	public HashSet<String> getImportPackages() {
+		// TODO Auto-generated method stub
+		return importPackageList;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package seu.EOSTI.Model;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class ClassModel extends AbstractClassModel {
 	private List<String> typeParameters =  new LinkedList<>();
 	private boolean empty = true;
 
+	private HashSet<String> importPackageList = new HashSet();
 	
 
 	public void setPackage(String name){
@@ -193,6 +195,19 @@ public class ClassModel extends AbstractClassModel {
 	public List<ConstructorMethodModel> getConstructorModel() {
 		// TODO Auto-generated method stub
 		return constructorMethodModels;
+	}
+
+	@Override
+	public void setImportPackages(HashSet<String> importPackageStrings) {
+		// TODO Auto-generated method stub
+		importPackageList = importPackageStrings;
+		
+	}
+
+	@Override
+	public HashSet<String> getImportPackages() {
+		// TODO Auto-generated method stub
+		return importPackageList;
 	}
 	
 	
