@@ -93,10 +93,12 @@ public class ShowComposite extends Composite {
 					frame1.add(panel1);
 					panel1.setLayout(new BorderLayout(0, 0));
 					ChartPanel extenChartPanel = new ChartPanel(chart);
-					panel1.add(extenChartPanel, BorderLayout.SOUTH);	
-					frame1.setVisible(true);
-					panel1.setVisible(true);
-					extenChartPanel.setVisible(true);
+					panel1.add(extenChartPanel, BorderLayout.SOUTH);						
+					
+					frame1.setVisible(true);					
+/*					panel1.setVisible(true);
+					extenChartPanel.setVisible(true);*/
+					System.out.println("chart print");
 				}
 				
 				///
@@ -124,8 +126,10 @@ public class ShowComposite extends Composite {
 					ChartPanel changeChartPanel = new ChartPanel(chart);
 					panel2.add(changeChartPanel, BorderLayout.SOUTH);	
 					frame2.setVisible(true);
-					panel2.setVisible(true);
-					changeChartPanel.setVisible(true);
+/*					panel2.setVisible(true);
+					changeChartPanel.setVisible(true);*/
+					System.out.println("chart print");
+					
 				}
 			}
 		});

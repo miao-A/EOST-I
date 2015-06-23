@@ -13,6 +13,11 @@ public class ProjectInfoConnector extends DBConnector {
 	private String version;
 	private String introduction;
 	
+	public ProjectInfoConnector(){
+		super();
+		connect = getConnection();
+	};
+	
 	public ProjectInfoConnector(String projectName, String version,String introduction){
 		super();
 		connect = getConnection();

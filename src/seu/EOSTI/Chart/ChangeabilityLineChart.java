@@ -18,24 +18,20 @@ public class ChangeabilityLineChart  extends LineChart {
 		ProjectConnector pConnector = new ProjectConnector();
 		List<String> versionlist = pConnector.getVersion(projectName);
 		
-		LinkedHashMap<String, HashMap<String, Double>> dataMap = new LinkedHashMap<String, HashMap<String, Double>>();
-		
+		LinkedHashMap<String, HashMap<String, Double>> dataMap = new LinkedHashMap<String, HashMap<String, Double>>();		
 		
 		for (String version : versionlist) {
 			ChangeabilityInfoConnector dbConnector = new ChangeabilityInfoConnector(projectName, version);
 			HashMap<String, Double> map = new HashMap<String, Double>();
-			List<String> pkgNameList = dbConnector.getpackageName();			
+			List<String> pkgNameList = dbConnector.getpackageName();
+			int pkgNum = pkgNameList.size();
+		
 			for (String pkgName : pkgNameList) {
-
-				if (pkgName.equals("junit.awtui")) {
-					int i=0;
-					i=1;
-				}
+				
 				double ratio = dbConnector.getChangeabilityRatio(pkgName);
 				map.put(pkgName, new Double(ratio));
-				
 			}
-			dataMap.put(projectName+version, map);			
+			dataMap.put(projectName+version+" ("+pkgNum+")", map);			
 		}
 		this.setDataSet(dataMap);
 	}

@@ -27,11 +27,12 @@ public class ExtensibilityLineChart extends LineChart {
 			HashMap<String, Double> map = new HashMap<String, Double>();
 			ExtensibilityInfoConnector dbConnector = new ExtensibilityInfoConnector(projectName, version);
 			List<String> pkgNameList = dbConnector.getpackageName();
+			int pkgNum = pkgNameList.size();
 			for (String pkgName : pkgNameList) {
 				double ratio = dbConnector.getExtensibilityRatio(pkgName);
 				map.put(pkgName, new Double(ratio));
 			}			
-			dataMap.put(projectName+version, map);
+			dataMap.put(projectName+version+" ("+pkgNum+")", map);
 		}
 		
 		this.setDataSet(dataMap);

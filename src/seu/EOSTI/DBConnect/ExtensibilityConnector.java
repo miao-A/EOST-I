@@ -130,6 +130,43 @@ private String versionString;
 		return rStrings;
 	}
 	
+public ArrayList<String> packageExtensibilityInfo(String packageName){
+		
+		ArrayList<String> rStrings = new ArrayList<String>();
+		try {
+			Statement stmt = connect.createStatement();
+			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
+			
+			String str = "Select  * FROM eosti.classTypeinfo where pkgname = '"
+			+ packageName 
+			+ "' and VerID = '" 
+			+ versionString + "' and projName = '"
+			+projectNameString +"'";
+
+
+/*			
+			String concretestr = str +" and classtype = 'concrete'";
+			String abstractstr = str +" and classtype = 'abstract'";
+			String interfacestr = str +" and classtype = 'interface'";*/
+			
+			//rStrings.add(packageName);
+			
+			ResultSet rs ;
+
+			
+			rs= stmt.executeQuery(str);			
+			while (rs.next()) {
+				rStrings.add(rs.getString("classname")+"&"+rs.getString("classtype"));
+				
+			}			
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("failed to run extensibility query!");
+			}
+		return rStrings;
+	}
+	
 	
 	
 	public ArrayList<String> projectExtensibilityRatio(){

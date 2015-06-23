@@ -51,7 +51,7 @@ public abstract class LineChart {
         
         JFreeChart chart = ChartFactory.createLineChart( 
                            title, // 图表标题
-                           "包名", // 目录轴的显示标签
+                           "项目版本（包数）", // 目录轴的显示标签
                            "比例%", // 数值轴的显示标签
                             dataset, // 数据集
                             PlotOrientation.VERTICAL, // 图表方向：水平、垂直
@@ -96,7 +96,6 @@ public abstract class LineChart {
                       );
         */
         
-        
 	                       
 	   return chart;
 	} 
@@ -115,19 +114,11 @@ public abstract class LineChart {
 		while (it.hasNext()) {
 			Entry<String, HashMap<String, Double>> entry1 = it.next();
 			
-			for (Map.Entry<String, Double> entry2 :entry1.getValue().entrySet() ) {
-				/*if (entry2.getValue()==0) {
-					continue;
-				}*/
-				if (entry2.getKey().equals("junit.awtui")) {
-					System.out.println(entry2.getKey() +entry1.getKey()+"   "+ entry2.getValue());
-				}
+			for (Map.Entry<String, Double> entry2 :entry1.getValue().entrySet() ) {			
 				//System.out.println("key= " + entry2.getKey() + " and value= " + entry2.getValue());
 				dataset.addValue(entry2.getValue(), entry2.getKey(), entry1.getKey());
 			}		
-		}
-		
-		
+		}	
 		
 		for (int i = 0; i < dataset.getRowCount(); i++) {
 			Comparable rowKey = dataset.getRowKey(i);
@@ -143,14 +134,11 @@ public abstract class LineChart {
 			if(flag){				
 				dataset.removeRow(i);
 				i--;
-			}
-			
+			}			
 		}
 	}
-
 	
     private  CategoryDataset getDataSet() { 
         return dataset; 
     } 
-
 }
