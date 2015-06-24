@@ -1,4 +1,4 @@
-package seu.EOSTI.DBConnect;
+/*package seu.EOSTI.DBConnect;
 
 
 import java.sql.Connection;
@@ -69,8 +69,7 @@ public class ChangeabilityConnector extends DBConnector{
 			System.out.println("getpackageName error");
 		}
 		
-		return list; 
-
+		return list;
 	}
 	
 	//传出耦合计数
@@ -258,3 +257,4 @@ public class ChangeabilityConnector extends DBConnector{
 	}
 
 }
+*/

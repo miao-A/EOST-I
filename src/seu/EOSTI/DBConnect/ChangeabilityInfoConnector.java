@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 public class ChangeabilityInfoConnector extends DBConnector {
 	private Connection connect = null;
-	private String projectNameString;
-	private String versionString;
+	private String projectName;
+	private String version;
 		
 		public ChangeabilityInfoConnector(String projectName, String version){
 			super();
 			connect = getConnection();
-			this.projectNameString = projectName;
-			this.versionString = version;
+			this.projectName = projectName;
+			this.version = version;
 		}
 		
 		public ArrayList<String> getpackageName(){
@@ -25,11 +25,11 @@ public class ChangeabilityInfoConnector extends DBConnector {
 			try {
 
 				Statement stmt = connect.createStatement();
-				String sql = "SELECT pkgname FROM eosti.pkgCouplingInfo where ProjName = '"
-						+ projectNameString 
+				String sql = "SELECT pkgname FROM eosti.class_packageinfo where ProjName = '"
+						+ projectName 
 						+ "' and verID = '"
-						+ versionString 
-						+"' group by pkgName";
+						+ version 
+						+ " 'group by pkgname";
 				ResultSet rs = stmt.executeQuery(sql);
 				while (rs.next()) {
 					list.add(rs.getString("pkgName"));
@@ -54,11 +54,11 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				Statement stmt = connect.createStatement();
 
 				// / efferent  couplings 被该包依赖的外部包数目
-				String cestr = "Select  count(distinct importPkgName) as result FROM eosti.pkgCouplingInfo where pkgName = '"
+				String cestr = "Select  count(distinct importPkgName) as result FROM eosti.class_packageinfo where pkgname = '"
 						+ packageName
 						+ "' and verID = '"
-						+ versionString
-						+ "' and projName = '" + projectNameString + "'";
+						+ version
+						+ "' and projName = '" + projectName + "'";
 
 
 				ResultSet rs;
@@ -73,11 +73,11 @@ public class ChangeabilityInfoConnector extends DBConnector {
 
 				
 
-				String castr = "Select  count(distinct pkgName) as result FROM eosti.pkgCouplingInfo where importPkgName = '"
+				String castr = "Select  count(distinct pkgName) as result FROM eosti.class_packageinfo where importPkgName = '"
 						+ packageName
 						+ "' and verID = '"
-						+ versionString
-						+ "' and projName = '" + projectNameString + "'";
+						+ version
+						+ "' and projName = '" + projectName + "'";
 
 
 				rs = stmt.executeQuery(castr);
@@ -92,8 +92,8 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				
 				String changeSql = "INSERT INTO `eosti`.`changeabilityinfo`  (`pkgName`, `projName`, `verID`, `coupleAfferent`, `coupleEfferent`, `ratio`) VALUES ('"
 						+ packageName + "' , '"
-						+ projectNameString + "', '"
-						+ versionString + "', "
+						+ projectName + "', '"
+						+ version + "', "
 						+ ca + ", "
 						+ ce + ", "
 						+ changeability + ")";
@@ -113,8 +113,8 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 				
 				String str = "Select  ratio as result FROM eosti.changeabilityinfo where VerID = '"
-						+ versionString + "' and projName = '"
-						+projectNameString +"' and pkgName = '"
+						+ version + "' and projName = '"
+						+projectName +"' and pkgName = '"
 						+ pkgName +"'";				
 				
 				ResultSet rs ;

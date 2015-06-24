@@ -63,10 +63,9 @@ public class IntergrationMain {
 	ArrayList<String> list = projectInfoConnector.getVersion(project);
 	for (int i = 1; i < list.size(); i++) {
 		System.out.println(list.get(i-1)+" compare with " + list.get(i));
-		//ChangeabilityConnector preProject = new ChangeabilityConnector(project, list.get(i-1));
-		//ChangeabilityConnector postProject = new ChangeabilityConnector(project, list.get(i-1));
-		ExtensibilityConnector preProject = new ExtensibilityConnector(project, list.get(i-1));
-		ExtensibilityConnector postProject = new ExtensibilityConnector(project, list.get(i));
+
+		ClassChangeabilityConnector preProject = new ClassChangeabilityConnector(project, list.get(i-1));
+		ClassChangeabilityConnector postProject = new ClassChangeabilityConnector(project, list.get(i));
 				
 		HashMap<String,ArrayList<String>> preHashMap = new HashMap<>();
 		HashMap<String,ArrayList<String>> postHashMap = new HashMap<>();

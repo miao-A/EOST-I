@@ -19,8 +19,8 @@ public class Changeability {
 	
 	public Changeability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
 		
-		ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor(projectNameString,versionString);
-//		private ChangeabilityOfClassRequestor changeabilityOfClassRequestor = new ChangeabilityOfClassRequestor();
+//		ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor(projectNameString,versionString);
+		ChangeabilityOfClassRequestor changeabilityRequestor = new ChangeabilityOfClassRequestor(projectNameString,versionString);
 		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);

@@ -4,17 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.osgi.baseadaptor.bundlefile.MRUBundleFileList;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
@@ -25,13 +22,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.internal.dnd.SwtUtil;
 
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ConstructorMethodModel;
 import seu.EOSTI.Model.MethodModel;
-import seu.EOSTI.Model.SingleVariableModel;
+
 import seu.EOSTI.Parser.Compatibility;
 import seu.EOSTI.modelcompatibilityrecoder.ChangeStatus;
 import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
@@ -41,7 +36,6 @@ import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;
 
-
 public class CompatibilityComposite extends Composite {
 	private Text oldComponentText;
 	private Text newComponentText;
@@ -49,8 +43,7 @@ public class CompatibilityComposite extends Composite {
 	private TableEditor editor = null;
 	private final List<MyModel> myModels = new LinkedList<>();
 	
-	class MyModel{
-		
+	class MyModel{		
 		
 		String identifierString = new String();
 		List<String> newAddList = null;

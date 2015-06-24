@@ -28,7 +28,8 @@ public class IntergrationDialog extends Dialog {
 	private ExtensibilityComposite extensibilityComposite;
 	private CompatibilityComposite compatibilityComposite;
 	private ProjectInfoComposite projectInfoComposite;
-	private ShowComposite nullComposite;
+	private ShowComposite showComposite;
+	private ExtensibilityDiffComposite diffComposite;
 	
 	/**
 	 * Create the dialog.
@@ -135,7 +136,8 @@ public class IntergrationDialog extends Dialog {
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				rightCompositeSL.topControl = nullComposite;
+				rightCompositeSL.topControl = showComposite;
+				//rightCompositeSL.topControl = diffComposite;
 				rightComposite.layout();
 			}
 		});
@@ -146,8 +148,8 @@ public class IntergrationDialog extends Dialog {
 		changeabilityComposite = new ChangeabilityComposite(rightComposite, SWT.NONE);
 		projectInfoComposite = new ProjectInfoComposite(rightComposite, SWT.NONE);
 
-		nullComposite = new ShowComposite(rightComposite, SWT.NONE);
-		
+		showComposite = new ShowComposite(rightComposite, SWT.NONE);
+//		diffComposite = new ExtensibilityDiffComposite(rightComposite, SWT.NONE);
 		rightCompositeSL.topControl = projectInfoComposite;
 
 	}

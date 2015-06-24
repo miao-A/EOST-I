@@ -27,13 +27,17 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	private String classString;
 	private String methodDeclaString;
 	private String methodInvoString;
+	private String projectName;
+	private String version;
 
 	private HashSet<String> importStrings;
 	
 	
-	public ChangeabilityOfClassVisitor() {
+	public ChangeabilityOfClassVisitor(String projectName, String version) {
 		// TODO Auto-generated constructor stub
 		importStrings = new HashSet<String>();
+		this.projectName = projectName;
+		this.version = version;
 	}
 	
 
@@ -60,6 +64,9 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 ////类级别耦合性检测
 /*		binding.getPackage();
 		binding.getQualifiedName();*/
+		if (binding == null) {
+			return true;
+		}
 		String fullString = binding.getQualifiedName();
 		String importpackageName = binding.getPackage().getName();
 		String importClassName = fullString.substring(importpackageName.length()+1);
@@ -74,9 +81,14 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	
 	public boolean visit(MethodInvocation node){
 		IMethodBinding binding =  (IMethodBinding) node.getName().resolveBinding();
-		
+		if (binding == null) {
+			return true;
+		}
 		String fullString = binding.getDeclaringClass().getQualifiedName();
 		String importpackageName = binding.getDeclaringClass().getPackage().getName();
+		if(fullString.length()==0){
+			return true;
+		}
 		String importClassName = fullString.substring(importpackageName.length()+1);
 		if (importClassName.contains(".")) {
 			importClassName = importClassName.substring(0, importClassName.indexOf('.'));
@@ -92,18 +104,21 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageString );
 
-		ClassChangeabilityConnector connector = new ClassChangeabilityConnector();
+		ClassChangeabilityConnector connector = new ClassChangeabilityConnector(projectName,version);
 		for (String string : importStrings) {
 			
 			int index = string.indexOf('$');
 			String ipn = string.substring(0, index);
 			String icn = string.substring(index+1);
-			
-			if (packageString.equals(ipn)&&classString.equals(icn)) {
+			if (classString == null) {
+				continue;
+			}
+
+			if (packageString.equals(ipn)) {
 				continue;
 			}
 			
-			connector.importNameUpatedate(packageString, classString, ipn, icn, "EOSTI", "1.0");
+			connector.importNameUpatedate(packageString, classString, ipn, icn);
 		}
 		
 		System.out.println("----------------------------------------------------------");		

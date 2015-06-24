@@ -4,26 +4,21 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.SWT;
 
-import seu.EOSTI.DBConnect.ChangeabilityConnector;
+
+import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.custom.TableTree;
-import org.eclipse.jface.viewers.TableTreeViewer;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.internal.handlers.WizardHandler.New;
-
 import com.ibm.icu.text.DecimalFormat;
 
 public class ChangeabilityComposite extends Composite {
@@ -34,9 +29,7 @@ public class ChangeabilityComposite extends Composite {
 	 * @param style
 	 */
 	public ChangeabilityComposite(Composite parent, int style) {
-		super(parent, style);
-
-		
+		super(parent, style);	
 		
 		final Combo projectSelectCombo = new Combo(this, SWT.NONE);
 		final Combo versionCombo = new Combo(this, SWT.NONE);
@@ -102,8 +95,8 @@ public class ChangeabilityComposite extends Composite {
 				///Ê÷µÄ²ã¼¶ÏÔÊ¾
 				packageEfferentTree.removeAll();
 				packageAfferentTree.removeAll();
-				ChangeabilityConnector dbConnector = new ChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
-				
+//				ChangeabilityConnector dbConnector = new ChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
+				ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
 				final ArrayList<PackageNode> packageNodeList = new ArrayList<PackageNode>();
 				ArrayList<String> packageList = dbConnector.getpackageName();
 						//dbConnector.getpackageName();

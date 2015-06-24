@@ -7,15 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
-import seu.EOSTI.DBConnect.ProjectInfoConnector;
 
-public class ExtensibilityDiff {
-
+public class ChangeabilityDiff {
 	private String project = null;
 	private HashMap<String, HashMap<String, List<String>>> diffMap = null;
 	
 	
-	public ExtensibilityDiff(String project){
+	public ChangeabilityDiff(String project){
 		this.project = project;
 	}
 	
@@ -70,7 +68,7 @@ public class ExtensibilityDiff {
 	private HashMap<String, List<String>> diffInPackage(ArrayList<String> prelist,ArrayList<String> postlist) {
 
 		HashMap<String, List<String>> map = new HashMap<>();		
-		for (String classname : prelist) {
+/*		for (String classname : prelist) {
 			if (!postlist.contains(classname)) {
 				String[] string = classname.split("&");
 				String keystring = "-"+string[string.length-1];
@@ -110,7 +108,7 @@ public class ExtensibilityDiff {
 					map.put(keystring, classList);
 				}
 			}
-		}		
+		}		*/
 		
 		return map;
 	}
