@@ -1,4 +1,4 @@
-package seu.EOSTI.ASTVisitor;
+/*package seu.EOSTI.ASTVisitor;
 
 import java.text.DecimalFormat;
 
@@ -32,3 +32,4 @@ public class ChangeabilityRequestor extends FileASTRequestor {
 	
 
 }
+*/

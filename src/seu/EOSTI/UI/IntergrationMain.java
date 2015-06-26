@@ -61,6 +61,9 @@ public class IntergrationMain {
 	String project = "jUnit";
 	ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
 	ArrayList<String> list = projectInfoConnector.getVersion(project);
+/*	ArrayList<String> list = new ArrayList<String>();
+	list.add("3.4");
+	list.add("3.5");*/
 	for (int i = 1; i < list.size(); i++) {
 		System.out.println(list.get(i-1)+" compare with " + list.get(i));
 
@@ -71,15 +74,37 @@ public class IntergrationMain {
 		HashMap<String,ArrayList<String>> postHashMap = new HashMap<>();
 		
 		for (String packageName : preProject.getpackageName()) {			
-	//		System.out.println(packageName);
-			ArrayList<String> typelist = preProject.packageExtensibilityInfo(packageName);
-			preHashMap.put(packageName, typelist);		
+//			System.out.println("packageName:"+packageName);
+			ArrayList<String> exportlist = preProject.packageAffernetCouplingslist(packageName);
+//			System.out.println("ca:"+importlist.size());
+			for (String string : exportlist) {
+				exportlist.set(exportlist.indexOf(string), string+"&export");
+			}			
+			
+			ArrayList<String> importlist = preProject.packageEffernetCouplingslist(packageName);
+//			System.out.println("ce:"+exportlist.size());
+			for (String string : importlist) {
+				importlist.set(importlist.indexOf(string), string+"&import");
+			}
+			exportlist.addAll(importlist);
+			preHashMap.put(packageName, exportlist);		
 		}
 				
 		for (String packageName : postProject.getpackageName()) {
-	//		System.out.println(packageName);
-			ArrayList<String> typelist = postProject.packageExtensibilityInfo(packageName);
-			postHashMap.put(packageName, typelist);
+//			System.out.println("packageName:"+packageName);
+			ArrayList<String> exportlist = postProject.packageAffernetCouplingslist(packageName);
+//			System.out.println("ca:"+importlist.size());
+			for (String string : exportlist) {
+				exportlist.set(exportlist.indexOf(string), string+"&export");
+			}			
+			
+			ArrayList<String> importlist = postProject.packageEffernetCouplingslist(packageName);
+//			System.out.println("ce:"+exportlist.size());
+			for (String string : importlist) {
+				importlist.set(importlist.indexOf(string), string+"&import");
+			}
+			exportlist.addAll(importlist);
+			postHashMap.put(packageName, exportlist);
 		}
 		
 		Iterator<String> preIterator = preHashMap.keySet().iterator();
@@ -112,56 +137,53 @@ public class IntergrationMain {
 	/*	List<String> removedClassList =new LinkedList();
 		List<String> addClasslList = new LinkedList<>();*/
 		HashMap<String, List<String>> map = new HashMap<>();		
-		for (String classname : prelist) {
-			if (!postlist.contains(classname)) {
-//				removedClassList.add(classname);
-				String[] string = classname.split("&");
+		for (String packagename : prelist) {
+			if (!postlist.contains(packagename)) {
+				String[] string = packagename.split("&");
 				String keystring = "-"+string[string.length-1];
 
 				if (map.keySet().contains(keystring)) {
 					map.get(keystring).add(string[0]);
 					
 				}else {
-					List<String> classList = new LinkedList<>();
-					classList.add(string[0]);
-					map.put(keystring, classList);
+					List<String> packageList = new LinkedList<>();
+					packageList.add(string[0]);
+					map.put(keystring, packageList);
 				}
 				
 			}else {
-				String[] string = classname.split("&");
+				String[] string = packagename.split("&");
 				String keystring = string[string.length-1];
 				if (map.keySet().contains(keystring)) {
 					map.get(keystring).add(string[0]);
 					
 				}else {
-					List<String> classList = new LinkedList<>();
-					classList.add(string[0]);
-					map.put(keystring, classList);
+					List<String> packageList = new LinkedList<>();
+					packageList.add(string[0]);
+					map.put(keystring, packageList);
 				}
 			}
 		}
 		
-		for (String classname : postlist) {
-			if (!prelist.contains(classname)) {
+		for (String packagename : postlist) {
+			System.out.println(packagename);
+			if (!prelist.contains(packagename)) {
 //				addClasslList.add(classname);
-				String[] string = classname.split("&");
+				String[] string = packagename.split("&");
 				String keystring = "+"+string[string.length-1];
 
 				if (map.keySet().contains(keystring)) {
 					map.get(keystring).add(string[0]);
 					
 				}else {
-					List<String> classList = new LinkedList<>();
-					classList.add(string[0]);
-					map.put(keystring, classList);
+					List<String> packagList = new LinkedList<>();
+					packagList.add(string[0]);
+					map.put(keystring, packagList);
 				}
 			}
 		}		
 		
 		return map;
-	}
-
-
-		
+	}	
 	
 }

@@ -5,31 +5,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import javassist.compiler.ast.Visitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -65,7 +40,6 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
-import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ArrayTypeModel;
 import seu.EOSTI.Model.ConstructorMethodModel;

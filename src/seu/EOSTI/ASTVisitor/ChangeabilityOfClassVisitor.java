@@ -16,7 +16,6 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 
 

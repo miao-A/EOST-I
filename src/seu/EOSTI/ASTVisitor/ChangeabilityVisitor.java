@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
 
 
+
 public class ChangeabilityVisitor extends ASTVisitor{
 	
 

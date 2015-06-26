@@ -7,9 +7,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import seu.EOSTI.ASTVisitor.ChangeabilityOfClassRequestor;
-import seu.EOSTI.ASTVisitor.ChangeabilityRequestor;
 import seu.EOSTI.DBConnect.ChangeabilityInfoConnector;
-import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 
 
 public class Changeability {

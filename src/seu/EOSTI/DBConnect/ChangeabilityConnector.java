@@ -1,4 +1,4 @@
-/*package seu.EOSTI.DBConnect;
+package seu.EOSTI.DBConnect;
 
 
 import java.sql.Connection;
@@ -257,4 +257,3 @@ public class ChangeabilityConnector extends DBConnector{
 	}
 
 }
-*/

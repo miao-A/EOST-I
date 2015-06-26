@@ -30,7 +30,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "insert into `eosti`.`class_pkginfo` (`pkgName`, `className`, `projName`, `verID`, `importPkgName`, `importclassname`) VALUES ('"
+			String sql = "insert into `eosti`.`class_packageinfo` (`pkgName`, `className`, `projName`, `verID`, `importPkgName`, `importclassname`) VALUES ('"
 					+ packageName
 					+ "','"					
 					+ className
@@ -63,15 +63,15 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT pkgname FROM eosti.classpackage_info where ProjName = '"
+			String sql = "SELECT pkgname FROM eosti.class_packageinfo where ProjName = '"
 						+ projectName 
 						+ "' and verID = '"
 						+ version 
-						+ " 'group by pkgname";
+						+ "' group by pkgname";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				list.add(rs.getString("pkgname"));
-				System.out.println(rs.getString("pkgname"));
+				//System.out.println(rs.getString("pkgname"));
 				}	
 		} catch (Exception e) {
 			// TODO: handle exception
