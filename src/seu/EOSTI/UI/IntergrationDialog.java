@@ -28,8 +28,9 @@ public class IntergrationDialog extends Dialog {
 	private ExtensibilityComposite extensibilityComposite;
 	private CompatibilityComposite compatibilityComposite;
 	private ProjectInfoComposite projectInfoComposite;
-	private ShowComposite showComposite;
-	private ExtensibilityDiffComposite diffComposite;
+	private ExtensiMutiVerionShowComposite extensiMutiVerionShowComposite;
+	private ChangeMutiVersionShowComposite changeMutiVersionShowComposite;
+
 	
 	/**
 	 * Create the dialog.
@@ -112,6 +113,17 @@ public class IntergrationDialog extends Dialog {
 		});
 		extensionButton.setText("\u53EF\u6269\u5C55\u6027");
 		
+		Button extensiMutiButton = new Button(leftComposite, SWT.NONE);
+		extensiMutiButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = extensiMutiVerionShowComposite;
+				//rightCompositeSL.topControl = diffComposite;
+				rightComposite.layout();
+			}
+		});
+		extensiMutiButton.setText("\u53EF\u6269\u5C55\u6027\u591A\u7248\u672C\u6BD4\u8F83");		
+		
 		Button changeButton = new Button(leftComposite, SWT.NONE);
 		changeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -121,6 +133,16 @@ public class IntergrationDialog extends Dialog {
 			}
 		});
 		changeButton.setText("\u53EF\u66FF\u4EE3\u6027");
+		
+		Button changeMutiButton = new Button(leftComposite, SWT.NONE);
+		changeMutiButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = changeMutiVersionShowComposite;
+				rightComposite.layout();
+			}
+		});
+		changeMutiButton.setText("\u53EF\u66FF\u4EE3\u6027\u591A\u7248\u672C\u6BD4\u8F83");
 		
 		Button compatibilityButton = new Button(leftComposite, SWT.NONE);
 		compatibilityButton.addSelectionListener(new SelectionAdapter() {
@@ -132,24 +154,12 @@ public class IntergrationDialog extends Dialog {
 		});
 		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027");
 		
-		Button btnNewButton_1 = new Button(leftComposite, SWT.NONE);
-		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				rightCompositeSL.topControl = showComposite;
-				//rightCompositeSL.topControl = diffComposite;
-				rightComposite.layout();
-			}
-		});
-		btnNewButton_1.setText("\u4EE3\u7801\u6F14\u5316\u7248\u672C\u6BD4\u8F83");		
-		
 		compatibilityComposite = new CompatibilityComposite(rightComposite, SWT.NONE);
 		extensibilityComposite = new ExtensibilityComposite(rightComposite, SWT.NONE);
 		changeabilityComposite = new ChangeabilityComposite(rightComposite, SWT.NONE);
 		projectInfoComposite = new ProjectInfoComposite(rightComposite, SWT.NONE);
-
-		showComposite = new ShowComposite(rightComposite, SWT.NONE);
-//		diffComposite = new ExtensibilityDiffComposite(rightComposite, SWT.NONE);
+		changeMutiVersionShowComposite = new ChangeMutiVersionShowComposite(rightComposite, SWT.NONE);
+		extensiMutiVerionShowComposite = new ExtensiMutiVerionShowComposite(rightComposite, SWT.NONE);
 		rightCompositeSL.topControl = projectInfoComposite;
 
 	}

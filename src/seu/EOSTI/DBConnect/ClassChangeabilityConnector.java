@@ -245,6 +245,32 @@ public class ClassChangeabilityConnector extends DBConnector{
 		return rStrings;
 	}
 	
+	public ArrayList<String> class_packageEffernetCouplingslist(String packageName){
+
+		ArrayList<String> rStrings = new ArrayList<String>();
+		
+		try {
+			ResultSet rs;
+			Statement stmt = connect.createStatement();
+			String cestr = "Select   distinct importpkgName, importClassName  FROM eosti.class_packageinfo where pkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				String str = rs.getString("importpkgName");
+				str += "@" +  rs.getString("importclassname");
+				rStrings.add(str);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+		}		
+		return rStrings;
+	}
+	
 	//传入耦合计数
 	public int packageAfferentCouplingsCount(String packageName){
 		int ca = 0;
@@ -288,6 +314,32 @@ public class ClassChangeabilityConnector extends DBConnector{
 			rs = stmt.executeQuery(castr);
 			while (rs.next()) {
 				String str = rs.getString("result");
+				rStrings.add(str);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+		}		
+		return rStrings;
+	}
+	
+	public ArrayList<String> class_packageAffernetCouplingslist(String packageName){
+
+		ArrayList<String> rStrings = new ArrayList<String>();
+		
+		try {
+			ResultSet rs;
+			Statement stmt = connect.createStatement();
+			String castr = "Select  distinct pkgName, className FROM eosti.class_packageinfo where importPkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(castr);
+			while (rs.next()) {
+				String str = rs.getString("pkgname");
+				str += "@" + rs.getString("classname");
 				rStrings.add(str);
 			}
 			
