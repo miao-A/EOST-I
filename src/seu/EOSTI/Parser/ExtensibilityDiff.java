@@ -48,7 +48,7 @@ public class ExtensibilityDiff {
 			if (postHashMap.containsKey(packageName)) {
 				ArrayList<String> prelist = preHashMap.get(packageName);
 				ArrayList<String> postlist = postHashMap.get(packageName);
-				if (prelist.containsAll(postlist)) {
+				if (prelist.containsAll(postlist)&&postlist.containsAll(prelist)) {
 					preIterator.remove();
 					postHashMap.remove(packageName);	
 				}else {

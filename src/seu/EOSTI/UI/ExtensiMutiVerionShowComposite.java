@@ -23,18 +23,19 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 
-import seu.EOSTI.Chart.ChangeabilityLineChart;
 import seu.EOSTI.Chart.ExtensibilityLineChart;
 import seu.EOSTI.Chart.LineChart;
 import seu.EOSTI.DBConnect.ProjectConnector;
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
-import seu.EOSTI.Parser.ChangeabilityDiff;
 import seu.EOSTI.Parser.ExtensibilityDiff;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.swt.widgets.Button;
 
 public class ExtensiMutiVerionShowComposite extends Composite {
 
@@ -76,6 +77,14 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 		final StyledText eDiffText = textViewer.getTextWidget();
 		
 		extenDiffTabItem.setControl(eDiffText);
+		
+		final CTabItem extenDiff2TabItem = new CTabItem(tabFolder, SWT.NONE);
+		extenDiff2TabItem.setText("\u7248\u672C\u53D8\u66F42");
+		
+		
+
+		
+		
 			
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -182,7 +191,117 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 					}		
 					textAddColor(eDiffText);	
 					System.out.println("diff print");
-				}			
+				}	
+				
+				
+				{
+					Composite composite = new Composite(tabFolder, SWT.NONE);
+					extenDiff2TabItem.setControl(composite);
+					
+					final StyledText eDiffText2 = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
+					eDiffText2.setBounds(0, 93, 649, 348);
+					
+					eDiffText2.setText("");
+					eDiffText2.setEditable(false);
+					ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
+					ArrayList<String> list = projectInfoConnector.getVersion(projName);
+					final ExtensibilityDiff extensibilityDiff = new ExtensibilityDiff(projName);
+					Rectangle rectangle = new Rectangle(0, 0, 200, 17);
+					for (int i = 1; i < list.size(); i++) {
+						//System.out.println(list.get(i-1)+" compare with " + list.get(i));
+						String textString = list.get(i-1)+" compare with " + list.get(i);
+						
+						final Button btnRadioButton = new Button(composite, SWT.RADIO);
+						btnRadioButton.setBounds(rectangle);
+						btnRadioButton.setText(textString);						
+						if (i%2==1) {							
+							rectangle.x = 2*rectangle.width;
+							
+						}else {
+							rectangle.x = 0;
+							rectangle.y += rectangle.height;
+						}
+						
+						btnRadioButton.addSelectionListener(new SelectionListener() {
+							
+							@Override
+							public void widgetSelected(SelectionEvent arg0) {
+								// TODO Auto-generated method stub
+								eDiffText2.setText(btnRadioButton.getText());
+								String[] index = btnRadioButton.getText().split(" ");
+								
+								HashMap<String, HashMap<String,List<String>>> diffmap = extensibilityDiff.diffInProject(index[0], index[index.length-1]);
+								String textString = new String();
+								for (String pkgName : diffmap.keySet()) {
+									HashMap<String, List<String>> map = diffmap.get(pkgName);
+									if (map.containsKey("interface")||map.containsKey("+interface")||map.containsKey("-interface")) {
+										textString += "\npackage: " + pkgName;
+										if (map.containsKey("+interface")) {									
+											textString += "\n+interface\t"+map.get("+interface").size();
+											for (String string : map.get("+interface")) {
+												textString += "\nName:\t"+string;
+											}
+										}
+										
+										if (map.containsKey("+abstract")) {
+											textString += "\n+abstract\t"+map.get("+abstract").size();
+											for (String string : map.get("+abstract")) {
+												textString += "\nName:\t"+string;
+											}
+										}
+										
+										if (map.containsKey("+concrete")) {
+											textString += "\n+concrete\t"+map.get("+concrete").size();
+											for (String string : map.get("+concrete")) {
+												textString += "\nName:\t"+string;
+											}
+										}
+										
+										if (map.containsKey("-interface")) {
+											textString += "\n-interface\t"+map.get("-interface").size();
+											for (String string : map.get("-interface")) {
+												textString += "\nName:\t"+string;
+											}
+										}
+										
+										if (map.containsKey("-abstract")) {
+											textString += "\n-abstract\t"+map.get("-abstract").size();
+											for (String string : map.get("-abstract")) {
+												textString += "\nName:\t"+string;
+											}
+										}
+										
+										if (map.containsKey("-concrete")) {
+											textString += "\n-concrete\t"+map.get("-concrete").size();
+											for (String string : map.get("-concrete")) {
+												textString += "\nName:\t"+string;
+											}
+										}							
+									}else {
+										textString += "\nNo effect";
+									}							
+								}
+								
+								if (diffmap.size()==0) {
+									textString += "\nNo effect";
+								}
+								eDiffText2.append(textString+"\n\n");
+								
+								textAddColor(eDiffText2);	
+								System.out.println("diff print");
+								
+							}
+							
+							@Override
+							public void widgetDefaultSelected(SelectionEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+						});						
+											
+					}		
+					
+				}
 		
 			}			
 			

@@ -116,6 +116,9 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 			if (packageString.equals(ipn)) {
 				continue;
 			}
+			if (icn.contains("<")) {
+				icn = icn.split("<")[0];
+			}
 			
 			connector.importNameUpatedate(packageString, classString, ipn, icn);
 		}
