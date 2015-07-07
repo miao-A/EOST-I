@@ -1,5 +1,6 @@
 package seu.EOSTI.Chart;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,14 +10,18 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 
-public class ExtensibilityLineChart extends LineChart {
+public class ExtensibilityLineChart extends LineChart  {
 
-	public ExtensibilityLineChart(String title){
+	private String projectName = new String();
+	
+		
+	public ExtensibilityLineChart(String title,String projectName){
 		super(title);
+		this.projectName = projectName;
 	}
 	
 	@Override
-	public void creatDataSet(String projectName) {
+	public void creatDataSet() {
 		// TODO Auto-generated method stub
 		ProjectConnector pConnector = new ProjectConnector();
 		List<String> versionlist = pConnector.getVersion(projectName);	
@@ -36,9 +41,6 @@ public class ExtensibilityLineChart extends LineChart {
 		}
 		
 		this.setDataSet(dataMap);
-	}
-
-	
-	
+	}	
 
 }

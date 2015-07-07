@@ -152,7 +152,7 @@ public class CompatibilityComposite extends Composite {
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		String[] tableHeader = {"        包+类名        ","        新增方法         ", "        删除方法         ","        兼容的方法         ","        未变更方法         "};		
+		String[] tableHeader = {"        包+类名        ","        新增方法         ", "        不兼容方法         ","        兼容的方法         ","        未变更方法         "};		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
 			TableColumn tableColumn = new TableColumn(changeTypeTable, SWT.NONE);
@@ -215,7 +215,7 @@ public class CompatibilityComposite extends Composite {
 				
 				    final TableItem item = new TableItem(changeTypeTable, SWT.NONE);
 					if (tcr.getMethodChangeStatus().equals(ChangeStatus.UNCHANGED)) {
-						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};
+						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," uncompatibility:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};
 						myModel = new MyModel(string[0]);
 						item.setText(string);
 						
@@ -235,7 +235,7 @@ public class CompatibilityComposite extends Composite {
 						myModels.add(myModel);
 						continue;
 					}else {
-						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," removed:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};	
+						String string[] = {tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName()," new:"+thenewCount," uncompatibility:" + theremovedCount," compatibility:"+thecompatibilityCount," unchange:"+theunchangeCount};	
 						myModel = new MyModel(string[0]);
 						item.setText(string);
 					}
@@ -243,7 +243,7 @@ public class CompatibilityComposite extends Composite {
 					
 							
 					String itemString ="***"+ tcr.getNewTypeModel().getPackage() + " " + tcr.getNewTypeModel().getClassName() + " Method Count"+
-							" new:"+thenewCount + " removed:" + theremovedCount +" compatibility:" + theunchangeCount +" modified:"+thecompatibilityCount;
+							" new:"+thenewCount + " uncompatibility:" + theremovedCount +" compatibility:" + theunchangeCount +" modified:"+thecompatibilityCount;
 					
 					System.out.println(itemString);					
 					

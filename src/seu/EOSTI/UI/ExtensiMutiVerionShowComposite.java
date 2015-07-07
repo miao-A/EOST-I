@@ -6,14 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.swt.awt.SWT_AWT;
+
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.experimental.chart.swt.ChartComposite;
 
+import org.jfree.chart.ChartPanel;
 import java.awt.Panel;
 import java.awt.BorderLayout;
 
@@ -28,13 +29,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
 import seu.EOSTI.Chart.ExtensibilityLineChart;
-import seu.EOSTI.Chart.LineChart;
 import seu.EOSTI.DBConnect.ProjectConnector;
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
 import seu.EOSTI.Parser.ExtensibilityDiff;
 
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.widgets.Button;
 
 public class ExtensiMutiVerionShowComposite extends Composite {
@@ -70,20 +69,8 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 		final CTabItem extenTabItem = new CTabItem(tabFolder, SWT.NONE);
 		extenTabItem.setText("\u53EF\u6269\u5C55\u6027\u8D8B\u52BF\u56FE");
 		
-		CTabItem extenDiffTabItem = new CTabItem(tabFolder, SWT.NONE);
+		final CTabItem extenDiffTabItem = new CTabItem(tabFolder, SWT.NONE);
 		extenDiffTabItem.setText("\u7248\u672C\u53D8\u66F4");
-		
-		TextViewer textViewer = new TextViewer(tabFolder, SWT.BORDER|SWT.V_SCROLL);
-		final StyledText eDiffText = textViewer.getTextWidget();
-		
-		extenDiffTabItem.setControl(eDiffText);
-		
-		final CTabItem extenDiff2TabItem = new CTabItem(tabFolder, SWT.NONE);
-		extenDiff2TabItem.setText("\u7248\u672C\u53D8\u66F42");
-		
-		
-
-		
 		
 			
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
@@ -95,114 +82,48 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 				{
 					System.out.println("可扩展性指示图");
 					//BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");	
-					LineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图");	
-					extensibilityChart.creatDataSet(projName);		
-					JFreeChart chart = null;
+					ExtensibilityLineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图",projName);	
+					JFreeChart chart = null;										
+					
+					extensibilityChart.creatDataSet();		
+					
 					try {
-						chart = extensibilityChart.createChart();
+						extensibilityChart.createChart();
+						chart = extensibilityChart.getChart();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					Composite chartComposite = new Composite(tabFolder, SWT.EMBEDDED);
+
+					
+					ChartComposite chartComposite = new ChartComposite(tabFolder, SWT.NONE, chart, true);
 					extenTabItem.setControl(chartComposite);
+					chartComposite.setVisible(true);
 					
+/*					Composite chartComposite = new Composite(tabFolder, SWT.EMBEDDED);
+					extenTabItem.setControl(chartComposite);
 					Frame frame1 = SWT_AWT.new_Frame(chartComposite);
+					frame1.add(new ChartPanel(chart));*/
 					
-					Panel panel1 = new Panel();
-					frame1.add(panel1);
-					panel1.setLayout(new BorderLayout(0, 0));
-					ChartPanel extenChartPanel = new ChartPanel(chart);
-					panel1.add(extenChartPanel, BorderLayout.SOUTH);						
-					
-					frame1.setVisible(true);					
-					panel1.setVisible(true);
-					extenChartPanel.setVisible(true);
 					System.out.println("chart print");
+
+					
+					
 				}
 				
 				
 				
-				{
-					eDiffText.setText("");
-					ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
-					ArrayList<String> list = projectInfoConnector.getVersion(projName);
-					ExtensibilityDiff extensibilityDiff = new ExtensibilityDiff(projName);
-					for (int i = 1; i < list.size(); i++) {
-						System.out.println(list.get(i-1)+" compare with " + list.get(i));
-						String textString = list.get(i-1)+" compare with " + list.get(i);
-						
-						HashMap<String, HashMap<String,List<String>>> diffmap = extensibilityDiff.diffInProject(list.get(i-1), list.get(i));
-						for (String pkgName : diffmap.keySet()) {
-							
-							HashMap<String, List<String>> map = diffmap.get(pkgName);
-							if (map.containsKey("interface")||map.containsKey("+interface")||map.containsKey("-interface")) {
-								textString += "\npackage: " + pkgName;
-								if (map.containsKey("+interface")) {									
-									textString += "\n+interface\t"+map.get("+interface").size();
-									for (String string : map.get("+interface")) {
-										textString += "\nName:\t"+string;
-									}
-								}
-								
-								if (map.containsKey("+abstract")) {
-									textString += "\n+abstract\t"+map.get("+abstract").size();
-									for (String string : map.get("+abstract")) {
-										textString += "\nName:\t"+string;
-									}
-								}
-								
-								if (map.containsKey("+concrete")) {
-									textString += "\n+concrete\t"+map.get("+concrete").size();
-									for (String string : map.get("+concrete")) {
-										textString += "\nName:\t"+string;
-									}
-								}
-								
-								if (map.containsKey("-interface")) {
-									textString += "\n-interface\t"+map.get("-interface").size();
-									for (String string : map.get("-interface")) {
-										textString += "\nName:\t"+string;
-									}
-								}
-								
-								if (map.containsKey("-abstract")) {
-									textString += "\n-abstract\t"+map.get("-abstract").size();
-									for (String string : map.get("-abstract")) {
-										textString += "\nName:\t"+string;
-									}
-								}
-								
-								if (map.containsKey("-concrete")) {
-									textString += "\n-concrete\t"+map.get("-concrete").size();
-									for (String string : map.get("-concrete")) {
-										textString += "\nName:\t"+string;
-									}
-								}							
-							}else {
-								textString += "\nNo effect";
-							}							
-						}
-						
-						if (diffmap.size()==0) {
-							textString += "\nNo effect";
-						}
-						eDiffText.append(textString+"\n\n");						
-					}		
-					textAddColor(eDiffText);	
-					System.out.println("diff print");
-				}	
 				
 				
 				{
 					Composite composite = new Composite(tabFolder, SWT.NONE);
-					extenDiff2TabItem.setControl(composite);
+					extenDiffTabItem.setControl(composite);
 					
-					final StyledText eDiffText2 = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-					eDiffText2.setBounds(0, 93, 649, 348);
+					final StyledText eDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
+					eDiffText.setBounds(0, 93, 649, 348);
 					
-					eDiffText2.setText("");
-					eDiffText2.setEditable(false);
+					eDiffText.setText("");
+					eDiffText.setEditable(false);
 					ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
 					ArrayList<String> list = projectInfoConnector.getVersion(projName);
 					final ExtensibilityDiff extensibilityDiff = new ExtensibilityDiff(projName);
@@ -227,7 +148,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 							@Override
 							public void widgetSelected(SelectionEvent arg0) {
 								// TODO Auto-generated method stub
-								eDiffText2.setText(btnRadioButton.getText());
+								eDiffText.setText(btnRadioButton.getText());
 								String[] index = btnRadioButton.getText().split(" ");
 								
 								HashMap<String, HashMap<String,List<String>>> diffmap = extensibilityDiff.diffInProject(index[0], index[index.length-1]);
@@ -285,9 +206,9 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 								if (diffmap.size()==0) {
 									textString += "\nNo effect";
 								}
-								eDiffText2.append(textString+"\n\n");
+								eDiffText.append(textString+"\n\n");
 								
-								textAddColor(eDiffText2);	
+								textAddColor(eDiffText);	
 								System.out.println("diff print");
 								
 							}

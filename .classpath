@@ -23,5 +23,7 @@
 	<classpathentry exported="true" kind="lib" path="D:/eclipse/dropins/lib/mysql-connector-java-5.1.35-bin.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse/plugins/com.ibm.icu_50.1.1.v201304230130.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/japicmp-0.4.0-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/jfreechart-1.0.19-experimental.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/jfreechart-1.0.19-swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

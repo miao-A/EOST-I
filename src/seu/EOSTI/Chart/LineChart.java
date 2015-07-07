@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Shape;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,10 +27,11 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.osgi.resource.Capability;
 
-public abstract class LineChart {
+public abstract class LineChart{
 	
 	private DefaultCategoryDataset dataset = null;
 	private String title;
+	private JFreeChart chart = null;
 	
 	public LineChart() {
 		// TODO Auto-generated constructor stub
@@ -43,13 +45,11 @@ public abstract class LineChart {
 		
 	}
 	
-	public JFreeChart createChart() throws IOException{ 
+	public void createChart() throws IOException{ 
 	    
-        CategoryDataset dataset = getDataSet();
+        CategoryDataset dataset = getDataSet();       
         
-       
-        
-        JFreeChart chart = ChartFactory.createLineChart( 
+        chart = ChartFactory.createLineChart( 
                            title, // 图表标题
                            "项目版本（包数）", // 目录轴的显示标签
                            "比例%", // 数值轴的显示标签
@@ -73,7 +73,7 @@ public abstract class LineChart {
         
         TextTitle textTitle = chart.getTitle();
         textTitle.setFont(new Font("黑体", Font.PLAIN, 20));      
-        domainAxis.setTickLabelFont(new Font("sans-serif", Font.PLAIN, 11));
+        domainAxis.setTickLabelFont(new Font("Calibri", Font.PLAIN, 11));
         domainAxis.setLabelFont(new Font("宋体", Font.PLAIN, 16));  
        
 		domainAxis.setCategoryLabelPositions(CategoryLabelPositions
@@ -94,14 +94,15 @@ public abstract class LineChart {
                       700, // 宽
                       500 // 高
                       );
-        */
-        
-	                       
-	   return chart;
+        */                  
+	   
 	} 
 
+	public JFreeChart getChart(){
+		return chart;
+	}
 	
-	public abstract void creatDataSet(String projectName);
+	public abstract void creatDataSet();
 
     /** 
     * 获取一个演示用的简单数据集对象

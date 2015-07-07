@@ -96,11 +96,12 @@ public class CopyOfMutiVerionShowComposite extends Composite {
 				{
 					System.out.println("可扩展性指示图");
 					//BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");	
-					LineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图");	
-					extensibilityChart.creatDataSet(projName);		
+					LineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图",projName);	
+					extensibilityChart.creatDataSet();		
 					JFreeChart chart = null;
 					try {
-						chart = extensibilityChart.createChart();
+						extensibilityChart.createChart();
+						chart = extensibilityChart.getChart(); 
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -127,11 +128,12 @@ public class CopyOfMutiVerionShowComposite extends Composite {
 				
 					System.out.println("可替代性指示图");
 					//BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");
-					LineChart changeabilityChart = new ChangeabilityLineChart("可替代性指示图");
-					changeabilityChart.creatDataSet(projName);		
+					LineChart changeabilityChart = new ChangeabilityLineChart("可替代性指示图",projName);
+					changeabilityChart.creatDataSet();		
 					JFreeChart chart = null;
 					try {
-						chart = changeabilityChart.createChart();
+						changeabilityChart.createChart();
+						chart = changeabilityChart.getChart(); 
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

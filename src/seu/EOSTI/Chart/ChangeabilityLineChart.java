@@ -9,11 +9,19 @@ import seu.EOSTI.DBConnect.ProjectConnector;
 
 public class ChangeabilityLineChart  extends LineChart {
 
-	public ChangeabilityLineChart(String title){
+	private String projectName= new String();
+	
+	public ChangeabilityLineChart(){
+		super();
+		creatDataSet();
+	}
+	
+	public ChangeabilityLineChart(String title,String projectName){
 		super(title);
+		this.projectName = projectName;
 	}
 	@Override
-	public void creatDataSet(String projectName) {
+	public void creatDataSet() {
 		// TODO Auto-generated method stub
 		ProjectConnector pConnector = new ProjectConnector();
 		List<String> versionlist = pConnector.getVersion(projectName);
@@ -35,4 +43,5 @@ public class ChangeabilityLineChart  extends LineChart {
 		}
 		this.setDataSet(dataMap);
 	}
+	
 }
