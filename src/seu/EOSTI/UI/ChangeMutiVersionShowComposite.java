@@ -477,6 +477,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			String textString = version1+" compare with " + version2;
 			
 			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.moreDiffInProject(version1, version2);
+			boolean noEffect = true;
 
 			for (String pkgName : diffmap.keySet()) {
 				
@@ -511,14 +512,12 @@ public class ChangeMutiVersionShowComposite extends Composite {
 							textString += "\nName:\t"+string;
 						}
 					}
+					noEffect = false;
 					
-					
-				}else {
-					textString += "\nNo effect";
 				}							
 			}
 			
-			if (diffmap.size()==0) {
+			if (diffmap.size()==0||noEffect) {
 				textString += "\nNo effect";
 			}
 			

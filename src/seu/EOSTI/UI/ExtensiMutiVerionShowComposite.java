@@ -10,6 +10,8 @@ import java.util.List;
 
 
 
+
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -306,7 +308,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 			extenDiffTabItem.setControl(composite);
 			
 			final StyledText eDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-			eDiffText.setBounds(0, 93, 649, 348);
+			eDiffText.setBounds(0, 0, 649, 348);
 			
 			eDiffText.setText("");
 			eDiffText.setEditable(false);
@@ -316,6 +318,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 			String textString = version1 + " compare with " + version2;
 							
 			HashMap<String, HashMap<String,List<String>>> diffmap = extensibilityDiff.diffInProject(version1, version2);
+			boolean noEffect = true;
 			for (String pkgName : diffmap.keySet()) {
 				HashMap<String, List<String>> map = diffmap.get(pkgName);
 				if (map.containsKey("interface")||map.containsKey("+interface")||map.containsKey("-interface")) {
@@ -360,14 +363,14 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 						for (String string : map.get("-concrete")) {
 							textString += "\nName:\t"+string;
 						}
-					}							
-				}else {
-					textString += "\nNo effect";
-				}							
+					}
+					
+					noEffect = false;
+				}						
 			}
 						
-			if (diffmap.size()==0) {
-				textString += "\nNo effect";
+			if (diffmap.size()==0||noEffect) {
+				textString += "\nNo effect!";
 			}
 			eDiffText.append(textString+"\n\n");
 						
