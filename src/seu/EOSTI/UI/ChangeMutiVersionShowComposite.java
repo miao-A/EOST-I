@@ -80,12 +80,40 @@ public class ChangeMutiVersionShowComposite extends Composite {
 		
 		final CTabItem classChangeDiffTabItem = new CTabItem(tabFolder, SWT.NONE);
 		classChangeDiffTabItem.setText("\u7248\u672C\u53D8\u66F4\u8BE6\u7EC6\u4FE1\u606F");
+		
+		final Combo version1Combo = new Combo(this, SWT.NONE);
+		version1Combo.setBounds(304, 10, 88, 25);
+		
+		final Combo version2Combo = new Combo(this, SWT.NONE);
+		version2Combo.setBounds(477, 10, 88, 25);
+		
+		Label label = new Label(this, SWT.NONE);
+		label.setBounds(237, 15, 61, 17);
+		label.setText("\u7248\u672C1\uFF1A");
+		
+		Label label_1 = new Label(this, SWT.NONE);
+		label_1.setText("\u7248\u672C2\uFF1A");
+		label_1.setBounds(410, 15, 61, 17);
 			
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = projectSelectCombo.getSelectionIndex();
-				String projName = projectSelectCombo.getItem(index);		
+				String projName = projectSelectCombo.getItem(index);
+				
+				ArrayList<String> verList = pcConnector.getVersion(projectSelectCombo.getItem(index));
+				version1Combo.removeAll();
+				for (String string : verList) {
+					version1Combo.add(string);
+				}
+				version1Combo.layout();
+				
+				version2Combo.removeAll();
+				for (String string : verList) {
+					version2Combo.add(string);
+				}
+				version2Combo.layout();
+				
 				
 				{				
 					System.out.println("可替代性指示图");
@@ -114,7 +142,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 				
 				
 				
-				
+	/*			
 				
 				
 				{
@@ -321,12 +349,187 @@ public class ChangeMutiVersionShowComposite extends Composite {
 					}		
 					
 				}
-				
+				*/
 				
 			}			
 		});
 	
+		version1Combo.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (projectSelectCombo.getText().equals("")) {
+					return ;					
+				}
+				if (version2Combo.getText().equals("")) {
+					return ;					
+				}
+				String version1 = version1Combo.getText();
+				String version2 = version2Combo.getText();
+				String projName = projectSelectCombo.getText();
+				setCompose(tabFolder,changeDifftabItem,classChangeDiffTabItem,projName,version1,version2);
+				
+			}
+		});
+		
+		
+		version2Combo.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				if (projectSelectCombo.getText().equals("")) {
+					return ;					
+				}
+				
+				if (version1Combo.getText().equals("")) {
+					return ;					
+				}
+				String version1 = version1Combo.getText();
+				String version2 = version2Combo.getText();
+				String projName = projectSelectCombo.getText();
+				setCompose(tabFolder,changeDifftabItem,classChangeDiffTabItem,projName,version1,version2);
+				
+			}
+		});
+		
 	}
+	
+	
+	private void setCompose(Composite tabFolder,CTabItem changeDifftabItem,CTabItem classChangeDiffTabItem,String projName,String version1,String version2) {
+		
+		{
+			Composite composite = new Composite(tabFolder, SWT.NONE);			
+			changeDifftabItem.setControl(composite);
+			
+			final StyledText cDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
+			cDiffText.setBounds(0, 93, 649, 348);
+			
+			cDiffText.setText("");
+			cDiffText.setEditable(false);
+			final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
+			
+			String textString = version1+" compare with " + version2;
+			
+			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.diffInProject(version1, version2);
+			
+			for (String pkgName : diffmap.keySet()) {
+				
+				HashMap<String, List<String>> map = diffmap.get(pkgName);
+				if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
+					textString += "\npackage: " + pkgName;
+					
+					if (map.containsKey("+import")) {									
+						textString += "\n+import \t"+map.get("+import").size();
+						for (String string : map.get("+import")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("-import")) {									
+						textString += "\n-import \t"+map.get("-import").size();
+						for (String string : map.get("-import")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("+export")) {									
+						textString += "\n+export \t"+map.get("+export").size();
+						for (String string : map.get("+export")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("-export")) {									
+						textString += "\n-export \t"+map.get("-export").size();
+						for (String string : map.get("-export")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					
+				}else {
+					textString += "\nNo effect";
+				}							
+			}
+			
+			if (diffmap.size()==0) {
+				textString += "\nNo effect";
+			}
+			
+			cDiffText.append(textString+"\n\n");								
+			textAddColor(cDiffText);	
+			System.out.println("diff print");
+		}		
+		
+		{
+			Composite composite = new Composite(tabFolder, SWT.NONE);			
+			classChangeDiffTabItem.setControl(composite);
+			
+			final StyledText mcDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
+			mcDiffText.setBounds(0, 93, 649, 348);
+			
+			mcDiffText.setText("");
+			mcDiffText.setEditable(false);
+			ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
+			ArrayList<String> list = projectInfoConnector.getVersion(projName);
+			final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
+			String textString = version1+" compare with " + version2;
+			
+			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.moreDiffInProject(version1, version2);
+
+			for (String pkgName : diffmap.keySet()) {
+				
+				HashMap<String, List<String>> map = diffmap.get(pkgName);
+				if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
+					textString += "\npackage: " + pkgName;
+					
+					if (map.containsKey("+import")) {									
+						textString += "\n+import \t"+map.get("+import").size();
+						for (String string : map.get("+import")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("-import")) {									
+						textString += "\n-import \t"+map.get("-import").size();
+						for (String string : map.get("-import")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("+export")) {									
+						textString += "\n+export \t"+map.get("+export").size();
+						for (String string : map.get("+export")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					if (map.containsKey("-export")) {									
+						textString += "\n-export \t"+map.get("-export").size();
+						for (String string : map.get("-export")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+					
+					
+				}else {
+					textString += "\nNo effect";
+				}							
+			}
+			
+			if (diffmap.size()==0) {
+				textString += "\nNo effect";
+			}
+			
+			mcDiffText.append(textString+"\n\n");								
+			textAddColor(mcDiffText);	
+			System.out.println("diff print");
+					
+		}
+	}
+	
+
 	
 	private void textAddColor(StyledText styledText){
 		String text = styledText.getText();

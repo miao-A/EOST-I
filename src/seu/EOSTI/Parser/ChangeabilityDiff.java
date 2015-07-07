@@ -28,16 +28,11 @@ public class ChangeabilityDiff {
 		HashMap<String,ArrayList<String>> postHashMap = new HashMap<>();
 		
 		for (String packageName : preProject.getpackageName()) {			
-//			System.out.println("packageName:"+packageName);
 			ArrayList<String> exportlist = preProject.packageAffernetCouplingslist(packageName);
-//			ArrayList<String> exportlist = preProject.class_packageAffernetCouplingslist(packageName);
-//			System.out.println("ca:"+importlist.size());
 			for (String string : exportlist) {
 				exportlist.set(exportlist.indexOf(string), string+"&export");
 			}			
 			ArrayList<String> importlist = preProject.packageEffernetCouplingslist(packageName);		
-//			ArrayList<String> importlist = preProject.class_packageEffernetCouplingslist(packageName);
-//			System.out.println("ce:"+exportlist.size());
 			for (String string : importlist) {
 				importlist.set(importlist.indexOf(string), string+"&import");
 			}
@@ -141,7 +136,7 @@ public class ChangeabilityDiff {
 			if (postHashMap.containsKey(packageName)) {
 				ArrayList<String> prelist = preHashMap.get(packageName);
 				ArrayList<String> postlist = postHashMap.get(packageName);
-				if (prelist.containsAll(postlist)) {
+				if (prelist.containsAll(postlist)&&postlist.containsAll(prelist)) {
 					preIterator.remove();
 					postHashMap.remove(packageName);	
 				}else {
@@ -156,9 +151,6 @@ public class ChangeabilityDiff {
 		
 		return diffMap;
 	}
-		
-	
-
 	
 	private HashMap<String, List<String>> diffInPackage(ArrayList<String> prelist,ArrayList<String> postlist) {
 

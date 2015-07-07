@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
+
+
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.jfree.chart.JFreeChart;
 import org.jfree.experimental.chart.swt.ChartComposite;
-
 import org.jfree.chart.ChartPanel;
+
 import java.awt.Panel;
 import java.awt.BorderLayout;
 
@@ -72,12 +75,39 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 		final CTabItem extenDiffTabItem = new CTabItem(tabFolder, SWT.NONE);
 		extenDiffTabItem.setText("\u7248\u672C\u53D8\u66F4");
 		
+		final Combo version1Combo = new Combo(this, SWT.NONE);
+		version1Combo.setBounds(304, 10, 88, 25);
+		
+		final Combo version2Combo = new Combo(this, SWT.NONE);
+		version2Combo.setBounds(477, 10, 88, 25);
+		
+		Label label = new Label(this, SWT.NONE);
+		label.setBounds(237, 15, 61, 17);
+		label.setText("\u7248\u672C1\uFF1A");
+		
+		Label label_1 = new Label(this, SWT.NONE);
+		label_1.setText("\u7248\u672C2\uFF1A");
+		label_1.setBounds(410, 15, 61, 17);
+		
 			
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = projectSelectCombo.getSelectionIndex();
 				String projName = projectSelectCombo.getItem(index);
+				
+				ArrayList<String> verList = pcConnector.getVersion(projectSelectCombo.getItem(index));
+				version1Combo.removeAll();
+				for (String string : verList) {
+					version1Combo.add(string);
+				}
+				version1Combo.layout();
+				
+				version2Combo.removeAll();
+				for (String string : verList) {
+					version2Combo.add(string);
+				}
+				version2Combo.layout();
 				
 				{
 					System.out.println("可扩展性指示图");
@@ -113,7 +143,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 				
 				
 				
-				
+				/*
 				
 				{
 					Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -222,13 +252,130 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 											
 					}		
 					
-				}
+				
+				 	*/
 		
 			}			
 			
 		});
-	
+
+		version1Combo.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (projectSelectCombo.getText().equals("")) {
+					return ;					
+				}
+				if (version2Combo.getText().equals("")) {
+					return ;					
+				}
+				String version1 = version1Combo.getText();
+				String version2 = version2Combo.getText();
+				String projName = projectSelectCombo.getText();
+				setCompose(tabFolder,extenDiffTabItem,projName,version1,version2);
+				
+			}
+		});
+		
+		
+		version2Combo.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				if (projectSelectCombo.getText().equals("")) {
+					return ;					
+				}
+				
+				if (version1Combo.getText().equals("")) {
+					return ;					
+				}
+				String version1 = version1Combo.getText();
+				String version2 = version2Combo.getText();
+				String projName = projectSelectCombo.getText();
+				setCompose(tabFolder,extenDiffTabItem,projName,version1,version2);
+				
+			}
+		});
 	}
+	
+	private void setCompose(Composite tabFolder,CTabItem extenDiffTabItem,String projName,String version1,String version2) {
+	
+		
+			Composite composite = new Composite(tabFolder, SWT.NONE);
+			extenDiffTabItem.setControl(composite);
+			
+			final StyledText eDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
+			eDiffText.setBounds(0, 93, 649, 348);
+			
+			eDiffText.setText("");
+			eDiffText.setEditable(false);
+			ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
+			ArrayList<String> list = projectInfoConnector.getVersion(projName);
+			final ExtensibilityDiff extensibilityDiff = new ExtensibilityDiff(projName);
+			String textString = version1 + " compare with " + version2;
+							
+			HashMap<String, HashMap<String,List<String>>> diffmap = extensibilityDiff.diffInProject(version1, version2);
+			for (String pkgName : diffmap.keySet()) {
+				HashMap<String, List<String>> map = diffmap.get(pkgName);
+				if (map.containsKey("interface")||map.containsKey("+interface")||map.containsKey("-interface")) {
+					textString += "\npackage: " + pkgName;
+					if (map.containsKey("+interface")) {									
+						textString += "\n+interface\t"+map.get("+interface").size();
+						for (String string : map.get("+interface")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+								
+					if (map.containsKey("+abstract")) {
+						textString += "\n+abstract\t"+map.get("+abstract").size();
+						for (String string : map.get("+abstract")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+								
+					if (map.containsKey("+concrete")) {
+						textString += "\n+concrete\t"+map.get("+concrete").size();
+						for (String string : map.get("+concrete")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+							
+					if (map.containsKey("-interface")) {
+						textString += "\n-interface\t"+map.get("-interface").size();
+						for (String string : map.get("-interface")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+								
+					if (map.containsKey("-abstract")) {
+						textString += "\n-abstract\t"+map.get("-abstract").size();
+						for (String string : map.get("-abstract")) {
+							textString += "\nName:\t"+string;
+						}
+					}
+								
+					if (map.containsKey("-concrete")) {
+						textString += "\n-concrete\t"+map.get("-concrete").size();
+						for (String string : map.get("-concrete")) {
+							textString += "\nName:\t"+string;
+						}
+					}							
+				}else {
+					textString += "\nNo effect";
+				}							
+			}
+						
+			if (diffmap.size()==0) {
+				textString += "\nNo effect";
+			}
+			eDiffText.append(textString+"\n\n");
+						
+			textAddColor(eDiffText);	
+			System.out.println("diff print");
+					
+	}
+
 	
 	private void textAddColor(StyledText styledText){
 		String text = styledText.getText();
