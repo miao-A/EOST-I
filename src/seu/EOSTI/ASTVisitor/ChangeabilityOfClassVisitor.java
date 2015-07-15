@@ -63,10 +63,10 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 ////类级别耦合性检测
 /*		binding.getPackage();
 		binding.getQualifiedName();*/
-		if (binding == null) {
+		if (binding == null||binding.getPackage()==null) {
 			return true;
 		}
-		String fullString = binding.getQualifiedName();
+		String fullString = binding.getQualifiedName();		
 		String importpackageName = binding.getPackage().getName();
 		String importClassName = fullString.substring(importpackageName.length()+1);
 		if (importClassName.contains(".")) {

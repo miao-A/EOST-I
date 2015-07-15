@@ -43,7 +43,9 @@ import org.eclipse.swt.widgets.Button;
 
 public class ExtensiMutiVerionShowComposite extends Composite {
 
-	
+	private ProjectConnector pcConnector = new ProjectConnector();
+	private ArrayList<String> rStrings;
+	private Combo projectSelectCombo = new Combo(this, SWT.NONE);
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -57,14 +59,8 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 		lblNull.setBounds(21, 10, 61, 17);
 		lblNull.setText("\u9009\u62E9\u9879\u76EE\uFF1A");
 	
-		final Combo projectSelectCombo = new Combo(this, SWT.NONE);
 		projectSelectCombo.setBounds(102, 7, 98, 25);
-		
-		final ProjectConnector pcConnector = new ProjectConnector();
-		ArrayList<String> rStrings = pcConnector.getProject();
-		for (String string : rStrings) {
-			projectSelectCombo.add(string);
-		}		
+			
 		
 		final CTabFolder tabFolder = new CTabFolder(this, SWT.BORDER);
 		tabFolder.setLocation(13, 53);
@@ -308,7 +304,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 			extenDiffTabItem.setControl(composite);
 			
 			final StyledText eDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-			eDiffText.setBounds(0, 0, 649, 348);
+			eDiffText.setBounds(0, 0, 649, 441);
 			
 			eDiffText.setText("");
 			eDiffText.setEditable(false);
@@ -379,6 +375,13 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 					
 	}
 
+	public void reloadProject(){
+		projectSelectCombo.removeAll();
+		rStrings = pcConnector.getProject();	
+		for (String string : rStrings) {
+			projectSelectCombo.add(string);
+		}
+	}
 	
 	private void textAddColor(StyledText styledText){
 		String text = styledText.getText();

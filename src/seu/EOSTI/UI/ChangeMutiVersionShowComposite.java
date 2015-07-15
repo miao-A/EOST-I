@@ -42,7 +42,9 @@ import org.eclipse.jface.text.TextViewer;
 
 public class ChangeMutiVersionShowComposite extends Composite {
 
-	
+	private ProjectConnector pcConnector = new ProjectConnector();
+	private ArrayList<String> rStrings;
+	private Combo projectSelectCombo = new Combo(this, SWT.NONE);
 	private JFreeChart chart = null;
 
 	/**
@@ -58,14 +60,8 @@ public class ChangeMutiVersionShowComposite extends Composite {
 		lblNull.setBounds(21, 10, 61, 17);
 		lblNull.setText("\u9009\u62E9\u9879\u76EE\uFF1A");
 	
-		final Combo projectSelectCombo = new Combo(this, SWT.NONE);
 		projectSelectCombo.setBounds(102, 7, 98, 25);
 		
-		final ProjectConnector pcConnector = new ProjectConnector();
-		ArrayList<String> rStrings = pcConnector.getProject();
-		for (String string : rStrings) {
-			projectSelectCombo.add(string);
-		}		
 		
 		final CTabFolder tabFolder = new CTabFolder(this, SWT.BORDER);
 		tabFolder.setLocation(13, 53);
@@ -403,7 +399,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			changeDifftabItem.setControl(composite);
 			
 			final StyledText cDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-			cDiffText.setBounds(0, 93, 649, 348);
+			cDiffText.setBounds(0, 0, 649, 441);
 			
 			cDiffText.setText("");
 			cDiffText.setEditable(false);
@@ -467,7 +463,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			classChangeDiffTabItem.setControl(composite);
 			
 			final StyledText mcDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-			mcDiffText.setBounds(0, 93, 649, 348);
+			mcDiffText.setBounds(0, 0, 649, 441);
 			
 			mcDiffText.setText("");
 			mcDiffText.setEditable(false);
@@ -513,7 +509,6 @@ public class ChangeMutiVersionShowComposite extends Composite {
 						}
 					}
 					noEffect = false;
-					
 				}							
 			}
 			
@@ -566,6 +561,14 @@ public class ChangeMutiVersionShowComposite extends Composite {
 		}
 	}
 
+	public void reloadProject(){
+		projectSelectCombo.removeAll();
+		rStrings = pcConnector.getProject();	
+		for (String string : rStrings) {
+			projectSelectCombo.add(string);
+		}
+	}
+	
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

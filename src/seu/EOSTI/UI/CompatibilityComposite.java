@@ -201,7 +201,7 @@ public class CompatibilityComposite extends Composite {
 					//仅统计与public相关类
 					int thenewCount = tcr.getMethodRecoder().getNewAddMehodNum()+tcr.getConstructorMethodRecoder().getNewAddMehodNum();
 					int theunchangeCount = tcr.getMethodRecoder().getUnchangedMethodNum()+tcr.getConstructorMethodRecoder().getUnchangedMethodNum();
-					int theremovedCount = tcr.getMethodRecoder().getRemovedMehodNum()+tcr.getConstructorMethodRecoder().getNewAddMehodNum();
+					int theremovedCount = tcr.getMethodRecoder().getRemovedMehodNum()+tcr.getConstructorMethodRecoder().getRemovedMehodNum();
 					int thecompatibilityCount = tcr.getMethodRecoder().getCompatibilityMethodMap().size()+tcr.getConstructorMethodRecoder().getCompatibilityConstructorMethodMap().size();
 					
 					
@@ -479,7 +479,7 @@ public class CompatibilityComposite extends Composite {
 								}
 						    	
 							    comb.setItems( (String[]) list.toArray(new String[list.size()]));
-							    comb.add("removed:"+list.size(), 0);
+							    comb.add("uncompatibility:"+list.size(), 0);
 							    comb.addSelectionListener(new SelectionAdapter() {
 							    	@Override
 							    	public void widgetSelected(SelectionEvent e) {

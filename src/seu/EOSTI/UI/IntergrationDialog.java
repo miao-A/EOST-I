@@ -107,8 +107,8 @@ public class IntergrationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = extensibilityComposite;
-				rightComposite.layout();
-				
+				extensibilityComposite.reloadProject();
+				rightComposite.layout();				
 			}
 		});
 		extensionButton.setText("\u53EF\u6269\u5C55\u6027");
@@ -118,6 +118,7 @@ public class IntergrationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = extensiMutiVerionShowComposite;
+				extensiMutiVerionShowComposite.reloadProject();
 				//rightCompositeSL.topControl = diffComposite;
 				rightComposite.layout();
 			}
@@ -129,6 +130,7 @@ public class IntergrationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = changeabilityComposite;
+				changeabilityComposite.reloadProject();
 				rightComposite.layout();
 			}
 		});
@@ -139,6 +141,7 @@ public class IntergrationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = changeMutiVersionShowComposite;
+				changeMutiVersionShowComposite.reloadProject();
 				rightComposite.layout();
 			}
 		});

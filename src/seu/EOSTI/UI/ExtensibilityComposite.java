@@ -24,7 +24,9 @@ import org.eclipse.swt.events.SelectionEvent;
 
 public class ExtensibilityComposite extends Composite {
 	private Table extensibilityTable;
-
+	private ProjectConnector pcConnector = new ProjectConnector();
+	private ArrayList<String> rStrings;
+	private Combo projectSelectCombo = new Combo(this, SWT.NONE);
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -53,22 +55,19 @@ public class ExtensibilityComposite extends Composite {
 			tableColumn.setMoveable(false); 
 	    	tableColumn.pack();
 	    }  
-
 		
-		final Combo projectSelectCombo = new Combo(this, SWT.NONE);
+		
 		final Combo versionCombo = new Combo(this, SWT.NONE);
 		projectSelectCombo.setBounds(111, 0, 98, 25);
-		versionCombo.setBounds(340, 0, 88, 25);	
+		versionCombo.setBounds(340, 0, 88, 25);			
 		
-		final ProjectConnector pcConnector = new ProjectConnector();
-		ArrayList<String> rStrings = pcConnector.getProject();
-		for (String string : rStrings) {
-			projectSelectCombo.add(string);
-		}
 		
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
+		
+			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) {				
+				
 				int index = projectSelectCombo.getSelectionIndex();
 				
 				ArrayList<String> verList = pcConnector.getVersion(projectSelectCombo.getItem(index));
@@ -110,12 +109,17 @@ public class ExtensibilityComposite extends Composite {
 		
 		Label lblVersion = new Label(this, SWT.NONE);
 		lblVersion.setBounds(260, 8, 61, 17);
-		lblVersion.setText("Version:");
-		
-
-
+		lblVersion.setText("Version:");		
 	}
 
+	public void reloadProject(){
+		projectSelectCombo.removeAll();
+		rStrings = pcConnector.getProject();	
+		for (String string : rStrings) {
+			projectSelectCombo.add(string);
+		}
+	}
+	
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

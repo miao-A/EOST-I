@@ -23,6 +23,9 @@ import com.ibm.icu.text.DecimalFormat;
 
 public class ChangeabilityComposite extends Composite {
 
+	private ProjectConnector pcConnector = new ProjectConnector();
+	private ArrayList<String> rStrings;
+	private Combo projectSelectCombo = new Combo(this, SWT.NONE);
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -31,22 +34,16 @@ public class ChangeabilityComposite extends Composite {
 	public ChangeabilityComposite(Composite parent, int style) {
 		super(parent, style);	
 		
-		final Combo projectSelectCombo = new Combo(this, SWT.NONE);
 		final Combo versionCombo = new Combo(this, SWT.NONE);
 		projectSelectCombo.setBounds(111, 0, 98, 25);
 		versionCombo.setBounds(340, 0, 88, 25);	
-		
-		final ProjectConnector pcConnector = new ProjectConnector();
-		ArrayList<String> rStrings = pcConnector.getProject();
-		for (String string : rStrings) {
-			projectSelectCombo.add(string);
-		}
-		
+						
 		projectSelectCombo.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index = projectSelectCombo.getSelectionIndex();
+			
 				
 				ArrayList<String> verList = pcConnector.getVersion(projectSelectCombo.getItem(index));
 				versionCombo.removeAll();
@@ -215,6 +212,14 @@ public class ChangeabilityComposite extends Composite {
 		});
 	}
 
+	public void reloadProject(){
+		projectSelectCombo.removeAll();
+		rStrings = pcConnector.getProject();	
+		for (String string : rStrings) {
+			projectSelectCombo.add(string);
+		}
+	}
+	
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

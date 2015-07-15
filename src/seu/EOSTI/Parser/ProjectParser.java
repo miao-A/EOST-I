@@ -1,13 +1,9 @@
 package seu.EOSTI.Parser;
 
 
-import java.io.File;
-import java.util.Hashtable;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-
-
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -18,9 +14,7 @@ public class ProjectParser {
 	private String pathOfProject;
 	private String projectName;
 	private String version;
-
 	
-//	private static Vector<InfoOfExtensibility> vec = new Vector<>();
 	
 	public  ProjectParser(String pathOfProject,String projectName,String version) {
 		// TODO Auto-generated constructor stub
@@ -48,7 +42,7 @@ public class ProjectParser {
 		List<String> javafilelist = readFile.readJavaFiles();		
 //		String[] sourcepathEntries = javafilelist.toArray(new String[javafilelist.size()]);
 		String[] sourcepathEntries = {pathOfProject};
-		//jarpathEntries为项目依赖的jar包，sourcepathEntries为项目中java文件
+
 		parser.setEnvironment(jarpathEntries, sourcepathEntries, null, true);
 		
 		// enable binding	
