@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ClassChangeabilityConnector extends DBConnector{
 
@@ -262,6 +263,34 @@ public class ClassChangeabilityConnector extends DBConnector{
 				String str = rs.getString("importpkgName");
 				str += "@" +  rs.getString("importclassname");
 				rStrings.add(str);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+		}		
+		return rStrings;
+	}
+	
+	
+	public ArrayList<String> classImportpkg(String packageName){
+
+		ArrayList<String> rStrings = new ArrayList<String>();
+		
+		try {
+			ResultSet rs;
+			Statement stmt = connect.createStatement();
+			String cestr = "Select   distinct importpkgName, importClassName,classname  FROM eosti.class_packageinfo where pkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				String str = rs.getString("classname")+"+";
+				str += rs.getString("importpkgName");
+				str += "@" +  rs.getString("importclassname");
+				rStrings.add(str);				
 			}
 			
 		} catch (Exception e) {

@@ -4,6 +4,8 @@ import java.awt.Frame;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.awt.SWT_AWT;
@@ -32,6 +34,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import seu.EOSTI.Chart.ChangeabilityLineChart;
 import seu.EOSTI.Chart.ExtensibilityLineChart;
 import seu.EOSTI.Chart.LineChart;
+import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
 import seu.EOSTI.Parser.ChangeabilityDiff;
@@ -134,218 +137,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 				
 					System.out.println("chart print");
 					
-				}				
-				
-				
-				
-	/*			
-				
-				
-				{
-					Composite composite = new Composite(tabFolder, SWT.NONE);
-					changeDifftabItem.setControl(composite);
-					
-					final StyledText cDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-					cDiffText.setBounds(0, 93, 649, 348);
-					
-					cDiffText.setText("");
-					cDiffText.setEditable(false);
-					ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
-					ArrayList<String> list = projectInfoConnector.getVersion(projName);
-					final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
-					Rectangle rectangle = new Rectangle(0, 0, 200, 17);
-					for (int i = 1; i < list.size(); i++) {
-						//System.out.println(list.get(i-1)+" compare with " + list.get(i));
-						String textString = list.get(i-1)+" compare with " + list.get(i);
-						
-						final Button btnRadioButton = new Button(composite, SWT.RADIO);
-						btnRadioButton.setBounds(rectangle);
-						btnRadioButton.setText(textString);						
-						if (i%2==1) {							
-							rectangle.x = 2*rectangle.width;
-							
-						}else {
-							rectangle.x = 0;
-							rectangle.y += rectangle.height;
-						}
-						
-						btnRadioButton.addSelectionListener(new SelectionListener() {
-							
-							@Override
-							public void widgetSelected(SelectionEvent arg0) {
-								// TODO Auto-generated method stub
-								cDiffText.setText(btnRadioButton.getText());
-								String[] index = btnRadioButton.getText().split(" ");
-								
-								HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.diffInProject(index[0], index[index.length-1]);
-								String textString = new String();
-								for (String pkgName : diffmap.keySet()) {
-									
-									HashMap<String, List<String>> map = diffmap.get(pkgName);
-									if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
-										textString += "\npackage: " + pkgName;
-										
-										if (map.containsKey("+import")) {									
-											textString += "\n+import \t"+map.get("+import").size();
-											for (String string : map.get("+import")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("-import")) {									
-											textString += "\n-import \t"+map.get("-import").size();
-											for (String string : map.get("-import")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("+export")) {									
-											textString += "\n+export \t"+map.get("+export").size();
-											for (String string : map.get("+export")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("-export")) {									
-											textString += "\n-export \t"+map.get("-export").size();
-											for (String string : map.get("-export")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										
-									}else {
-										textString += "\nNo effect";
-									}							
-								}
-								
-								if (diffmap.size()==0) {
-									textString += "\nNo effect";
-								}
-								
-								cDiffText.append(textString+"\n\n");								
-								textAddColor(cDiffText);	
-								System.out.println("diff print");
-								
-							}
-
-							@Override
-							public void widgetDefaultSelected(
-									SelectionEvent arg0) {
-								// TODO Auto-generated method stub
-								
-							}
-							
-							
-						});						
-											
-					}		
-					
-				}
-				
-				
-				{
-					Composite composite = new Composite(tabFolder, SWT.NONE);
-					classChangeDiffTabItem.setControl(composite);
-					
-					final StyledText mcDiffText = new StyledText(composite, SWT.BORDER|SWT.V_SCROLL);
-					mcDiffText.setBounds(0, 93, 649, 348);
-					
-					mcDiffText.setText("");
-					mcDiffText.setEditable(false);
-					ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
-					ArrayList<String> list = projectInfoConnector.getVersion(projName);
-					final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
-					Rectangle rectangle = new Rectangle(0, 0, 200, 17);
-					for (int i = 1; i < list.size(); i++) {
-						//System.out.println(list.get(i-1)+" compare with " + list.get(i));
-						String textString = list.get(i-1)+" compare with " + list.get(i);
-						
-						final Button btnRadioButton = new Button(composite, SWT.RADIO);
-						btnRadioButton.setBounds(rectangle);
-						btnRadioButton.setText(textString);						
-						if (i%2==1) {							
-							rectangle.x = 2*rectangle.width;
-							
-						}else {
-							rectangle.x = 0;
-							rectangle.y += rectangle.height;
-						}
-						
-						btnRadioButton.addSelectionListener(new SelectionListener() {
-							
-							@Override
-							public void widgetSelected(SelectionEvent arg0) {
-								// TODO Auto-generated method stub
-								mcDiffText.setText(btnRadioButton.getText());
-								String[] index = btnRadioButton.getText().split(" ");
-								
-								HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.moreDiffInProject(index[0], index[index.length-1]);
-								String textString = new String();
-								for (String pkgName : diffmap.keySet()) {
-									
-									HashMap<String, List<String>> map = diffmap.get(pkgName);
-									if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
-										textString += "\npackage: " + pkgName;
-										
-										if (map.containsKey("+import")) {									
-											textString += "\n+import \t"+map.get("+import").size();
-											for (String string : map.get("+import")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("-import")) {									
-											textString += "\n-import \t"+map.get("-import").size();
-											for (String string : map.get("-import")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("+export")) {									
-											textString += "\n+export \t"+map.get("+export").size();
-											for (String string : map.get("+export")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										if (map.containsKey("-export")) {									
-											textString += "\n-export \t"+map.get("-export").size();
-											for (String string : map.get("-export")) {
-												textString += "\nName:\t"+string;
-											}
-										}
-										
-										
-									}else {
-										textString += "\nNo effect";
-									}							
-								}
-								
-								if (diffmap.size()==0) {
-									textString += "\nNo effect";
-								}
-								
-								mcDiffText.append(textString+"\n\n");								
-								textAddColor(mcDiffText);	
-								System.out.println("diff print");
-								
-							}
-
-							@Override
-							public void widgetDefaultSelected(
-									SelectionEvent arg0) {
-								// TODO Auto-generated method stub
-								
-							}
-							
-							
-						});						
-											
-					}		
-					
-				}
-				*/
+				}			
 				
 			}			
 		});
@@ -521,9 +313,129 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			System.out.println("diff print");
 					
 		}
+		
+		/*影响因子分析
+		 * {		
+			
+			ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
+			ArrayList<String> list = projectInfoConnector.getVersion(projName);
+			final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
+			String textString = version1+" compare with " + version2;
+			
+			ClassChangeabilityConnector preProject = new ClassChangeabilityConnector(projName, version1);
+			ClassChangeabilityConnector postProject = new ClassChangeabilityConnector(projName, version2);
+			
+			HashMap<String, ArrayList<String>> preHashMap=new HashMap<>();
+			for (String packageName : preProject.getpackageName()) {			
+				ArrayList<String> importlist = preProject.classImportpkg(packageName);
+		
+				preHashMap.put(packageName, importlist);		
+			}
+					
+			HashMap<String, ArrayList<String>> postHashMap=new HashMap<>();
+			for (String packageName : postProject.getpackageName()) {
+				ArrayList<String> importlist = postProject.classImportpkg(packageName);		
+				postHashMap.put(packageName, importlist);
+			}	
+			
+			Iterator<String> preIterator = preHashMap.keySet().iterator();
+			Iterator<String> postIterator = postHashMap.keySet().iterator();
+			HashMap<String, HashMap<String, List<String>>> diffMap = new HashMap<>();
+			while (preIterator.hasNext()) {		
+				String packageName = preIterator.next();
+				
+				if (postHashMap.containsKey(packageName)) {
+					ArrayList<String> prelist = preHashMap.get(packageName);
+					ArrayList<String> postlist = postHashMap.get(packageName);
+					if (prelist.containsAll(postlist)&&postlist.containsAll(prelist)) {
+						preIterator.remove();
+						postHashMap.remove(packageName);	
+					}else {
+						System.out.println(packageName);
+						System.out.println("something change");
+						HashMap<String, List<String>> map = diffInPackage(prelist,postlist);
+						diffMap.put(packageName, map);
+					}		
+						
+				}		
+			}			
+
+			for (String pkgName : diffMap.keySet()) {
+				
+				HashMap<String, List<String>> map = diffMap.get(pkgName);
+				for (String classname : map.keySet()) {
+					System.out.println(classname);
+					for (String string : map.get(classname)) {
+						
+						if (string.contains("+")) {
+							System.out.println("&&"+string);
+						}
+						if(string.contains("-")){
+							System.out.println("##"+string);
+						}
+					}
+				}
+				
+			}
+			
+			
+			System.out.println("diff print");
+					
+		}*/
 	}
 	
+/*//测试在此
+	private HashMap<String, List<String>> diffInPackage(ArrayList<String> prelist,ArrayList<String> postlist) {
 
+		HashMap<String, List<String>> map = new HashMap<>();		
+		for (String classname : prelist) {
+			if (!postlist.contains(classname)) {
+				String[] string = classname.split("\\+");
+				String keystring = string[0];
+
+				if (map.keySet().contains(keystring)) {
+					map.get(keystring).add("-"+string[1]);
+					
+				}else {
+					List<String> packageList = new LinkedList<>();
+					packageList.add("-"+string[1]);
+					map.put(keystring, packageList);
+				}
+				
+			}else {
+				String[] string = classname.split("\\+");
+				String keystring = string[0];
+				if (map.keySet().contains(keystring)) {
+					map.get(keystring).add(string[1]);
+					
+				}else {
+					List<String> packageList = new LinkedList<>();
+					packageList.add(string[1]);
+					map.put(keystring, packageList);
+				}
+			}
+		}
+		
+		for (String packagename : postlist) {
+			System.out.println(packagename);
+			if (!prelist.contains(packagename)) {
+//				addClasslList.add(classname);
+				String[] string = packagename.split("\\+");
+				String keystring = string[0];
+
+				if (map.keySet().contains(keystring)) {
+					map.get(keystring).add("+"+string[1]);
+					
+				}else {
+					List<String> packagList = new LinkedList<>();
+					packagList.add("+"+string[1]);
+					map.put(keystring, packagList);
+				}
+			}
+		}		
+		
+		return map;
+	}*/
 	
 	private void textAddColor(StyledText styledText){
 		String text = styledText.getText();
