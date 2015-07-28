@@ -21,10 +21,16 @@ public class CompatibilityComposite extends Composite {
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		tabItem.setText("\u6784\u4EF6\u517C\u5BB9\u6027");
+		tabItem.setText("\u5185\u90E8\u517C\u5BB9\u6027");
 		
-		Composite composite = new ComponentCompatibilityComposite(tabFolder, SWT.NONE);
+		Composite composite = new InnerCompatibilityComposite(tabFolder, SWT.NONE);
 		tabItem.setControl(composite);
+		
+		CTabItem tabItem_2 = new CTabItem(tabFolder, SWT.NONE);
+		tabItem_2.setText("\u5916\u90E8\u517C\u5BB9\u6027");
+		
+		Composite composite_2 = new Composite(tabFolder, SWT.NONE);
+		tabItem_2.setControl(composite_2);
 		
 		CTabItem tabItem_1 = new CTabItem(tabFolder, SWT.NONE);
 		tabItem_1.setText("\u7248\u672C\u517C\u5BB9\u6027");

@@ -100,9 +100,9 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 	public void endVisit(CompilationUnit node){
 		//可用于数据库插入，数据库建成后上述get方法可删除
 	
-		System.out.println("----------------------------------------------------------");
+/*		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageString );
-
+*/
 		ClassChangeabilityConnector connector = new ClassChangeabilityConnector(projectName,version);
 		for (String string : importStrings) {
 			
@@ -123,7 +123,7 @@ public class ChangeabilityOfClassVisitor extends ASTVisitor{
 			connector.importNameUpatedate(packageString, classString, ipn, icn);
 		}
 		
-		System.out.println("----------------------------------------------------------");		
-		importStrings.clear();
+/*		System.out.println("----------------------------------------------------------");		
+*/		importStrings.clear();
 	}
 }

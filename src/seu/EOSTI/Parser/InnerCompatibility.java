@@ -11,65 +11,95 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
+import seu.EOSTI.ASTVisitor.InnerCompatibilityRequestor;
 import seu.EOSTI.ASTVisitor.VersionCompatibilityRequestor;
 import seu.EOSTI.Model.AbstractClassModel;
-
 import seu.EOSTI.Model.ConstructorMethodModel;
 import seu.EOSTI.Model.MethodModel;
+import seu.EOSTI.Model.UnCompatibilityMIModel;
 import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
 import seu.EOSTI.modelcompatibilityrecoder.CompatibilityStatus;
 import seu.EOSTI.modelcompatibilityrecoder.ConstructorMethodRecoder;
 import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
 
-public class Compatibility {
+public class InnerCompatibility {
 	
-	private String oldPathOfComponet;
-	private String newPathOfComponet;
-	private List<AbstractClassModel> changeRecoder;
+	private String pathOfComponetFirst;
+	private String pathOfComponetSecond;
+/*	private List<AbstractClassModel> changeRecoder;
 	
 	private List<AbstractClassModel> removedType = new LinkedList<>();
-	private List<AbstractClassModel> newType = new LinkedList<>();
-	private List<ClassCompatibilityRecoder> compatibilityRecoders = new LinkedList<>();
-	private List<ClassCompatibilityRecoder> unCompatibilityRecoders = new LinkedList<>();
+	private List<AbstractClassModel> newType = new LinkedList<>();*/
+/*	private List<ClassCompatibilityRecoder> compatibilityRecoders = new LinkedList<>();
+	private List<ClassCompatibilityRecoder> unCompatibilityRecoders = new LinkedList<>();*/
+	private List<UnCompatibilityMIModel> unCompatibilityMIModels = new LinkedList<>();
 //	private List<AbstractClassModel> unchangedClassModels = new LinkedList<>();
 	
 	
 	private List<ClassCompatibilityRecoder>  typeRecoders = new LinkedList<>();
 	
-	public Compatibility(String oldPathOfComponet,String newPathOfComponet) {
+	public InnerCompatibility(String pathOfProject,String pathOfComponet) {
 		// TODO Auto-generated constructor stub
-		this.oldPathOfComponet = oldPathOfComponet;
-		this.newPathOfComponet = newPathOfComponet;
-		changeRecoder = new LinkedList<>();
+		this.pathOfComponetFirst = pathOfProject;
+		this.pathOfComponetSecond = pathOfComponet;
 		
-		compatibilityParser(this.parserComponet(oldPathOfComponet),this.parserComponet(newPathOfComponet));		
+		unCompatibilityMIModels = innerCompatibilityParser(pathOfProject,pathOfComponet);
+		for (UnCompatibilityMIModel unCompatibilityMIModel : unCompatibilityMIModels) {
+			unCompatibilityMIModel.getMessage();
+		}		
 	}
 	
-	public void compatibilityParser(List<AbstractClassModel> oldModels,List<AbstractClassModel> newModels){
-
-		for (AbstractClassModel oldTypeModel : oldModels) {
-			if (!newModels.contains(oldTypeModel)) {
-				removedType.add(oldTypeModel);
+	
+	public List<UnCompatibilityMIModel> innerCompatibilityParser(String ProjectOfPath, String pathOfTestComponet){
+		
+		List<AbstractClassModel> models = parserComponet(pathOfTestComponet);
+		List<String> packageList = new ArrayList<>();
+		for (AbstractClassModel abstractClassModel : models) {
+			if (!packageList.contains(abstractClassModel.getPackage())) {
+				packageList.add(abstractClassModel.getPackage());
 			}			
 		}
+		// create a AST parser
+		ASTParser parser;
+		parser = ASTParser.newParser(AST.JLS4);
+			
+		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
+		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
+		parser.setCompilerOptions(complierOptions);
 		
-		for (AbstractClassModel newTypeModel : newModels) {
-			if (!oldModels.contains(newTypeModel)) {
-				newType.add(newTypeModel);
-			}
-		}
+		// enable binding	
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setResolveBindings(true);
+		parser.setBindingsRecovery(true);
+		parser.setStatementsRecovery(true);
+			
+				
+		InnerCompatibilityRequestor componentRequertor = new InnerCompatibilityRequestor(packageList);
+		ReadFile readFile = new ReadFile(ProjectOfPath);
+		List<String> filelist = readFile.readJavaFiles();
 		
-		for(AbstractClassModel newTypeModel : newModels) {
-			if(oldModels.contains(newTypeModel)){
-				int index = oldModels.indexOf(newTypeModel);				
-				ClassCompatibilityRecoder classCompatibilityRecoder = new ClassCompatibilityRecoder(oldModels.get(index),newTypeModel);
-				if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.COMPATIBILITY)) {
-					compatibilityRecoders.add(classCompatibilityRecoder);
-				}else if (classCompatibilityRecoder.getCompatibilityStatus().equals(CompatibilityStatus.UNCOMPATIBILITY)) {
-					unCompatibilityRecoders.add(classCompatibilityRecoder);
-				}
-			}
-		}		
+/*		ReadFile readTestedFile = new ReadFile(pathOfTestComponet);
+		filelist.addAll(readTestedFile.readJavaFiles());*/
+				
+		//////////////////////
+		List<String> jarfilelist = readFile.readJarFiles();		
+		String[] jarpathEntries = jarfilelist.toArray(new String[jarfilelist.size()]);
+
+				/////////////////////
+				
+				
+		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
+		System.out.println("fileread over!");
+				
+		//parser.setEnvironment(null, null, null, true);
+		parser.setEnvironment(jarpathEntries, null, null, true);
+				
+		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);
+		System.out.println("comparing... ...");
+		//		return componentRequertor.getTypeModels();
+		return componentRequertor.getuncompatibilityMIModels();
+		
+		
 	}	
 	
 	public List<AbstractClassModel> parserComponet(String pathOfComponet)  {
@@ -112,7 +142,11 @@ public class Compatibility {
 		return componentRequertor.getTypeModels();
 	}		
 	
-	public List<ClassCompatibilityRecoder> getTypeChangeRecoders(){
+	public List<UnCompatibilityMIModel> getunCompatibilityMIModels(){
+		return unCompatibilityMIModels;
+	}
+	
+	/*public List<ClassCompatibilityRecoder> getTypeChangeRecoders(){
 		return unCompatibilityRecoders;
 	}
 	
@@ -237,5 +271,5 @@ public class Compatibility {
 			}		
 						
 		}
-	}
+	}*/
 }

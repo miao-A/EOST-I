@@ -56,14 +56,14 @@ import seu.EOSTI.Model.ClassModel;
 import seu.EOSTI.Model.TypeModel;
 import seu.EOSTI.Model.WildCardTypeModel;
 
-public class ComponentVisitor extends ASTVisitor {
+public class VersionCompatibilityVisitor extends ASTVisitor {
 
 	private ClassModel classModel;
 	private EnumModel enumModel;
 	private String packageName = null;
 	private HashSet<String> importPackageStrings;
 	
-	public ComponentVisitor(){
+	public VersionCompatibilityVisitor(){
 		classModel = new ClassModel();
 		enumModel = new EnumModel();
 		importPackageStrings = new HashSet<String>();
@@ -90,6 +90,9 @@ public class ComponentVisitor extends ASTVisitor {
 
 		if (binding == null) {
 			System.out.println("simpleType binding is null in class:"  );
+			return true;
+		}
+		if (binding.getPackage()==null) {
 			return true;
 		}
 
@@ -396,21 +399,21 @@ public class ComponentVisitor extends ASTVisitor {
 				TypeModel typeModel = null;
 				Type type = methodDeclaration.getReturnType2();
 				if (type instanceof PrimitiveType) {
-					System.out.println(type.getClass().getName() + " "
-							+ type.toString());
+					//System.out.println(type.getClass().getName() + " "
+					//		+ type.toString());
 					typeModel = new PrimitiveTypeModel(type.toString());
 				} else if (type instanceof ArrayType) {
-					System.out.println(type.getClass().getName() + " "
+					/*System.out.println(type.getClass().getName() + " "
 							+ ((ArrayType) type).getComponentType().toString()
 							+ " " + ((ArrayType) type).getDimensions() + " "
-							+ ((ArrayType) type).getElementType().toString());
+							+ ((ArrayType) type).getElementType().toString());*/
 					typeModel = new ArrayTypeModel(((ArrayType) type)
 							.getComponentType().toString(),
 							((ArrayType) type).getDimensions(),
 							((ArrayType) type).getElementType().toString());
 				} else if (type instanceof SimpleType) {
-					System.out.println(type.getClass().getName() + " "
-							+ ((SimpleType) type).getName());
+					/*System.out.println(type.getClass().getName() + " "
+							+ ((SimpleType) type).getName());*/
 					Name name = ((SimpleType) type).getName();
 					if (name instanceof QualifiedName) {
 						((QualifiedName) name).getQualifier();
@@ -423,10 +426,10 @@ public class ComponentVisitor extends ASTVisitor {
 
 					if (type.resolveBinding() != null) {
 						if (type.resolveBinding().getSuperclass() != null) {
-							System.out
+							/*System.out
 									.println(((SimpleType) type)
 											.resolveBinding().getSuperclass()
-											.getName());
+											.getName());*/
 							((SimpleTypeModel) typeModel)
 									.setSuperClass(((SimpleType) type)
 											.resolveBinding().getSuperclass()
@@ -434,30 +437,30 @@ public class ComponentVisitor extends ASTVisitor {
 						}
 					}
 				} else if (type instanceof QualifiedType) {
-					System.out.println(type.getClass().getName());
+					//System.out.println(type.getClass().getName());
 					QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
 					qualifiedTypeModel.setTypeName(((QualifiedType) type)
 							.getName().toString());
 					qualifiedTypeModel.setQualifiedName(((QualifiedType) type)
 							.getQualifier().toString());
-					System.out.println(qualifiedTypeModel.getFullName());
+					//System.out.println(qualifiedTypeModel.getFullName());
 
 				} else if (type instanceof WildcardType) {
-					System.out.println(type.getClass().getName());
+					//System.out.println(type.getClass().getName());
 					typeModel = new WildCardTypeModel(
 							((WildcardType) type).isUpperBound(),
 							((WildcardType) type).getBound());
 				} else if (type instanceof ParameterizedType) {
-					System.out.println(type.getClass().getName() + " "
+					/*System.out.println(type.getClass().getName() + " "
 							+ ((ParameterizedType) type).getType().toString()
-							+ " ");
+							+ " ");*/
 					typeModel = new ParameterizedTypeModel(
 							((ParameterizedType) type).getType().toString());
 					List<Type> types = ((ParameterizedType) type).typeArguments();
 					((ParameterizedTypeModel) typeModel)
 							.setTypeArguments(types);
 				} else if (type instanceof UnionType) {
-					System.out.println("Union");
+					//System.out.println("Union");
 				}
 
 				methodModel.setReturnType(typeModel);
@@ -496,17 +499,17 @@ public class ComponentVisitor extends ASTVisitor {
 					TypeModel typeModel = null;
 					Type type = ((MethodDeclaration) bodyDeclaration).getReturnType2();
 					if (type instanceof PrimitiveType) {
-						System.out.println(type.getClass().getName() + " "
-								+ type.toString());
+						/*System.out.println(type.getClass().getName() + " "
+								+ type.toString());*/
 						typeModel = new PrimitiveTypeModel(type.toString());
 					} else if (type instanceof ArrayType) {
-						System.out.println(type.getClass().getName()
+						/*System.out.println(type.getClass().getName()
 								+ " "
 								+ ((ArrayType) type).getComponentType().toString()
 								+ " "
 								+ ((ArrayType) type).getDimensions()
 								+ " "
-								+ ((ArrayType) type).getElementType().toString());
+								+ ((ArrayType) type).getElementType().toString());*/
 						typeModel = new ArrayTypeModel(((ArrayType) type).getComponentType().toString(),
 								((ArrayType) type).getDimensions(),
 								((ArrayType) type).getElementType().toString());
@@ -528,25 +531,25 @@ public class ComponentVisitor extends ASTVisitor {
 							}
 						}
 					} else if (type instanceof QualifiedType) {
-						System.out.println(type.getClass().getName());
+						//System.out.println(type.getClass().getName());
 						QualifiedTypeModel qualifiedTypeModel = new QualifiedTypeModel();
 						qualifiedTypeModel.setTypeName(((QualifiedType) type)
 								.getName().toString());
 						qualifiedTypeModel
 								.setQualifiedName(((QualifiedType) type)
 										.getQualifier().toString());
-						System.out.println(qualifiedTypeModel.getFullName());
+						//System.out.println(qualifiedTypeModel.getFullName());
 
 					} else if (type instanceof WildcardType) {
-						System.out.println(type.getClass().getName());
+						//System.out.println(type.getClass().getName());
 						typeModel = new WildCardTypeModel(
 								((WildcardType) type).isUpperBound(),
 								((WildcardType) type).getBound());
 					} else if (type instanceof ParameterizedType) {
-						System.out.println(type.getClass().getName()
+						/*System.out.println(type.getClass().getName()
 								+ " "
 								+ ((ParameterizedType) type).getType()
-										.toString() + " ");
+										.toString() + " ");*/
 						typeModel = new ParameterizedTypeModel(
 								((ParameterizedType) type).getType().toString());
 						List<Type> types = ((ParameterizedType) type).typeArguments();

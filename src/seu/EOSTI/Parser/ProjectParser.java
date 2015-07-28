@@ -26,10 +26,10 @@ public class ProjectParser {
 	
 	public void parser()  {
 		// create a AST parser
-		parser = ASTParser.newParser(AST.JLS4);
+		parser = ASTParser.newParser(AST.JLS3);
 	
 		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
-		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7);
+		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_6);
 		parser.setCompilerOptions(complierOptions);
 		// set the environment for the AST parsers
 		//String libPath = pathOfLib;
@@ -62,11 +62,18 @@ public class ProjectParser {
 	
 	private void runExtensiblityDectector(){
 		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);		
-		
 	}
 	
 	private void runChangeabilityDector(){
 		Changeability changeability = new Changeability(parser, pathOfProject,projectName,version);
+	}
+	
+	public void runOuterCompatibilityDectector(){
+		OuterCompatibility outerCompatibility = new OuterCompatibility(parser, pathOfProject,projectName,version);		
+	}
+	
+	public void runInnerCompatibilityDectector(String projectPath,String pathOne,String version){
+		InnerCompatibility InnerCompatibility = new InnerCompatibility(projectPath,pathOne);
 	}
 
 	public void getInfoOfProject() {

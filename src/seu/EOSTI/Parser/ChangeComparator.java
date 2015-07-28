@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
-import seu.EOSTI.ASTVisitor.ComponentRequertor;
+import seu.EOSTI.ASTVisitor.VersionCompatibilityRequestor;
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ClassModel;
 import seu.EOSTI.Model.ConstructorMethodModel;
@@ -86,7 +86,7 @@ public class ChangeComparator {
 		parser.setStatementsRecovery(true);
 		
 		
-		ComponentRequertor componentRequertor = new ComponentRequertor();
+		VersionCompatibilityRequestor componentRequertor = new VersionCompatibilityRequestor();
 		ReadFile readFile = new ReadFile(pathOfComponet);		
 		List<String> filelist = readFile.readJavaFiles();
 		

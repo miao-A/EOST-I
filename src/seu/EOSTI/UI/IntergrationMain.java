@@ -20,7 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TableItem;
 
-import seu.EOSTI.ASTVisitor.ExtendsRequestor;
+
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.DBConnector;
@@ -37,14 +37,17 @@ public class IntergrationMain {
 		
 	public static void main(String args[]) {
 		
-		String projectPath = "D:/ProjectOfHW/src";
-		String projectName = "jdk";
-		String version = "1.7.0";
-
+		//String projectPath = "D:/workspace/Hello";
+		String projectName = "ss";
+		String version = "ss";
+		
+		String projectPath = "D:\\ProjectOfHW\\jEditor\\jEditor0.2";
+		String pathOfOne = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\app";
+//		String pathOfTwo = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\diff";
 		
 		ProjectParser projectParser = new ProjectParser(projectPath,projectName,version);
-//		projectParser.parser();
-		projectParser.runDectors();
+		projectParser.parser();
+		projectParser.runInnerCompatibilityDectector(projectPath,pathOfOne,version);
 	}
 	
 }

@@ -15,18 +15,18 @@ import org.eclipse.jdt.core.dom.FileASTRequestor;
 import seu.EOSTI.Model.AbstractClassModel;
 import seu.EOSTI.Model.ClassModel;
 
-public class ComponentRequertor extends FileASTRequestor {
+public class VersionCompatibilityRequestor extends FileASTRequestor {
 
 
 	private List<AbstractClassModel> typeModels;
 	
-	public ComponentRequertor(){
+	public VersionCompatibilityRequestor(){
 		typeModels = new LinkedList<>();
 	}	
 
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-		ComponentVisitor visitor = new ComponentVisitor();
+		VersionCompatibilityVisitor visitor = new VersionCompatibilityVisitor();
 		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
 		if (visitor.getTypeModel()!=null) {

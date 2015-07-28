@@ -70,7 +70,7 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		ITypeBinding binding = node.resolveBinding();
 
 		if (binding == null) {
-			System.out.println("simpleType binding is null in class:" +classString );
+			//System.out.println("simpleType binding is null in class:" +classString );
 			return true;
 		}
 		String importpackageName = binding.getPackage().getName();

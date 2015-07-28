@@ -8,17 +8,20 @@ import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 
 
-public class ExtendsRequestor extends FileASTRequestor {
+public class OuterCompatibilityRequestor extends FileASTRequestor {
 
-
+	private String projectName;
+	private String version;
 	
-	public ExtendsRequestor(){
-
+	
+	public OuterCompatibilityRequestor(String projectName,String version){
+		this.projectName = projectName;
+		this.version = version;
 	}	
 	
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-		ExtendsVisitor visitor = new ExtendsVisitor();
+		OuterCompatibilityVisitor visitor = new OuterCompatibilityVisitor();
 		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
 	}
