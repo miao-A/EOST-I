@@ -2,9 +2,13 @@ package seu.EOSTI.ASTVisitor;
 
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
+
+import seu.EOSTI.Model.JarClassModel;
 
 
 
@@ -12,23 +16,29 @@ public class OuterCompatibilityRequestor extends FileASTRequestor {
 
 	private String projectName;
 	private String version;
+	private List<JarClassModel> jarList = new ArrayList<>();
+	private List<JarClassModel> unCompatibilityJarList = new ArrayList<>();
 	
-	
-	public OuterCompatibilityRequestor(String projectName,String version){
+	public OuterCompatibilityRequestor(String projectName,String version, List<JarClassModel> list){
 		this.projectName = projectName;
 		this.version = version;
+		this.jarList = list;
 	}	
 	
 	@Override
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-		OuterCompatibilityVisitor visitor = new OuterCompatibilityVisitor();
+		OuterCompatibilityVisitor visitor = new OuterCompatibilityVisitor(jarList);
 		ast.accept(visitor);
 		super.acceptAST(sourceFilePath, ast);
+		this.unCompatibilityJarList.addAll(visitor.getunCompatibilityList());		
 	}
 
 	public void ShowInfoOfChangeability() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+	}
+	
+	public List<JarClassModel> getunCompatibilityList() {
+		return unCompatibilityJarList;
 	}
 	
 	

@@ -29,7 +29,7 @@ public class CompatibilityComposite extends Composite {
 		CTabItem tabItem_2 = new CTabItem(tabFolder, SWT.NONE);
 		tabItem_2.setText("\u5916\u90E8\u517C\u5BB9\u6027");
 		
-		Composite composite_2 = new Composite(tabFolder, SWT.NONE);
+		Composite composite_2 = new OuterCompatibilityComposite(tabFolder, SWT.NONE);
 		tabItem_2.setControl(composite_2);
 		
 		CTabItem tabItem_1 = new CTabItem(tabFolder, SWT.NONE);

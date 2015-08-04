@@ -4,9 +4,12 @@ package seu.EOSTI.Parser;
 
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+
+import seu.EOSTI.Model.JarClassModel;
 
 public class ProjectParser {
 
@@ -26,11 +29,12 @@ public class ProjectParser {
 	
 	public void parser()  {
 		// create a AST parser
-		parser = ASTParser.newParser(AST.JLS3);
+		parser = ASTParser.newParser(AST.JLS4);
 	
-		Map<String,String> complierOptions= JavaCore.getDefaultOptions();
-		complierOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_6);
-		parser.setCompilerOptions(complierOptions);
+		Map<String,String> compilerOptions= JavaCore.getDefaultOptions();
+//		compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_6);
+		compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
+		parser.setCompilerOptions(compilerOptions);
 		// set the environment for the AST parsers
 		//String libPath = pathOfLib;
 		ReadFile readFile = new ReadFile(pathOfProject);
@@ -69,12 +73,22 @@ public class ProjectParser {
 	}
 	
 	public void runOuterCompatibilityDectector(){
-		OuterCompatibility outerCompatibility = new OuterCompatibility(parser, pathOfProject,projectName,version);		
+		OuterCompatibility outerCompatibility = new OuterCompatibility(pathOfProject,version);
+		
+		String jarPath = "D:\\test\\jfreechart-1.0.19.jar";
+		String dependPath = "D:\\test\\TestJar";
+		outerCompatibility.jarCompatibility(jarPath, dependPath);
+		List<JarClassModel> lists = outerCompatibility.getUncompatibilityClassModels();
+		for (JarClassModel jarClassModel : lists) {
+			System.out.println(jarClassModel.getClassName());
+			System.out.println(jarClassModel.getmethod().get(0).getMethodName());
+		}
+		
 	}
 	
-	public void runInnerCompatibilityDectector(String projectPath,String pathOne,String version){
+	/*public void runInnerCompatibilityDectector(String projectPath,String pathOne,String version){
 		InnerCompatibility InnerCompatibility = new InnerCompatibility(projectPath,pathOne);
-	}
+	}*/
 
 	public void getInfoOfProject() {
 		System.out.println("InfoOfProject"+pathOfProject);				
