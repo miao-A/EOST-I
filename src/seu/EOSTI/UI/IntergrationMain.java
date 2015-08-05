@@ -53,10 +53,10 @@ public class IntergrationMain {
 		String pathOfOne = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\app";*/
 //		String pathOfTwo = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\diff";
 		
-		ProjectParser projectParser = new ProjectParser(projectPath,projectName,version);
+/*		ProjectParser projectParser = new ProjectParser(projectPath,projectName,version);
 		projectParser.parser();
-		projectParser.runOuterCompatibilityDectector();
-		/*OuterCompatibility outerCompatibility = new OuterCompatibility(projectPath,version);
+		projectParser.runOuterCompatibilityDectector();*/
+		OuterCompatibility outerCompatibility = new OuterCompatibility(projectPath,version);
 		if (outerCompatibility.jdkCompatibility("1.4")) {
 			
 			
@@ -66,7 +66,7 @@ public class IntergrationMain {
 				System.out.println(string);
 			}
 			System.out.println("≤ªºÊ»›");
-		}*/
+		}
 		
     
     	

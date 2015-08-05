@@ -1,13 +1,12 @@
 package seu.EOSTI.UI;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
@@ -16,34 +15,28 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 
-import seu.EOSTI.Model.AbstractClassModel;
-import seu.EOSTI.Model.ConstructorMethodModel;
-import seu.EOSTI.Model.MethodModel;
+import seu.EOSTI.Model.JarClassModel;
 import seu.EOSTI.Model.UnCompatibilityMIModel;
-import seu.EOSTI.Parser.Compatibility;
 import seu.EOSTI.Parser.InnerCompatibility;
-import seu.EOSTI.modelcompatibilityrecoder.ChangeStatus;
-import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.ConstructorMethodRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
+import seu.EOSTI.Parser.OuterCompatibility;
 
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.jface.viewers.TableViewer;
 
 public class OuterCompatibilityComposite extends Composite {
 	private Text pathOfProjectText;
-	private Text componentOfProjectText;
-	private Table uncompatibilityTable;
+	private Text jarPathText;
+	private Table jdkuncompatibilityTable;
 	private TableEditor editor = null;
 	
 	String strings = new String();
+	private Text jarDependPathText;
+	private Table jaruncompatibilityTable;
+	private Table table;
 
 	/**
 	 * Create the composite.
@@ -54,15 +47,19 @@ public class OuterCompatibilityComposite extends Composite {
 		super(parent, style);
 		
 		Label label = new Label(this, SWT.NONE);
-		label.setBounds(10, 13, 103, 17);
+		label.setAlignment(SWT.RIGHT);
+		label.setBounds(39, 13, 103, 17);
 		label.setText("\u9879\u76EE\u8DEF\u5F84\uFF1A");
 		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("\u9879\u76EE\u6784\u4EF6\u8DEF\u5F84\uFF1A");
-		label_1.setBounds(10, 116, 103, 17);
+		Label lbljar = new Label(this, SWT.NONE);
+		lbljar.setAlignment(SWT.RIGHT);
+		lbljar.setText("\u5916\u90E8jar\u5305\u8DEF\u5F84\uFF1A");
+		lbljar.setBounds(39, 114, 103, 17);
 		
 		pathOfProjectText = new Text(this, SWT.BORDER);
-		pathOfProjectText.setBounds(119, 10, 375, 22);
+		pathOfProjectText.setBounds(148, 10, 346, 22);
+		
+		
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -77,17 +74,14 @@ public class OuterCompatibilityComposite extends Composite {
 				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2");//"D:/ProjectOfHW/junit/junit3.4"
 				folderDialog.open();
 				
-				pathOfProjectText.setText(folderDialog.getFilterPath());
-				
-			}
-			
-			
+				pathOfProjectText.setText(folderDialog.getFilterPath());				
+			}			
 		});
 		btnNewButton.setBounds(500, 10, 53, 22);
 		btnNewButton.setText("\u8DEF\u5F84...");
 		
-		componentOfProjectText = new Text(this, SWT.BORDER);
-		componentOfProjectText.setBounds(119, 111, 375, 22);
+		jarPathText = new Text(this, SWT.BORDER);
+		jarPathText.setBounds(148, 111, 346, 22);
 		
 		Button button = new Button(this, SWT.NONE);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -96,30 +90,33 @@ public class OuterCompatibilityComposite extends Composite {
 				
 				Display display = Display.getDefault();
 				Shell shell = new Shell(display);
-				DirectoryDialog folderDialog = new DirectoryDialog(shell);
-				
-				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2/src/org/jeditor/app");
-				folderDialog.open();
-				
-				componentOfProjectText.setText(folderDialog.getFilterPath());
-				
+				FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+				fileDialog.setText("选择jar文件");
+				fileDialog.setFilterPath("D:\\test");
+				fileDialog.setFileName("jfreechart-1.0.19.jar");
+				fileDialog.open();
+								
+				jarPathText.setText(fileDialog.getFilterPath()+"\\"+fileDialog.getFileName());				
 			}
 		});
 		button.setBounds(500, 111, 53, 22);
 		button.setText("\u8DEF\u5F84...");
 		
-		uncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		uncompatibilityTable.setBounds(10, 193, 711, 333);
-		uncompatibilityTable.setHeaderVisible(true);
-		uncompatibilityTable.setLinesVisible(true);
-
+		jdkuncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		jdkuncompatibilityTable.setBounds(10, 204, 711, 160);
+		jdkuncompatibilityTable.setHeaderVisible(false);
+		jdkuncompatibilityTable.setLinesVisible(true);
 		
-		editor = new TableEditor(uncompatibilityTable);
+		jaruncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		jaruncompatibilityTable.setLinesVisible(true);
+		jaruncompatibilityTable.setHeaderVisible(false);
+		jaruncompatibilityTable.setBounds(10, 384, 711, 160);
+		
+		/*editor = new TableEditor(jdkuncompatibilityTable);
 		editor.horizontalAlignment = SWT.LEFT;
-		editor.grabHorizontal = true;
+		editor.grabHorizontal = true;*/
 		
-		String[] tableHeader = {"        包名        ","        位置         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
+		/*String[] tableHeader = {"        包名        ","        位置         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
 			TableColumn tableColumn = new TableColumn(uncompatibilityTable, SWT.NONE);
@@ -128,57 +125,169 @@ public class OuterCompatibilityComposite extends Composite {
 			tableColumn.setMoveable(false); 
 	    	tableColumn.pack();
 	    	
+	    }*/
+		
+		
+		
+		Label lblJava = new Label(this, SWT.NONE);
+		lblJava.setBounds(81, 62, 61, 17);
+		lblJava.setText("Java\u7248\u672C\uFF1A");
+		
+		final Combo jdkVersionCombo = new Combo(this, SWT.NONE);
+		jdkVersionCombo.setBounds(148, 59, 88, 25);
+		String[] comboItems = {"1.7","1.6","1.5","1.4"};
+		jdkVersionCombo.setItems(comboItems);
+		jdkVersionCombo.select(0);
+		
+		String[] tableHeader = {"---------------------------","---------------------------------------------------------------------------"};	
+		for (int i = 0; i < tableHeader.length; i++)  
+	    {  					
+			TableColumn tableColumn = new TableColumn(jdkuncompatibilityTable, SWT.NONE);
+			tableColumn.setText(tableHeader[i]);  
+			// 设置表头可移动，默认为false  
+			tableColumn.setMoveable(true); 
+	    	tableColumn.pack();
+	    	
 	    }
+		
+		for (int i = 0; i < tableHeader.length; i++)  
+	    {  					
+			TableColumn tableColumn = new TableColumn(jaruncompatibilityTable, SWT.NONE);
+			tableColumn.setText(tableHeader[i]);  
+			// 设置表头可移动，默认为false  
+			tableColumn.setMoveable(true); 
+	    	tableColumn.pack();
+	    	
+	    }
+		
+		Label lbljar_1 = new Label(this, SWT.NONE);
+		lbljar_1.setAlignment(SWT.RIGHT);
+		lbljar_1.setText("\u5916\u90E8jar\u5305\u4F9D\u8D56\u5305\u8DEF\u5F84\uFF1A");
+		lbljar_1.setBounds(14, 139, 128, 17);
+		
+		Label label_1 = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
+		label_1.setBounds(0, 51, 577, 2);
+		
+		Label label_2 = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
+		label_2.setBounds(0, 94, 577, 2);
+		
+		Label label_3 = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
+		label_3.setBounds(0, 167, 577, 2);
+		
+		jarDependPathText = new Text(this, SWT.BORDER);
+		jarDependPathText.setBounds(148, 139, 346, 22);
 		
 		Button CompatibilityBtn = new Button(this, SWT.NONE);		
 		CompatibilityBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {				
-				uncompatibilityTable.removeAll();				
+			public void widgetSelected(SelectionEvent e) {
+				jdkuncompatibilityTable.removeAll();
+				jaruncompatibilityTable.removeAll();
 				
+						
 				String pathOfProject = pathOfProjectText.getText(); // "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
-				String componentOfProject = componentOfProjectText.getText(); //"D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
-								
-				InnerCompatibility innerCompatibility = new InnerCompatibility(pathOfProject, componentOfProject);
-				List<UnCompatibilityMIModel> unCompatibilityMIModels = innerCompatibility.getunCompatibilityMIModels();					
-
-				if (unCompatibilityMIModels.size() == 0) {
-					System.out.println("构件在当前程序内兼容");
-				}
+				String jarPath = jarPathText.getText(); //"D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
+				String jarDependPath = jarDependPathText.getText();	
 				
+				int jdkIndex = jdkVersionCombo.getSelectionIndex();
 				
-				
-				for (UnCompatibilityMIModel unCompatibilityMIModel : unCompatibilityMIModels) {
-					//unCompatibilityMIModel.getMessage();
+				OuterCompatibility outerCompatibility = new OuterCompatibility(pathOfProject, null);
+				if (outerCompatibility.jdkCompatibility(jdkVersionCombo.getItem(jdkIndex))) {
 					
-				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
-				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getPathOfFile(),
-				    		unCompatibilityMIModel.getFromPackageName(),unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
-				    		unCompatibilityMIModel.getRealArguments()};
-				    item.setText(string);
-				}				
-					
-
-				if (unCompatibilityMIModels.size()>0) {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});
+					String[] tableHeader = {"        兼容        ","        "+jdkVersionCombo.getItem(jdkIndex)+"         "};	
+					TableItem item = new TableItem(jdkuncompatibilityTable,SWT.NONE);
+					item.setText(tableHeader);
+					/*for (int i = 0; i < tableHeader.length; i++)  
+				    {  					
+						TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+						tableColumn.setText(tableHeader[i]);  
+						// 设置表头可移动，默认为false  
+						tableColumn.setMoveable(false); 
+				    	tableColumn.pack();
+				    	
+				    }	*/			
+	
 				}else {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"该构件与程序兼容"});
+					TableItem item =null;
+					System.out.println("不兼容"+jdkVersionCombo.getItem(jdkIndex));
+					
+					String[] tableHeader = {"        不兼容        ","        "+jdkVersionCombo.getItem(jdkIndex)+"         "};
+					item = new TableItem(jdkuncompatibilityTable,SWT.NONE);
+					item.setText(tableHeader);
+					
+					
+					List<String> lists = outerCompatibility.getuncompatibilityfileList();					
+					for (String string : lists) {
+						item = new TableItem(jdkuncompatibilityTable,SWT.NONE);
+						String[] strings= {"位置",string};
+						item.setText(strings);				
+						
+					}
 				}
 				
+				
+				if (jarPath != "") {
+					if (outerCompatibility.jarCompatibility(jarPath, jarDependPath)) {
+						
+						
+						String[] tableHeader = {"        兼容        ","        "+jarPath+"         "};	
+						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
+						item.setText(tableHeader);
+						
+						System.out.println("兼容"+jarPath);
+					}else {
+						System.out.println("不兼容"+jarPath);
+						String[] tableHeader = {"        不兼容        ","        "+jarPath+"         "};	
+						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
+						item.setText(tableHeader);
+						/*TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
+						item.setText(tableHeader);*/
+						/*for (int i = 0; i < tableHeader.length; i++)  
+					    {  					
+							TableColumn tableColumn = new TableColumn(jaruncompatibilityTable, SWT.NONE);
+							tableColumn.setText(tableHeader[i]);  
+							// 设置表头可移动，默认为false  
+							tableColumn.setMoveable(false); 
+					    	tableColumn.pack();
+					    	
+					    }*/
+						
+						List<JarClassModel> lists = outerCompatibility.getUncompatibilityClassModels();
+
+						for (JarClassModel model : lists) {
+							item = new TableItem(jaruncompatibilityTable,SWT.NONE);
+							String[] strings= {"位置",model.getFromClass()};
+							item.setText(strings);
+						}
+						
+					}	
+				}			
 			}
 		});
 		
-		CompatibilityBtn.setBounds(583, 10, 79, 69);
+		CompatibilityBtn.setBounds(622, 100, 79, 69);
 		CompatibilityBtn.setText("\u5206\u6790");
 		
-		Label lblJava = new Label(this, SWT.NONE);
-		lblJava.setBounds(10, 71, 61, 17);
-		lblJava.setText("Java\u7248\u672C\uFF1A");
+		Button button_1 = new Button(this, SWT.NONE);
+		button_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Display display = Display.getDefault();
+				Shell shell = new Shell(display);
+				DirectoryDialog folderDialog = new DirectoryDialog(shell);
+				
+				folderDialog.setText("请选择项目文件");	
+				folderDialog.setFilterPath("D:\\test\\TestJar");
+				folderDialog.open();				
+				jarDependPathText.setText(folderDialog.getFilterPath());				
+			}
+		});
+		button_1.setText("\u8DEF\u5F84...");
+		button_1.setBounds(500, 139, 53, 22);
 		
-		Combo jdkVersionCombo = new Combo(this, SWT.NONE);
-		jdkVersionCombo.setBounds(121, 68, 88, 25);
+		
+		
+		
 	}
 
 	@Override

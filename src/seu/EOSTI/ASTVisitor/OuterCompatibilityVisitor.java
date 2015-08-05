@@ -30,6 +30,8 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
     private List<JarClassModel> jarList = new ArrayList<>();
     private List<JarClassModel> unCompatibilityJarList = new ArrayList<>();
     private List<String> unCompatibilityJarList2 = new ArrayList<>();
+    private String packageName;
+    private String className;
 
 	public OuterCompatibilityVisitor(List<JarClassModel> jarList) {
 		this.jarList = jarList;
@@ -37,6 +39,7 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
 	}
 
 	public boolean visit(CompilationUnit node){
+		packageName = node.getPackage().getName().getFullyQualifiedName();
 		
 		/*IProblem[] iProblems = node.getProblems();
 		for (IProblem iProblem : iProblems) {
@@ -63,6 +66,7 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
 	
 	public boolean visit(TypeDeclaration node){
 		
+		className = node.getName().getFullyQualifiedName();
 		return true;
 	}
 	
@@ -74,16 +78,16 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
 				return true;
 		}	
 	
-		System.out.println("---------------------------------------------------------------");
+//		System.out.println("---------------------------------------------------------------");
 		String importpackageName = binding.getDeclaringClass().getPackage().getName();
 		IMethodBinding iMethodBinding = binding.getMethodDeclaration();
-		System.out.println("packagename:" + importpackageName);
-		System.out.println("classname:"+binding.getDeclaringClass().getName());
+		/*System.out.println("packagename:" + importpackageName);
+		System.out.println("classname:"+binding.getDeclaringClass().getName());*/
 		
 			
 		String methodname = iMethodBinding.getName();
-		System.out.println("methodname:" + methodname );
-		
+/*		System.out.println("methodname:" + methodname );
+*/		
 		
 		if (NORMAL_METHOD.indexOf(methodname) <0)
         {
@@ -93,27 +97,20 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
            List<Expression> list = node.arguments();
            for (Expression expression : list) {
         	   ITypeBinding iTypeBinding = expression.resolveTypeBinding();
-        	   System.out.println(iTypeBinding.getQualifiedName());
-        	   paraList.add(iTypeBinding.getQualifiedName());
+/*        	   System.out.println(iTypeBinding.getQualifiedName());
+*/        	   paraList.add(iTypeBinding.getQualifiedName());
            }
-			/*ITypeBinding[] iTypeBindings = iMethodBinding.getParameterTypes();
-			List<String> paralist = new ArrayList<>();
-			for (ITypeBinding iTypeBinding : iTypeBindings) {
-				System.out.println("para:"+iTypeBinding.getQualifiedName());
-				paralist.add(iTypeBinding.getQualifiedName());
-			}*/
+			
 			jarMethodModel.setParameters(paraList);
 			jarClassModel.addmethod(jarMethodModel);
-			if (jarMethodModel.getMethodName().equals("writeChartAsJPEG")) {
-				System.out.println();
-			}
-        
+			jarClassModel.setFromClass(packageName +"."+className);
+			
 			if (!compatibiliyInJar(jarClassModel)) {
 				unCompatibilityJarList.add(jarClassModel);			
 			}
         }	
 		
-		System.out.println("---------------------------------------------------------------");
+//		System.out.println("---------------------------------------------------------------");
 				
 		return true;
 		
@@ -130,11 +127,6 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
 			}			
 		}		
 		return true;
-	}
-	
-	public void endVisit(TypeDeclaration node){
-		//classString = node.getName().toString();
-		System.out.println("endTTTT");
 	}
 	
 	public List<JarClassModel> getunCompatibilityList() {

@@ -103,6 +103,10 @@ public class OuterCompatibility {
 			return true;
 		}
 		uncompatibilityfileList.addAll(requertor.getuncompatibilityFiles());
+		
+		if (uncompatibilityfileList.size() == 0) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -118,14 +122,7 @@ public class OuterCompatibility {
 			e1.printStackTrace();
 		}
     	
-    	/*for (JarClassModel jarClassModel : list) {
-    		System.out.println("----------------------------------------------");
-			System.out.println("classname:"+jarClassModel.getClassName());
-			for (JarMethodModel jarMethodModel : jarClassModel.getmethod()) {
-				System.out.println("methodname:"+jarMethodModel.getMethodName());
-			}
-			System.out.println("----------------------------------------------");
-		}*/
+    	
 		
 		// create a AST parser
 		ASTParser parser;
@@ -154,8 +151,7 @@ public class OuterCompatibility {
 		//////////////////////
 		List<String> jarfilelist = readFile.readJarFiles();		
 		String[] jarpathEntries = jarfilelist.toArray(new String[jarfilelist.size()]);
-		/////////////////////
-						
+		/////////////////////						
 						
 		String[] sourceFilePaths = filelist.toArray(new String[filelist.size()]);
 		System.out.println("fileread over!");
@@ -166,6 +162,10 @@ public class OuterCompatibility {
 		parser.createASTs(sourceFilePaths,  null, new String[0], requertor, null);
 		
 		uncompatibilityClassModels.addAll(requertor.getunCompatibilityList());
+		
+		if (uncompatibilityClassModels.size()==0) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -181,15 +181,5 @@ public class OuterCompatibility {
 	public void setUncompatibilityClassModels(List<JarClassModel> uncompatibilityClassModels) {
 		this.uncompatibilityClassModels = uncompatibilityClassModels;
 	}
-
-	
-	
-	
-
-	
-	
-	
-
-	
 	
 }

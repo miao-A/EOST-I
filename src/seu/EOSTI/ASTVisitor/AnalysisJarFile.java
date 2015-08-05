@@ -70,6 +70,7 @@ public class AnalysisJarFile {
     }
 	
 	public static List<JarClassModel> getJarMethod(String jarFile,String dependfile) throws Exception {
+		
         String NORMAL_METHOD= "waitequalsnotifynotifyAlltoStringhashCodegetClass"; 
         List<JarClassModel> jarClassModels = new ArrayList<>();
  //       List<String[]> a = new ArrayList<String[]>();

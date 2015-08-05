@@ -49,20 +49,23 @@ public class JavaVersionCompatibilityVisitor extends ASTVisitor{
 		IProblem[] iProblems = node.getProblems();
 		for (IProblem iProblem : iProblems) {
 			if (iProblem.isError()) {
-				System.out.println(iProblem.getOriginatingFileName());
-				System.out.println(iProblem.getMessage());
-				String[] strings = iProblem.getArguments();
-				for (String string : strings) {
-					System.out.println(string);
+				if (iProblem.getID()==IProblem.InvalidUsageOfWildcard||(iProblem.getID()>=1610613327&&iProblem.getID()<=1610613335)) {
+								
+					System.out.println(iProblem.getID());
+					System.out.println(iProblem.getOriginatingFileName());
+					System.out.println(iProblem.getMessage());
+					String[] strings = iProblem.getArguments();
+					for (String string : strings) {
+						System.out.println(string);
+					}
+					System.out.println();
+					/*UnCompatibilityMIModel unCompatibilityMIModel = new UnCompatibilityMIModel(iProblem.getArguments()[0], 
+							iProblem.getArguments()[1], iProblem.getArguments()[2], iProblem.getArguments()[3],
+							node.getPackage().getName().toString(), String.valueOf(iProblem.getOriginatingFileName()));*/
+					if (unCompatibilityMIModels.indexOf(String.valueOf(iProblem.getOriginatingFileName()))==-1) {
+						unCompatibilityMIModels.add(String.valueOf(iProblem.getOriginatingFileName()));
+					}
 				}
-				System.out.println();
-				/*UnCompatibilityMIModel unCompatibilityMIModel = new UnCompatibilityMIModel(iProblem.getArguments()[0], 
-						iProblem.getArguments()[1], iProblem.getArguments()[2], iProblem.getArguments()[3],
-						node.getPackage().getName().toString(), String.valueOf(iProblem.getOriginatingFileName()));*/
-				if (unCompatibilityMIModels.indexOf(String.valueOf(iProblem.getOriginatingFileName()))==-1) {
-					unCompatibilityMIModels.add(String.valueOf(iProblem.getOriginatingFileName()));
-				}
-				
 			}
 		}
 		return true;

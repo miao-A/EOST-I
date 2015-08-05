@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JarClassModel {
-	String packagename;
-	String classname;
-	List<JarMethodModel> methodList = new ArrayList<>();
+	private String packagename;
+	private String classname;
+	private List<JarMethodModel> methodList = new ArrayList<>();
+	
+	private String fromClass;
 	
 	public JarClassModel(String pName, String ppName) {
 		// TODO Auto-generated constructor stub
@@ -40,6 +42,14 @@ public class JarClassModel {
 		}
 		
 		return false;
+	}
+
+	public String getFromClass() {
+		return fromClass;
+	}
+
+	public void setFromClass(String fromClass) {
+		this.fromClass = fromClass;
 	}
 	
 	
