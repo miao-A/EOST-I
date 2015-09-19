@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 
 
-import seu.EOSTI.ASTVisitor.AnalysisJarFile;
+
 import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.DBConnector;
@@ -33,6 +33,7 @@ import seu.EOSTI.DBConnect.ExtensibilityConnector;
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
 import seu.EOSTI.Model.JarClassModel;
 import seu.EOSTI.Model.JarMethodModel;
+import seu.EOSTI.Parser.AnalysisJarFile;
 import seu.EOSTI.Parser.ChangeComparator;
 import seu.EOSTI.Parser.Compatibility;
 import seu.EOSTI.Parser.OuterCompatibility;
@@ -57,9 +58,7 @@ public class IntergrationMain {
 		projectParser.parser();
 		projectParser.runOuterCompatibilityDectector();*/
 		OuterCompatibility outerCompatibility = new OuterCompatibility(projectPath,version);
-		if (outerCompatibility.jdkCompatibility("1.4")) {
-			
-			
+		if (outerCompatibility.jdkCompatibility("1.4")) {			
 			System.out.println("ºÊ»›");
 		}else{
 			for (String string : outerCompatibility.getuncompatibilityfileList()) {

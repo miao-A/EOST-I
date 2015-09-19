@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.TableViewer;
 
-public class OuterCompatibilityComposite extends Composite {
+public class OuterCompatibilityMutiVersionComposite extends Composite {
 	private Text pathOfProjectText;
 	private Text jarPathText;
 	private Table jdkuncompatibilityTable;
@@ -37,19 +37,20 @@ public class OuterCompatibilityComposite extends Composite {
 	private Text jarDependPathText;
 	private Table jaruncompatibilityTable;
 	private Table table;
+	private Text text;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public OuterCompatibilityComposite(Composite parent, int style) {
+	public OuterCompatibilityMutiVersionComposite(Composite parent, int style) {
 		super(parent, style);
 		
 		Label label = new Label(this, SWT.NONE);
 		label.setAlignment(SWT.RIGHT);
-		label.setBounds(28, 69, 103, 17);
-		label.setText("\u9879\u76EE\u8DEF\u5F84\uFF1A");
+		label.setBounds(26, 39, 103, 17);
+		label.setText("\u9879\u76EE\u8DEF\u5F841\uFF1A");
 		
 		Label lbljar = new Label(this, SWT.NONE);
 		lbljar.setAlignment(SWT.RIGHT);
@@ -57,7 +58,7 @@ public class OuterCompatibilityComposite extends Composite {
 		lbljar.setBounds(39, 114, 103, 17);
 		
 		pathOfProjectText = new Text(this, SWT.BORDER);
-		pathOfProjectText.setBounds(137, 66, 346, 22);
+		pathOfProjectText.setBounds(135, 36, 346, 22);
 		
 		
 		
@@ -77,7 +78,7 @@ public class OuterCompatibilityComposite extends Composite {
 				pathOfProjectText.setText(folderDialog.getFilterPath());				
 			}			
 		});
-		btnNewButton.setBounds(489, 66, 53, 22);
+		btnNewButton.setBounds(487, 36, 53, 22);
 		btnNewButton.setText("\u8DEF\u5F84...");
 		
 		jarPathText = new Text(this, SWT.BORDER);
@@ -164,9 +165,6 @@ public class OuterCompatibilityComposite extends Composite {
 		lbljar_1.setAlignment(SWT.RIGHT);
 		lbljar_1.setText("\u5916\u90E8jar\u5305\u4F9D\u8D56\u5305\u8DEF\u5F84\uFF1A");
 		lbljar_1.setBounds(14, 139, 128, 17);
-		
-		Label label_1 = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label_1.setBounds(0, 51, 577, 2);
 		
 		Label label_2 = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label_2.setBounds(0, 94, 577, 2);
@@ -275,6 +273,18 @@ public class OuterCompatibilityComposite extends Composite {
 		});
 		button_1.setText("\u8DEF\u5F84...");
 		button_1.setBounds(500, 139, 53, 22);
+		
+		Label label_1 = new Label(this, SWT.NONE);
+		label_1.setText("\u9879\u76EE\u8DEF\u5F842\uFF1A");
+		label_1.setAlignment(SWT.RIGHT);
+		label_1.setBounds(26, 65, 103, 17);
+		
+		text = new Text(this, SWT.BORDER);
+		text.setBounds(135, 62, 346, 22);
+		
+		Button button_2 = new Button(this, SWT.NONE);
+		button_2.setText("\u8DEF\u5F84...");
+		button_2.setBounds(487, 62, 53, 22);
 		
 		
 		

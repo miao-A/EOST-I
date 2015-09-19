@@ -10,17 +10,11 @@ import java.util.Map;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-
 import seu.EOSTI.ASTVisitor.InnerCompatibilityRequestor;
 import seu.EOSTI.ASTVisitor.VersionCompatibilityRequestor;
 import seu.EOSTI.Model.AbstractClassModel;
-import seu.EOSTI.Model.ConstructorMethodModel;
-import seu.EOSTI.Model.MethodModel;
 import seu.EOSTI.Model.UnCompatibilityMIModel;
 import seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.CompatibilityStatus;
-import seu.EOSTI.modelcompatibilityrecoder.ConstructorMethodRecoder;
-import seu.EOSTI.modelcompatibilityrecoder.MethodRecoder;
 
 public class InnerCompatibility {
 	

@@ -123,7 +123,7 @@ public class VersionCompatibilityVisitor extends ASTVisitor {
 	
 	
 	public void endVisit(CompilationUnit node){
-		//可用于数据库插入，数据库建成后上述get方法可删除
+		
 	
 		System.out.println("----------------------------------------------------------");
 		System.out.println("package "+ packageName );
@@ -168,7 +168,7 @@ public class VersionCompatibilityVisitor extends ASTVisitor {
 		System.out.println("Type:\t"+node.getName().getIdentifier());
 		if (node.getSuperclassType() != null) {
 			classModel.setSuperClass(node.getSuperclassType().toString());
-		}		
+		}
 		
 		List<TypeParameter> typeParameters = node.typeParameters();
 		for (TypeParameter typeParameter : typeParameters) {

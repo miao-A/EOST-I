@@ -1,4 +1,4 @@
-package seu.EOSTI.ASTVisitor;
+package seu.EOSTI.Parser;
 
 import japicmp.model.StaticModifier;
 

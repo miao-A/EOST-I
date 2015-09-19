@@ -1,11 +1,6 @@
 package seu.EOSTI.ASTVisitor;
 
-import java.util.ArrayList;
 
-
-
-
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +8,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 import seu.EOSTI.Model.AbstractClassModel;
-import seu.EOSTI.Model.ClassModel;
+
 
 public class VersionCompatibilityRequestor extends FileASTRequestor {
 

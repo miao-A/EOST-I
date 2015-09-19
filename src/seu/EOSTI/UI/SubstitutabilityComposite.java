@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import com.ibm.icu.text.DecimalFormat;
 
-public class ChangeabilityComposite extends Composite {
+public class SubstitutabilityComposite extends Composite {
 
 	private ProjectConnector pcConnector = new ProjectConnector();
 	private ArrayList<String> rStrings;
@@ -31,7 +31,7 @@ public class ChangeabilityComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ChangeabilityComposite(Composite parent, int style) {
+	public SubstitutabilityComposite(Composite parent, int style) {
 		super(parent, style);	
 		
 		final Combo versionCombo = new Combo(this, SWT.NONE);

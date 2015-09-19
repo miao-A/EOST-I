@@ -10,12 +10,12 @@ import seu.EOSTI.ASTVisitor.ChangeabilityOfClassRequestor;
 import seu.EOSTI.DBConnect.ChangeabilityInfoConnector;
 
 
-public class Changeability {
+public class Substitutability {
 
 	private String projectName;
 	private String version;	
 	
-	public Changeability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
+	public Substitutability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
 		
 //		ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor(projectNameString,versionString);
 		ChangeabilityOfClassRequestor changeabilityRequestor = new ChangeabilityOfClassRequestor(projectNameString,versionString);

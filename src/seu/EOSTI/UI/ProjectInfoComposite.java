@@ -13,11 +13,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
 import seu.EOSTI.Parser.ProjectParser;
-import seu.EOSTI.Parser.ReadFile;
+
 
 public class ProjectInfoComposite extends Composite {
 	private Text projectPathText;

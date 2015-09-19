@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 
-import seu.EOSTI.ASTVisitor.AnalysisJarFile;
 import seu.EOSTI.ASTVisitor.ChangeabilityOfClassRequestor;
 import seu.EOSTI.ASTVisitor.InnerCompatibilityRequestor;
 import seu.EOSTI.ASTVisitor.JavaVersionCompatibilityRequestor;

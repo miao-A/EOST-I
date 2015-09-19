@@ -10,12 +10,12 @@ import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
 
-public class ChangeabilityDiff {
+public class SubstitutabilityDiff {
 	private String project = null;
 	private HashMap<String, HashMap<String, List<String>>> diffMap = null;
 	
 	
-	public ChangeabilityDiff(String project){
+	public SubstitutabilityDiff(String project){
 		this.project = project;
 	}
 	

@@ -21,15 +21,16 @@ import org.eclipse.ui.internal.dnd.SwtUtil;
 public class IntergrationDialog extends Dialog {
 
 	protected Object result;
-	protected Shell shell;
+	protected Shell shlCiet;
 	
 	private StackLayout rightCompositeSL = new StackLayout();
-	private ChangeabilityComposite changeabilityComposite;
+	private SubstitutabilityComposite changeabilityComposite;
 	private ExtensibilityComposite extensibilityComposite;
 	private CompatibilityComposite compatibilityComposite;
 	private ProjectInfoComposite projectInfoComposite;
 	private ExtensiMutiVerionShowComposite extensiMutiVerionShowComposite;
-	private ChangeMutiVersionShowComposite changeMutiVersionShowComposite;
+	private SubstitutabilityMutiVersionShowComposite changeMutiVersionShowComposite;
+	private CompatibilityMutiVersionComposite compatibilityMutiVersionComposite;
 
 	
 	/**
@@ -49,10 +50,10 @@ public class IntergrationDialog extends Dialog {
 	 */
 	public Object open() throws IOException {
 		createContents();
-		shell.open();
-		shell.layout();
+		shlCiet.open();
+		shlCiet.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
+		while (!shlCiet.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -65,12 +66,12 @@ public class IntergrationDialog extends Dialog {
 	 * @throws IOException 
 	 */
 	private void createContents() throws IOException {
-		shell = new Shell(getParent(), SWT.DIALOG_TRIM);
-		shell.setSize(967, 641);
-		shell.setText("\u8F6F\u4EF6\u6F14\u5316\u2014\u96C6\u6210\u6027");
-		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		shlCiet = new Shell(getParent(), SWT.DIALOG_TRIM);
+		shlCiet.setSize(967, 641);
+		shlCiet.setText("CIET");
+		shlCiet.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		Composite composite = new Composite(shell, SWT.NONE);
+		Composite composite = new Composite(shlCiet, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		
 		Composite leftComposite = new Composite(composite, SWT.NONE);
@@ -111,7 +112,7 @@ public class IntergrationDialog extends Dialog {
 				rightComposite.layout();				
 			}
 		});
-		extensionButton.setText("\u53EF\u6269\u5C55\u6027");
+		extensionButton.setText("\u53EF\u6269\u5C55\u6027\u5EA6\u91CF");
 		
 		Button extensiMutiButton = new Button(leftComposite, SWT.NONE);
 		extensiMutiButton.addSelectionListener(new SelectionAdapter() {
@@ -123,7 +124,7 @@ public class IntergrationDialog extends Dialog {
 				rightComposite.layout();
 			}
 		});
-		extensiMutiButton.setText("\u53EF\u6269\u5C55\u6027\u591A\u7248\u672C\u6BD4\u8F83");		
+		extensiMutiButton.setText("\u53EF\u6269\u5C55\u6027\u6F14\u5316\u8BC4\u4F30");		
 		
 		Button changeButton = new Button(leftComposite, SWT.NONE);
 		changeButton.addSelectionListener(new SelectionAdapter() {
@@ -134,7 +135,7 @@ public class IntergrationDialog extends Dialog {
 				rightComposite.layout();
 			}
 		});
-		changeButton.setText("\u53EF\u66FF\u4EE3\u6027");
+		changeButton.setText("\u53EF\u66FF\u6362\u6027\u5EA6\u91CF");
 		
 		Button changeMutiButton = new Button(leftComposite, SWT.NONE);
 		changeMutiButton.addSelectionListener(new SelectionAdapter() {
@@ -145,7 +146,7 @@ public class IntergrationDialog extends Dialog {
 				rightComposite.layout();
 			}
 		});
-		changeMutiButton.setText("\u53EF\u66FF\u4EE3\u6027\u591A\u7248\u672C\u6BD4\u8F83");
+		changeMutiButton.setText("\u53EF\u66FF\u6362\u6027\u6F14\u5316\u8BC4\u4F30");
 		
 		Button compatibilityButton = new Button(leftComposite, SWT.NONE);
 		compatibilityButton.addSelectionListener(new SelectionAdapter() {
@@ -155,15 +156,32 @@ public class IntergrationDialog extends Dialog {
 				rightComposite.layout();
 			}
 		});
-		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027");
+		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027\u5EA6\u91CF");
 		
 		compatibilityComposite = new CompatibilityComposite(rightComposite, SWT.NONE);
 		extensibilityComposite = new ExtensibilityComposite(rightComposite, SWT.NONE);
-		changeabilityComposite = new ChangeabilityComposite(rightComposite, SWT.NONE);
+		changeabilityComposite = new SubstitutabilityComposite(rightComposite, SWT.NONE);
 		projectInfoComposite = new ProjectInfoComposite(rightComposite, SWT.NONE);
-		changeMutiVersionShowComposite = new ChangeMutiVersionShowComposite(rightComposite, SWT.NONE);
+		changeMutiVersionShowComposite = new SubstitutabilityMutiVersionShowComposite(rightComposite, SWT.NONE);
 		extensiMutiVerionShowComposite = new ExtensiMutiVerionShowComposite(rightComposite, SWT.NONE);
+		compatibilityMutiVersionComposite = new CompatibilityMutiVersionComposite(rightComposite, SWT.NONE);
 		rightCompositeSL.topControl = projectInfoComposite;
+		
+		Button compatibilityMutibutton = new Button(composite, SWT.NONE);
+		compatibilityMutibutton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = compatibilityMutiVersionComposite;
+				rightComposite.layout();
+			}
+		});
+		compatibilityMutibutton.setText("\u53EF\u517C\u5BB9\u6027\u6F14\u5316\u8BC4\u4F30");
+		FormData fd_compatibilityMutibutton = new FormData();
+		fd_compatibilityMutibutton.bottom = new FormAttachment(leftComposite, 87, SWT.BOTTOM);
+		fd_compatibilityMutibutton.right = new FormAttachment(leftComposite, 0, SWT.RIGHT);
+		fd_compatibilityMutibutton.top = new FormAttachment(leftComposite, 1);
+		fd_compatibilityMutibutton.left = new FormAttachment(leftComposite, 0, SWT.LEFT);
+		compatibilityMutibutton.setLayoutData(fd_compatibilityMutibutton);
 
 	}
 	

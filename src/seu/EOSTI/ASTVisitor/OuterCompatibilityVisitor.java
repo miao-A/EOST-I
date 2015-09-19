@@ -29,7 +29,6 @@ public class OuterCompatibilityVisitor extends ASTVisitor{
     String NORMAL_METHOD= "waitequalsnotifynotifyAlltoStringhashCodegetClass"; 
     private List<JarClassModel> jarList = new ArrayList<>();
     private List<JarClassModel> unCompatibilityJarList = new ArrayList<>();
-    private List<String> unCompatibilityJarList2 = new ArrayList<>();
     private String packageName;
     private String className;
 

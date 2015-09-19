@@ -9,7 +9,15 @@ import org.eclipse.jdt.core.dom.Modifier;
 import com.ibm.icu.text.StringTransform;
 
 
-
+/*public class ClassModel{	
+	private String packageName;//源文件中包名
+	private String className;//源文件中类名	
+	private JModifier modifier;//源文件中类修饰符	
+	private List<ConstructorMethodModel> constructorMethodModels;//	源文件中默认构造方法
+	private List<MethodModel> methodModels ;//源文件中方法
+	//......
+}
+*/
 public class ClassModel extends AbstractClassModel {
 	
 	private String packageName = "";

@@ -69,7 +69,7 @@ public class ProjectParser {
 	}
 	
 	private void runChangeabilityDector(){
-		Changeability changeability = new Changeability(parser, pathOfProject,projectName,version);
+		Substitutability changeability = new Substitutability(parser, pathOfProject,projectName,version);
 	}
 	
 	public void runOuterCompatibilityDectector(){
@@ -101,7 +101,8 @@ public class ProjectParser {
 	}
 	
 	public void getChangeabilityInfo(){		
-	Changeability changeability = new Changeability(parser, pathOfProject,projectName,version);
+	
+		Substitutability changeability = new Substitutability(parser, pathOfProject,projectName,version);
 	}	
 }
 

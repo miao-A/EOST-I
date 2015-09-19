@@ -7,16 +7,16 @@ import java.util.List;
 import seu.EOSTI.DBConnect.ChangeabilityInfoConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 
-public class ChangeabilityLineChart  extends LineChart {
+public class SubstitutabilityLineChart  extends LineChart {
 
 	private String projectName= new String();
 	
-	public ChangeabilityLineChart(){
+	public SubstitutabilityLineChart(){
 		super();
 		creatDataSet();
 	}
 	
-	public ChangeabilityLineChart(String title,String projectName){
+	public SubstitutabilityLineChart(String title,String projectName){
 		super(title);
 		this.projectName = projectName;
 	}

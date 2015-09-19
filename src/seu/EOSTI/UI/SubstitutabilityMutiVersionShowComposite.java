@@ -31,24 +31,24 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
-import seu.EOSTI.Chart.ChangeabilityLineChart;
+import seu.EOSTI.Chart.SubstitutabilityLineChart;
 import seu.EOSTI.Chart.ExtensibilityLineChart;
 import seu.EOSTI.Chart.LineChart;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 import seu.EOSTI.DBConnect.ProjectInfoConnector;
-import seu.EOSTI.Parser.ChangeabilityDiff;
+import seu.EOSTI.Parser.SubstitutabilityDiff;
 import seu.EOSTI.Parser.ExtensibilityDiff;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.jface.text.TextViewer;
 
-public class ChangeMutiVersionShowComposite extends Composite {
+public class SubstitutabilityMutiVersionShowComposite extends Composite {
 
 	private ProjectConnector pcConnector = new ProjectConnector();
 	private ArrayList<String> rStrings;
 	private Combo projectSelectCombo = new Combo(this, SWT.NONE);
-	private JFreeChart chart = null;
+//	private JFreeChart chart = null;
 
 	/**
 	 * Create the composite.
@@ -56,7 +56,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 	 * @param style
 	 * @throws IOException 
 	 */
-	public ChangeMutiVersionShowComposite(Composite parent, int style) throws IOException {
+	public SubstitutabilityMutiVersionShowComposite(Composite parent, int style) throws IOException {
 		super(parent, style);
 		
 		Label lblNull = new Label(this, SWT.NONE);
@@ -72,7 +72,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 				
 		final CTabItem changeTabItem = new CTabItem(tabFolder, SWT.NONE);
-		changeTabItem.setText("\u53EF\u66FF\u4EE3\u6027\u8D8B\u52BF\u56FE");
+		changeTabItem.setText("\u53EF\u66FF\u6362\u6027\u8D8B\u52BF\u56FE");
 		
 		final CTabItem changeDifftabItem = new CTabItem(tabFolder, SWT.NONE);
 		changeDifftabItem.setText("\u7248\u672C\u53D8\u66F4");
@@ -115,9 +115,9 @@ public class ChangeMutiVersionShowComposite extends Composite {
 				
 				
 				{				
-					System.out.println("可替代性指示图");
-					//BarChart changeabilityChart = new ChangeabilityBarChart("可替代性指示图");
-					ChangeabilityLineChart changeabilityChart = new ChangeabilityLineChart("可替代性指示图",projName);				
+					System.out.println("可替换性指示图");
+					//BarChart changeabilityChart = new ChangeabilityBarChart("可替换性指示图");
+					SubstitutabilityLineChart changeabilityChart = new SubstitutabilityLineChart("可替换性指示图",projName);				
 					
 					
 					changeabilityChart.creatDataSet();		
@@ -195,7 +195,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			
 			cDiffText.setText("");
 			cDiffText.setEditable(false);
-			final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
+			final SubstitutabilityDiff	changeabilityDiff = new SubstitutabilityDiff(projName);
 			
 			String textString = version1+" compare with " + version2;
 			
@@ -261,7 +261,7 @@ public class ChangeMutiVersionShowComposite extends Composite {
 			mcDiffText.setEditable(false);
 			ProjectInfoConnector projectInfoConnector = new ProjectInfoConnector();
 			ArrayList<String> list = projectInfoConnector.getVersion(projName);
-			final ChangeabilityDiff	changeabilityDiff = new ChangeabilityDiff(projName);
+			final SubstitutabilityDiff	changeabilityDiff = new SubstitutabilityDiff(projName);
 			String textString = version1+" compare with " + version2;
 			
 			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.moreDiffInProject(version1, version2);

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="seu.EOSTI.Model.AbstractClassModel" x="16" y="328">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="seu.EOSTI.Parser.Compatibility" x="169" y="58">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="changeRecoder" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder"
+            endpointName="compatibilityRecoders" kind="Simple">
+            <Point x="390" y="254"/>
+        </Association>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="newType" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder"
+            endpointName="typeRecoders" kind="Simple">
+            <Point x="551" y="295"/>
+        </Association>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder"
+            endpointName="unCompatibilityRecoders" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="removedType" kind="Simple"/>
+        <Communication destinationClassName="seu.EOSTI.Model.AbstractClassModel"/>
+        <Communication destinationClassName="seu.EOSTI.modelcompatibilityrecoder.MethodRecoder"/>
+        <Communication destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder"/>
+    </Class>
+    <Class name="seu.EOSTI.modelcompatibilityrecoder.FieldRecoder"
+        x="306" y="719">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ModifierRecoder"/>
+    </Class>
+    <Class name="seu.EOSTI.modelcompatibilityrecoder.ModifierRecoder"
+        x="-9" y="703">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="seu.EOSTI.modelcompatibilityrecoder.MethodRecoder"
+        x="636" y="685">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class
+        name="seu.EOSTI.modelcompatibilityrecoder.ClassCompatibilityRecoder"
+        x="442" y="366">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="newInnerTypeModels" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="removedInnerTypeModels" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ModifierRecoder"
+            endpointName="modifierRecoder" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.FieldRecoder"
+            endpointName="fieldRecoder" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.modelcompatibilityrecoder.MethodRecoder"
+            endpointName="methodRecoder" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="uncompatibilityInnerTypeModels" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="compatibilityInnerTypeModels" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="oldTypeModel" kind="Simple"/>
+        <Association
+            destinationClassName="seu.EOSTI.Model.AbstractClassModel"
+            endpointName="newTypeModel" kind="Simple"/>
+        <Communication destinationClassName="seu.EOSTI.Model.AbstractClassModel"/>
+        <Communication destinationClassName="seu.EOSTI.modelcompatibilityrecoder.ModifierRecoder"/>
+        <Communication destinationClassName="seu.EOSTI.modelcompatibilityrecoder.MethodRecoder"/>
+    </Class>
+</ClassDiagram>
