@@ -38,13 +38,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Combo;
 
 public class InnerCompatibilityMutiVersionComposite extends Composite {
-	private Text pathOfProjectText;
-	private Text componentOfProjectText;
+	private Text pathOfOldProjectText;
 	private Table uncompatibilityTable;
 	private TableEditor editor = null;
 	
 	String strings = new String();
-	private Text text;
+	private Text pathOfNewProjectText;
 
 	/**
 	 * Create the composite.
@@ -58,12 +57,8 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		label.setBounds(10, 13, 103, 17);
 		label.setText("\u9879\u76EE\u8DEF\u5F841\uFF1A");
 		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("\u9879\u76EE\u6784\u4EF6\u8DEF\u5F84\uFF1A");
-		label_1.setBounds(10, 62, 103, 17);
-		
-		pathOfProjectText = new Text(this, SWT.BORDER);
-		pathOfProjectText.setBounds(119, 10, 375, 22);
+		pathOfOldProjectText = new Text(this, SWT.BORDER);
+		pathOfOldProjectText.setBounds(119, 10, 375, 22);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -78,7 +73,7 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2");//"D:/ProjectOfHW/junit/junit3.4"
 				folderDialog.open();
 				
-				pathOfProjectText.setText(folderDialog.getFilterPath());
+				pathOfOldProjectText.setText(folderDialog.getFilterPath());
 				
 			}
 			
@@ -87,31 +82,8 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		btnNewButton.setBounds(500, 10, 53, 22);
 		btnNewButton.setText("\u8DEF\u5F84...");
 		
-		componentOfProjectText = new Text(this, SWT.BORDER);
-		componentOfProjectText.setBounds(119, 57, 375, 22);
-		
-		Button button = new Button(this, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				Display display = Display.getDefault();
-				Shell shell = new Shell(display);
-				DirectoryDialog folderDialog = new DirectoryDialog(shell);
-				
-				folderDialog.setText("请选择项目文件");	
-				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2/src/org/jeditor/app");
-				folderDialog.open();
-				
-				componentOfProjectText.setText(folderDialog.getFilterPath());
-				
-			}
-		});
-		button.setBounds(500, 57, 53, 22);
-		button.setText("\u8DEF\u5F84...");
-		
 		uncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		uncompatibilityTable.setBounds(10, 135, 711, 391);
+		uncompatibilityTable.setBounds(10, 85, 711, 382);
 		uncompatibilityTable.setHeaderVisible(true);
 		uncompatibilityTable.setLinesVisible(true);
 
@@ -137,19 +109,23 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {				
 				uncompatibilityTable.removeAll();				
 				
-				String pathOfProject = pathOfProjectText.getText(); // "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
-				String componentOfProject = componentOfProjectText.getText(); //"D:/ProjectOfHW/jEditor/jEditor0.4.2/src/org/jeditor/gui";
+				String pathOfOldProject = pathOfOldProjectText.getText(); // "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
+				String pathOfNewProject = pathOfNewProjectText.getText();
 								
-				InnerCompatibility innerCompatibility = new InnerCompatibility(pathOfProject, componentOfProject);
-				List<UnCompatibilityMIModel> unCompatibilityMIModels = innerCompatibility.getunCompatibilityMIModels();					
+				InnerCompatibility oldInnerCompatibility = new InnerCompatibility(pathOfOldProject, pathOfOldProject);
+				InnerCompatibility newInnerCompatibility = new InnerCompatibility(pathOfNewProject, pathOfNewProject);
+				List<UnCompatibilityMIModel> oldUnCompatibilityMIModels = oldInnerCompatibility.getunCompatibilityMIModels();
+				List<UnCompatibilityMIModel> newUnCompatibilityMIModels = newInnerCompatibility.getunCompatibilityMIModels();
 
-				if (unCompatibilityMIModels.size() == 0) {
-					System.out.println("构件在当前程序内兼容");
+				if (oldUnCompatibilityMIModels.size() == 0) {
+					System.out.println("版本1内部兼容性良好");
 				}
 				
+				if (newUnCompatibilityMIModels.size() == 0) {
+					System.out.println("版本2内部兼容性良好");
+				}
 				
-				
-				for (UnCompatibilityMIModel unCompatibilityMIModel : unCompatibilityMIModels) {
+				for (UnCompatibilityMIModel unCompatibilityMIModel : oldUnCompatibilityMIModels) {
 					//unCompatibilityMIModel.getMessage();
 					
 				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
@@ -160,12 +136,30 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 				}				
 					
 
-				if (unCompatibilityMIModels.size()>0) {
+				if (oldUnCompatibilityMIModels.size()>0) {
 					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});
+					lastItem.setText(new String[] {"版本1不兼容的接口个数:",String.valueOf(oldUnCompatibilityMIModels.size())});
 				}else {
 					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"该构件与程序兼容"});
+					lastItem.setText(new String[] {"版本1程序内部兼容性良好"});
+				}
+				
+				for (UnCompatibilityMIModel unCompatibilityMIModel : newUnCompatibilityMIModels) {
+					//unCompatibilityMIModel.getMessage();
+					
+				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
+				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getPathOfFile(),
+				    		unCompatibilityMIModel.getFromPackageName(),unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
+				    		unCompatibilityMIModel.getRealArguments()};
+				    item.setText(string);
+				}	
+				
+				if (newUnCompatibilityMIModels.size()>0) {
+					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
+					lastItem.setText(new String[] {"版本2不兼容的接口个数:",String.valueOf(newUnCompatibilityMIModels.size())});
+				}else {
+					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
+					lastItem.setText(new String[] {"版本2程序内部兼容性良好"});
 				}
 				
 			}
@@ -176,14 +170,28 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		
 		Label label_2 = new Label(this, SWT.NONE);
 		label_2.setText("\u9879\u76EE\u8DEF\u5F842\uFF1A");
-		label_2.setBounds(10, 110, 103, 17);
+		label_2.setBounds(10, 51, 103, 17);
 		
-		text = new Text(this, SWT.BORDER);
-		text.setBounds(119, 107, 375, 22);
+		pathOfNewProjectText = new Text(this, SWT.BORDER);
+		pathOfNewProjectText.setBounds(119, 48, 375, 22);
 		
 		Button button_1 = new Button(this, SWT.NONE);
+		button_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Display display = Display.getDefault();
+				Shell shell = new Shell(display);
+				DirectoryDialog folderDialog = new DirectoryDialog(shell);
+				
+				folderDialog.setText("请选择项目文件");	
+				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.3");//"D:/ProjectOfHW/junit/junit3.4"
+				folderDialog.open();
+				
+				pathOfNewProjectText.setText(folderDialog.getFilterPath());
+			}
+		});
 		button_1.setText("\u8DEF\u5F84...");
-		button_1.setBounds(500, 107, 53, 22);
+		button_1.setBounds(500, 48, 53, 22);
 	}
 
 	@Override

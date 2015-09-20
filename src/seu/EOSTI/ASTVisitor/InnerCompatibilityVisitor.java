@@ -48,8 +48,12 @@ public class InnerCompatibilityVisitor extends ASTVisitor{
 		IProblem[] iProblems = node.getProblems();
 		for (IProblem iProblem : iProblems) {
 			if (iProblem.isError()) {
-				if(iProblem.getID()==iProblem.ParameterMismatch){					
+				if(iProblem.getID()==IProblem.ParameterMismatch){					
 					//System.out.println("##"+node.getPackage());
+					if (node.getPackage().getName().toString().equals(iProblem.getArguments()[0])) {
+						continue;
+					}
+					
 					if (packageList.contains(node.getPackage().getName().toString())) {
 						UnCompatibilityMIModel unCompatibilityMIModel = new UnCompatibilityMIModel(iProblem.getArguments()[0], 
 								iProblem.getArguments()[1], iProblem.getArguments()[2], iProblem.getArguments()[3],
