@@ -64,21 +64,14 @@ public class SubstitutabilityComposite extends Composite {
 		lblVersion.setText("Version:");
 		
 		TabFolder tabFolder = new TabFolder(this, SWT.NONE);
-		tabFolder.setBounds(0, 51, 655, 383);
+		tabFolder.setBounds(0, 51, 655, 406);
 		
-		TabItem efferent_tabItem = new TabItem(tabFolder, SWT.NONE);
-		efferent_tabItem.setText("\u5305\u4F9D\u8D56\u6811");
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("\u5305\u8026\u5408\u5173\u7CFB\u8868");
 		
-		final Tree packageEfferentTree = new Tree(tabFolder, SWT.BORDER);
-		packageEfferentTree.setLinesVisible(true);
-		efferent_tabItem.setControl(packageEfferentTree);
-		
-		TabItem afferent_tabItem = new TabItem(tabFolder, SWT.NONE);
-		afferent_tabItem.setText("\u5305\u88AB\u4F9D\u8D56\u6811");
-		
-		final Tree packageAfferentTree = new Tree(tabFolder, SWT.BORDER);
-		packageAfferentTree.setLinesVisible(true);
-		afferent_tabItem.setControl(packageAfferentTree);
+		final Tree packageCouplingTree = new Tree(tabFolder, SWT.BORDER);
+		tabItem.setControl(packageCouplingTree);
+		packageCouplingTree.setLinesVisible(true);
 
 		
 		
@@ -87,11 +80,11 @@ public class SubstitutabilityComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int index1 = projectSelectCombo.getSelectionIndex();
-				int index2 = versionCombo.getSelectionIndex();
+				int index2 = versionCombo.getSelectionIndex();				
 				
 				///Ê÷µÄ²ã¼¶ÏÔÊ¾
-				packageEfferentTree.removeAll();
-				packageAfferentTree.removeAll();
+				packageCouplingTree.removeAll();
+				
 //				ChangeabilityConnector dbConnector = new ChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
 				ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
 				final ArrayList<PackageNode> packageNodeList = new ArrayList<PackageNode>();
@@ -104,7 +97,7 @@ public class SubstitutabilityComposite extends Composite {
 					packageNodeList.add(packageNode);		
 				}
 				
-				for (PackageNode node : packageNodeList) {
+				/*for (PackageNode node : packageNodeList) {
 					TreeItem item = new TreeItem(packageEfferentTree, SWT.NONE);
 					DecimalFormat df = new DecimalFormat("0.00");
 					item.setText(node.getName()+" Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
@@ -146,10 +139,33 @@ public class SubstitutabilityComposite extends Composite {
 							
 						}
 					}			
-				}
+				}*/
 				
-
-				packageEfferentTree.addListener(SWT.Expand, new Listener() {					
+				for (PackageNode node : packageNodeList) {
+					TreeItem item = new TreeItem(packageCouplingTree, SWT.NONE);
+					DecimalFormat df = new DecimalFormat("0.00");
+					item.setText(node.getName()+" Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
+							+ " C: " + df.format(node.getChangeabilityRatio()));
+					ArrayList<String> list = new ArrayList<>(node.getEfferents());
+					list.addAll(node.getAfferents());
+					for (String string : list) {
+						TreeItem treeItem = new TreeItem(item, SWT.NONE);				
+						treeItem.setText(string);
+						if (packageNodeList.contains(new PackageNode(string))) {
+							int index = packageNodeList.indexOf(new PackageNode(string));
+							PackageNode pNode = packageNodeList.get(index);
+							ArrayList<String> nextList = new ArrayList<>(pNode.getEfferents());
+							nextList.addAll(pNode.getAfferents());
+							for (String string2 : nextList) {
+								TreeItem nextItem = new TreeItem(treeItem, SWT.NONE);				
+								nextItem.setText(string2);
+							}
+							
+						}
+					}			
+				}			
+				
+				packageCouplingTree.addListener(SWT.Expand, new Listener() {					
 					@Override
 					public void handleEvent(Event event) {
 						// TODO Auto-generated method stub
@@ -158,7 +174,8 @@ public class SubstitutabilityComposite extends Composite {
 						if (packageNodeList.contains(new PackageNode(selectItem.getText()))) {
 							int index = packageNodeList.indexOf(new PackageNode(selectItem.getText()));
 							PackageNode pNode = packageNodeList.get(index);
-							ArrayList<String> nextList = pNode.getEfferents();
+							ArrayList<String> nextList = new ArrayList<>(pNode.getEfferents());
+							nextList.addAll(pNode.getAfferents());
 							selectItem.removeAll();
 							for (String string2 : nextList) {
 								TreeItem nextItem = new TreeItem(selectItem, SWT.NONE);				
@@ -166,7 +183,7 @@ public class SubstitutabilityComposite extends Composite {
 								if (packageNodeList.contains(new PackageNode(string2))) {
 									int index2 = packageNodeList.indexOf(new PackageNode(string2));
 									PackageNode nextpNode = packageNodeList.get(index2);
-									ArrayList<String> nextnextList = nextpNode.getEfferents();
+									ArrayList<String> nextnextList = new ArrayList<>(nextpNode.getEfferents());
 									for (String string3 : nextnextList) {
 										TreeItem nextnextItem = new TreeItem(nextItem, SWT.NONE);				
 										nextnextItem.setText(string3);
@@ -177,37 +194,7 @@ public class SubstitutabilityComposite extends Composite {
 					}
 				});
 
-				packageAfferentTree.addListener(SWT.Expand, new Listener() {					
-					@Override
-					public void handleEvent(Event event) {
-						// TODO Auto-generated method stub
-						TreeItem selectItem =  (TreeItem) event.item;
-						System.out.println("selectitem:" + selectItem.getText());			
-						if (packageNodeList.contains(new PackageNode(selectItem.getText()))) {
-							int index = packageNodeList.indexOf(new PackageNode(selectItem.getText()));
-							PackageNode pNode = packageNodeList.get(index);
-							ArrayList<String> nextList = pNode.getAfferents();
-							selectItem.removeAll();
-							for (String string2 : nextList) {
-								TreeItem nextItem = new TreeItem(selectItem, SWT.NONE);				
-								nextItem.setText(string2);
-								if (packageNodeList.contains(new PackageNode(string2))) {
-									int index2 = packageNodeList.indexOf(new PackageNode(string2));
-									PackageNode nextpNode = packageNodeList.get(index2);
-									ArrayList<String> nextnextList = nextpNode.getAfferents();
-									for (String string3 : nextnextList) {
-										TreeItem nextnextItem = new TreeItem(nextItem, SWT.NONE);				
-										nextnextItem.setText(string3);
-									}						
-								}
-							}
-						}							
-					}
-				});
-
-				packageAfferentTree.layout();
-				packageEfferentTree.layout();
-	  
+				packageCouplingTree.layout();				
 			}
 		});
 	}
