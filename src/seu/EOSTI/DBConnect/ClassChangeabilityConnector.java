@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ClassChangeabilityConnector extends DBConnector{
 
@@ -31,7 +30,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "insert into `eosti`.`class_packageinfo` (`pkgName`, `className`, `projName`, `verID`, `importPkgName`, `importclassname`) VALUES ('"
+			String sql = "insert into `" + dBname + "`.`class_packageinfo` (`pkgName`, `className`, `projName`, `verID`, `importPkgName`, `importclassname`) VALUES ('"
 					+ packageName
 					+ "','"					
 					+ className
@@ -64,7 +63,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT pkgname FROM eosti.class_packageinfo where ProjName = '"
+			String sql = "SELECT pkgname FROM " + dBname + ".class_packageinfo where ProjName = '"
 						+ projectName 
 						+ "' and verID = '"
 						+ version 
@@ -87,7 +86,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT distinct pkgname, classname FROM eosti.class_packageinfo where verID = '"					
+			String sql = "SELECT distinct pkgname, classname FROM " + dBname + ".class_packageinfo where verID = '"					
 					+ version
 					+ "' and projName = '" 
 					+ projectName + "'";
@@ -112,7 +111,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / couple efferent
-			String cestr = "Select  count(distinct importpkgName, importClassName) as result FROM eosti.class_packageinfo where pkgname = '"
+			String cestr = "Select  count(distinct importpkgName, importClassName) as result FROM " + dBname + ".class_packageinfo where pkgname = '"
 					+ packageName
 					+ "' and className = '"
 					+ className
@@ -133,7 +132,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 				rStrings.add("ce: " + ce);
 			}
 
-			cestr = "Select  distinct importpkgName, importClassName  FROM eosti.class_packageinfo where pkgname = '"
+			cestr = "Select  distinct importpkgName, importClassName  FROM " + dBname + ".class_packageinfo where pkgname = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -144,7 +143,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 //				rStrings.add(str);
 			}
 
-			String castr = "Select  count(distinct pkgName, className) as result FROM eosti.class_packageinfo where importpkgname = '"
+			String castr = "Select  count(distinct pkgName, className) as result FROM " + dBname + ".class_packageinfo where importpkgname = '"
 					+ packageName
 					+ "' and importClassName = '"
 					+ className
@@ -160,7 +159,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 				rStrings.add("ca: " + ca);
 			}
 
-			castr = "Select  distinct pkgName, className FROM eosti.class_packageinfo where importpkgname = '"
+			castr = "Select  distinct pkgName, className FROM " + dBname + ".class_packageinfo where importpkgname = '"
 					+ packageName
 					+ "' and importClassName = '"
 					+ className
@@ -200,7 +199,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.class_packageinfo where pkgname = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".class_packageinfo where pkgname = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -228,7 +227,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select  distinct importPkgName as result FROM eosti.class_packageinfo where pkgName = '"
+			String cestr = "Select  distinct importPkgName as result FROM " + dBname + ".class_packageinfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -253,7 +252,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select   distinct importpkgName, importClassName  FROM eosti.class_packageinfo where pkgName = '"
+			String cestr = "Select   distinct importpkgName, importClassName  FROM " + dBname + ".class_packageinfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -280,7 +279,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select   distinct importpkgName, importClassName,classname  FROM eosti.class_packageinfo where pkgName = '"
+			String cestr = "Select   distinct importpkgName, importClassName,classname  FROM " + dBname + ".class_packageinfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -307,7 +306,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / afferent  couplings 该包依赖的外部包数目
-			String castr = "Select  count(distinct pkgName) as result FROM eosti.class_packageinfo where importPkgName = '"
+			String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".class_packageinfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -335,7 +334,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct pkgName as result FROM eosti.class_packageinfo where importPkgName = '"
+			String castr = "Select  distinct pkgName as result FROM " + dBname + ".class_packageinfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -360,7 +359,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct pkgName, className FROM eosti.class_packageinfo where importPkgName = '"
+			String castr = "Select  distinct pkgName, className FROM " + dBname + ".class_packageinfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -388,7 +387,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 			Statement stmt = connect.createStatement();
 
 			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM eosti.class_packageinfo where pkgName = '"
+			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".class_packageinfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -406,7 +405,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 				rStrings.add("ce: " + ce);
 			}
 
-			cestr = "Select  distinct importPkgName as result FROM eosti.class_packageinfo where pkgName = '"
+			cestr = "Select  distinct importPkgName as result FROM " + dBname + ".class_packageinfo where pkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -417,7 +416,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 				rStrings.add(str);
 			}
 
-			String castr = "Select  count(distinct pkgName) as result FROM eosti.class_packageinfo where importPkgName = '"
+			String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".class_packageinfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version
@@ -430,7 +429,7 @@ public class ClassChangeabilityConnector extends DBConnector{
 				rStrings.add("ca: " + ca);
 			}
 
-			castr = "Select  distinct pkgName as result FROM eosti.class_packageinfo where importPkgName = '"
+			castr = "Select  distinct pkgName as result FROM " + dBname + ".class_packageinfo where importPkgName = '"
 					+ packageName
 					+ "' and verID = '"
 					+ version

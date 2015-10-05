@@ -59,7 +59,7 @@ public class InnerCompatibilityComposite extends Composite {
 		label.setText("\u9879\u76EE\u8DEF\u5F84\uFF1A");
 		
 		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("\u9879\u76EE\u6784\u4EF6\u8DEF\u5F84\uFF1A");
+		label_1.setText("\u9879\u76EE\u4E2D\u5305\u8DEF\u5F84\uFF1A");
 		label_1.setBounds(10, 62, 103, 17);
 		
 		pathOfProjectText = new Text(this, SWT.BORDER);
@@ -165,7 +165,7 @@ public class InnerCompatibilityComposite extends Composite {
 					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});
 				}else {
 					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"该构件与程序兼容"});
+					lastItem.setText(new String[] {"该包在项目中兼容"});
 				}
 				
 			}

@@ -7,18 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javassist.compiler.ast.Visitor;
 
-import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.Message;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jfree.chart.JFreeChart;
 
 import seu.EOSTI.Model.JarClassModel;
 import seu.EOSTI.Model.JarMethodModel;

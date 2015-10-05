@@ -20,7 +20,7 @@ public class ProjectConnector extends DBConnector {
 	public ArrayList<String> getProject() {
 		
 		ArrayList<String> rsList = new ArrayList<String>();
-		String sqlstr = "SELECT projName FROM eosti.projectinfo group by projName";
+		String sqlstr = "SELECT projName FROM " + dBname + ".projectinfo group by projName";
 		Statement stmt;
 		try {
 			stmt = connect.createStatement();
@@ -41,7 +41,7 @@ public class ProjectConnector extends DBConnector {
 		
 		ArrayList<String> versionList = new ArrayList<String>();
 		
-		String sqlstr = "SELECT verID FROM eosti.projectinfo where projName = '"
+		String sqlstr = "SELECT verID FROM " + dBname + ".projectinfo where projName = '"
 				+ projectName +"' order by verID asc";
 		Statement stmt;
 		try {

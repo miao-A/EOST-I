@@ -8,6 +8,7 @@ import org.eclipse.swt.custom.CTabItem;
 
 public class CompatibilityMutiVersionComposite extends Composite {
 
+	private InnerCompatibilityMutiVersionComposite innerCompatibilityMutiVersionComposite;
 	/**
 	 * Create the composite.
 	 * @param parent

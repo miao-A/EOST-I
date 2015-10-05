@@ -6,9 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import seu.EOSTI.DBConnect.ChangeabilityConnector;
 import seu.EOSTI.DBConnect.ClassChangeabilityConnector;
-import seu.EOSTI.DBConnect.ExtensibilityConnector;
 
 public class SubstitutabilityDiff {
 	private String project = null;

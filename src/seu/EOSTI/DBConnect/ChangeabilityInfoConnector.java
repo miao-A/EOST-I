@@ -25,7 +25,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 			try {
 
 				Statement stmt = connect.createStatement();
-				String sql = "SELECT pkgname FROM eosti.class_packageinfo where ProjName = '"
+				String sql = "SELECT pkgname FROM " + dBname + ".class_packageinfo where ProjName = '"
 						+ projectName 
 						+ "' and verID = '"
 						+ version 
@@ -54,7 +54,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				Statement stmt = connect.createStatement();
 
 				// / efferent  couplings 被该包依赖的外部包数目
-				String cestr = "Select  count(distinct importPkgName) as result FROM eosti.class_packageinfo where pkgname = '"
+				String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".class_packageinfo where pkgname = '"
 						+ packageName
 						+ "' and verID = '"
 						+ version
@@ -73,7 +73,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 
 				
 
-				String castr = "Select  count(distinct pkgName) as result FROM eosti.class_packageinfo where importPkgName = '"
+				String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".class_packageinfo where importPkgName = '"
 						+ packageName
 						+ "' and verID = '"
 						+ version
@@ -90,7 +90,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				DecimalFormat df = new DecimalFormat("0.00");				
 
 				
-				String changeSql = "INSERT INTO `eosti`.`changeabilityinfo`  (`pkgName`, `projName`, `verID`, `coupleAfferent`, `coupleEfferent`, `ratio`) VALUES ('"
+				String changeSql = "INSERT INTO `" + dBname + "`.`changeabilityinfo`  (`pkgName`, `projName`, `verID`, `coupleAfferent`, `coupleEfferent`, `ratio`) VALUES ('"
 						+ packageName + "' , '"
 						+ projectName + "', '"
 						+ version + "', "
@@ -112,7 +112,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				Statement stmt = connect.createStatement();
 				//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 				
-				String str = "Select  ratio as result FROM eosti.changeabilityinfo where VerID = '"
+				String str = "Select  ratio as result FROM " + dBname + ".changeabilityinfo where VerID = '"
 						+ version + "' and projName = '"
 						+projectName +"' and pkgName = '"
 						+ pkgName +"'";				

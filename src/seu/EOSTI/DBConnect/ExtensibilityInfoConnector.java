@@ -23,7 +23,7 @@ public class ExtensibilityInfoConnector extends DBConnector {
 			try {
 
 				Statement stmt = connect.createStatement();
-				String sql = "SELECT pkgname FROM eosti.classTypeinfo where ProjName = '"
+				String sql = "SELECT pkgname FROM " + dBname + ".classTypeinfo where ProjName = '"
 						+ projectNameString 
 						+ "' and verID = '"
 						+ versionString 
@@ -52,7 +52,7 @@ public class ExtensibilityInfoConnector extends DBConnector {
 				Statement stmt = connect.createStatement();
 				//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 				
-				String str = "Select  count(classname) as result FROM eosti.classTypeinfo where pkgname = '"
+				String str = "Select  count(classname) as result FROM " + dBname + ".classTypeinfo where pkgname = '"
 				+ packageName 
 				+ "' and VerID = '" 
 				+ versionString + "' and projName = '"
@@ -97,7 +97,7 @@ public class ExtensibilityInfoConnector extends DBConnector {
 				DecimalFormat df = new DecimalFormat("#.00");
 				rStrings.add(df.format(ratioOfInterface));	
 				
-				String extenSql = "INSERT INTO `eosti`.`extensibilityinfo` (`pkgName`, `projName`, `verID`, `interfaceNum`, `abstractNum`, `concreteNum`,`ratio`) VALUES ('"
+				String extenSql = "INSERT INTO `" + dBname + "`.`extensibilityinfo` (`pkgName`, `projName`, `verID`, `interfaceNum`, `abstractNum`, `concreteNum`,`ratio`) VALUES ('"
 						+ packageName + "' , '"
 						+ projectNameString + "', '"
 						+ versionString + "', "
@@ -120,7 +120,7 @@ public class ExtensibilityInfoConnector extends DBConnector {
 				Statement stmt = connect.createStatement();
 				//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 				
-				String str = "Select  ratio as result FROM eosti.extensibilityinfo where VerID = '"
+				String str = "Select  ratio as result FROM " + dBname + ".extensibilityinfo where VerID = '"
 						+ versionString + "' and projName = '"
 						+projectNameString +"' and pkgName = '"
 						+ pkgName +"'";

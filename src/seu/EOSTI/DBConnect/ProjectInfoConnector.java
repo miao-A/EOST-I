@@ -29,7 +29,7 @@ public class ProjectInfoConnector extends DBConnector {
 		try {		
 
 			Statement stmt = connect.createStatement();
-			String sql = "INSERT INTO `eosti`.`projectinfo` (`projName`, `verID`, `projectInfo`) VALUES ('"
+			String sql = "INSERT INTO `" + dBname + "`.`projectinfo` (`projName`, `verID`, `projectInfo`) VALUES ('"
 				+ projectName + "', '"
 				+ version + "', '"
 				+introduction +"')";
@@ -44,7 +44,7 @@ public class ProjectInfoConnector extends DBConnector {
 	public ArrayList<String> getProject() {
 		
 		ArrayList<String> rsList = new ArrayList<String>();
-		String sqlstr = "SELECT projName FROM eosti.projectinfo group by projName";
+		String sqlstr = "SELECT projName FROM " + dBname + ".projectinfo group by projName";
 		Statement stmt;
 		try {
 			stmt = connect.createStatement();
@@ -65,7 +65,7 @@ public class ProjectInfoConnector extends DBConnector {
 		
 		ArrayList<String> versionList = new ArrayList<String>();
 		
-		String sqlstr = "SELECT verID FROM eosti.projectinfo where projName = '"
+		String sqlstr = "SELECT verID FROM " + dBname + ".projectinfo where projName = '"
 				+ projectName +"'";
 		Statement stmt;
 		try {

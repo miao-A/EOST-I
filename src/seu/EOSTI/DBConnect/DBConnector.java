@@ -10,6 +10,7 @@ public class DBConnector {
 	private String pwd = "1234";
 	private String url = "jdbc:mysql://localhost:3306/mysql";
 	private Connection connect=null;
+	protected String dBname = "eosti";
 	
 	public DBConnector(){
 		try {

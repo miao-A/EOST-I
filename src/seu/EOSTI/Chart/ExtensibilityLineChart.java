@@ -1,12 +1,8 @@
 package seu.EOSTI.Chart;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 import seu.EOSTI.DBConnect.ProjectConnector;
 

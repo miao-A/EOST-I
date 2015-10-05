@@ -71,7 +71,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 		extenTabItem.setText("\u53EF\u6269\u5C55\u6027\u8D8B\u52BF\u56FE");
 		
 		final CTabItem extenDiffTabItem = new CTabItem(tabFolder, SWT.NONE);
-		extenDiffTabItem.setText("\u7248\u672C\u53D8\u66F4");
+		extenDiffTabItem.setText("\u7248\u672C\u53D8\u66F4\u8BE6\u7EC6\u4FE1\u606F");
 		
 		final Combo version1Combo = new Combo(this, SWT.NONE);
 		version1Combo.setBounds(304, 10, 88, 25);
@@ -108,9 +108,9 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 				version2Combo.layout();
 				
 				{
-					System.out.println("可扩展性指示图");
+					//System.out.println("可扩展性指示图");
 					//BarChart extensibilityChart = new ExtensibilityBarChart("可扩展性指示图");	
-					ExtensibilityLineChart extensibilityChart = new ExtensibilityLineChart("可扩展性指示图",projName);	
+					ExtensibilityLineChart extensibilityChart = new ExtensibilityLineChart("",projName);	
 					JFreeChart chart = null;										
 					
 					extensibilityChart.creatDataSet();		

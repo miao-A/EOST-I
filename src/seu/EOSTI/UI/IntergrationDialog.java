@@ -68,7 +68,7 @@ public class IntergrationDialog extends Dialog {
 	private void createContents() throws IOException {
 		shlCiet = new Shell(getParent(), SWT.DIALOG_TRIM);
 		shlCiet.setSize(967, 641);
-		shlCiet.setText("CIET");
+		shlCiet.setText("CIE");
 		shlCiet.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(shlCiet, SWT.NONE);
@@ -114,6 +114,27 @@ public class IntergrationDialog extends Dialog {
 		});
 		extensionButton.setText("\u53EF\u6269\u5C55\u6027\u5EA6\u91CF");
 		
+		Button changeButton = new Button(leftComposite, SWT.NONE);
+		changeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = changeabilityComposite;
+				changeabilityComposite.reloadProject();
+				rightComposite.layout();
+			}
+		});
+		changeButton.setText("\u53EF\u66FF\u6362\u6027\u5EA6\u91CF");
+		
+		Button compatibilityButton = new Button(leftComposite, SWT.NONE);
+		compatibilityButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				rightCompositeSL.topControl = compatibilityComposite;
+				rightComposite.layout();
+			}
+		});
+		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027\u5EA6\u91CF");
+		
 		Button extensiMutiButton = new Button(leftComposite, SWT.NONE);
 		extensiMutiButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -126,17 +147,6 @@ public class IntergrationDialog extends Dialog {
 		});
 		extensiMutiButton.setText("\u53EF\u6269\u5C55\u6027\u6F14\u5316\u8BC4\u4F30");		
 		
-		Button changeButton = new Button(leftComposite, SWT.NONE);
-		changeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				rightCompositeSL.topControl = changeabilityComposite;
-				changeabilityComposite.reloadProject();
-				rightComposite.layout();
-			}
-		});
-		changeButton.setText("\u53EF\u66FF\u6362\u6027\u5EA6\u91CF");
-		
 		Button changeMutiButton = new Button(leftComposite, SWT.NONE);
 		changeMutiButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -147,16 +157,6 @@ public class IntergrationDialog extends Dialog {
 			}
 		});
 		changeMutiButton.setText("\u53EF\u66FF\u6362\u6027\u6F14\u5316\u8BC4\u4F30");
-		
-		Button compatibilityButton = new Button(leftComposite, SWT.NONE);
-		compatibilityButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				rightCompositeSL.topControl = compatibilityComposite;
-				rightComposite.layout();
-			}
-		});
-		compatibilityButton.setText("\u53EF\u517C\u5BB9\u6027\u5EA6\u91CF");
 		
 		compatibilityComposite = new CompatibilityComposite(rightComposite, SWT.NONE);
 		extensibilityComposite = new ExtensibilityComposite(rightComposite, SWT.NONE);

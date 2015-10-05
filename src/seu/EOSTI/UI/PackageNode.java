@@ -20,13 +20,13 @@ public class PackageNode {
 	
 	public void setAfferents(ArrayList<String> aList) {
 		for (String string : aList) {
-			afferentList.add(string);
+			afferentList.add("ca: "+string);
 		}
 	}
 	
 	public void setEfferents(ArrayList<String> eList) {
 		for (String string : eList) {
-			efferentList.add(string);
+			efferentList.add("ce: "+ string);
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class PackageNode {
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof PackageNode) {
-			if (this.getName().equals(((PackageNode) o).getName())) {
+			if (this.getName().equals("ca: "+((PackageNode) o).getName())||this.getName().equals("ce: "+((PackageNode) o).getName())) {
 			return true;
 			}
 		}

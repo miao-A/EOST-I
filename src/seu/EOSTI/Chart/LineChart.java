@@ -36,7 +36,7 @@ public abstract class LineChart{
 	public LineChart() {
 		// TODO Auto-generated constructor stub
 		dataset = new DefaultCategoryDataset();
-		title = "指示图";
+		title = "";
 	}
 	
 	public LineChart(String title){
@@ -52,7 +52,7 @@ public abstract class LineChart{
         chart = ChartFactory.createLineChart( 
                            title, // 图表标题
                            "项目版本（包数）", // 目录轴的显示标签
-                           "比例%", // 数值轴的显示标签
+                           "%", // 数值轴的显示标签
                             dataset, // 数据集
                             PlotOrientation.VERTICAL, // 图表方向：水平、垂直
                             true,  // 

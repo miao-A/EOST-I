@@ -36,16 +36,12 @@ public class ExtensibilityComposite extends Composite {
 		super(parent, style);
 		setLayout(null);
 		
-		Label lblExtensibilityComposite = new Label(this, SWT.NONE);
-		lblExtensibilityComposite.setBounds(0, 395, 165, 25);
-		lblExtensibilityComposite.setText("Extensibility Composite");
-		
 		extensibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		extensibilityTable.setBounds(0, 31, 655, 295);
+		extensibilityTable.setBounds(0, 31, 655, 389);
 		extensibilityTable.setHeaderVisible(true);
 		extensibilityTable.setLinesVisible(true);
 		
-		String[] tableHeader = {"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
+		String[] tableHeader = {"PackageName","concereteClass", "abstractClass","interfaceClass","totalClass","ratio %"};
 		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  

@@ -11,6 +11,7 @@ public class ExtensibilityConnector extends DBConnector{
 private Connection connect = null;
 private String projectNameString;
 private String versionString;
+
 	
 	public ExtensibilityConnector(String projectName, String version){
 		super();
@@ -24,7 +25,7 @@ private String versionString;
 		try {
 
 			Statement stmt = connect.createStatement();
-			String sql = "SELECT pkgname FROM eosti.classTypeinfo where ProjName = '"
+			String sql = "SELECT pkgname FROM " + dBname + ".classTypeinfo where ProjName = '"
 					+ projectNameString 
 					+ "' and verID = '"
 					+ versionString 
@@ -49,7 +50,7 @@ private String versionString;
 			
 
 			Statement stmt = connect.createStatement();
-			String sql = "INSERT INTO eosti.classTypeinfo (`pkgName`, `ClassName`, `ProjName` , `VerID`, `ClassType`) VALUES ('"
+			String sql = "INSERT INTO " + dBname + ".classTypeinfo (`pkgName`, `ClassName`, `ProjName` , `VerID`, `ClassType`) VALUES ('"
 					+ packageName
 					+"','"
 					+className
@@ -79,7 +80,7 @@ private String versionString;
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classTypeinfo where pkgname = '"
+			String str = "Select  count(classname) as result FROM " + dBname + ".classTypeinfo where pkgname = '"
 			+ packageName 
 			+ "' and VerID = '" 
 			+ versionString + "' and projName = '"
@@ -137,7 +138,7 @@ public ArrayList<String> packageExtensibilityInfo(String packageName){
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  * FROM eosti.classTypeinfo where pkgname = '"
+			String str = "Select  * FROM " + dBname + ".classTypeinfo where pkgname = '"
 			+ packageName 
 			+ "' and VerID = '" 
 			+ versionString + "' and projName = '"
@@ -176,7 +177,7 @@ public ArrayList<String> packageExtensibilityInfo(String packageName){
 			Statement stmt = connect.createStatement();
 			//{"PackageName","concereteClass", "interfaceClass","abstractClass","totalClass","ratio %"};
 			
-			String str = "Select  count(classname) as result FROM eosti.classTypeinfo where VerID = '"
+			String str = "Select  count(classname) as result FROM " + dBname + ".classTypeinfo where VerID = '"
 			+ versionString + "' and projName = '"
 					+projectNameString +"'";
 			String concretestr = str +" and classtype = 'concrete'";

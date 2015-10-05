@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import seu.EOSTI.DBConnect.ExtensibilityConnector;
-import seu.EOSTI.DBConnect.ProjectInfoConnector;
 
 public class ExtensibilityDiff {
 
