@@ -39,11 +39,15 @@ import org.eclipse.swt.widgets.Combo;
 
 public class InnerCompatibilityMutiVersionComposite extends Composite {
 	private Text pathOfOldProjectText;
-	private Table uncompatibilityTable;
+	private Table uncompatibilityTableOne;
+
 	private TableEditor editor = null;
 	
 	String strings = new String();
 	private Text pathOfNewProjectText;
+	private Table uncompatibilityTableTwo;
+	private Text ResultOneText;
+	private Text ResultTwoText;
 
 	/**
 	 * Create the composite.
@@ -82,20 +86,34 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		btnNewButton.setBounds(500, 10, 53, 22);
 		btnNewButton.setText("\u8DEF\u5F84...");
 		
-		uncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		uncompatibilityTable.setBounds(10, 85, 711, 382);
-		uncompatibilityTable.setHeaderVisible(true);
-		uncompatibilityTable.setLinesVisible(true);
+		uncompatibilityTableOne = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		uncompatibilityTableOne.setBounds(10, 105, 711, 166);
+		uncompatibilityTableOne.setHeaderVisible(true);
+		uncompatibilityTableOne.setLinesVisible(true);
 
+		uncompatibilityTableTwo = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
+		uncompatibilityTableTwo.setLinesVisible(true);
+		uncompatibilityTableTwo.setHeaderVisible(true);
+		uncompatibilityTableTwo.setBounds(10, 301, 711, 166);
 		
-		editor = new TableEditor(uncompatibilityTable);
+		
+		editor = new TableEditor(uncompatibilityTableOne);
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		String[] tableHeader = {"        包名        ","        位置         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
+		String[] tableHeader = {"        包名        ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
-			TableColumn tableColumn = new TableColumn(uncompatibilityTable, SWT.NONE);
+			TableColumn tableColumn = new TableColumn(uncompatibilityTableOne, SWT.NONE);
+			tableColumn.setText(tableHeader[i]);  
+			// 设置表头可移动，默认为false  
+			tableColumn.setMoveable(false); 
+	    	tableColumn.pack();
+	    	
+	    }
+		for (int i = 0; i < tableHeader.length; i++)  
+	    {  					
+			TableColumn tableColumn = new TableColumn(uncompatibilityTableTwo, SWT.NONE);
 			tableColumn.setText(tableHeader[i]);  
 			// 设置表头可移动，默认为false  
 			tableColumn.setMoveable(false); 
@@ -107,7 +125,8 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		CompatibilityBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {				
-				uncompatibilityTable.removeAll();				
+				uncompatibilityTableOne.removeAll();
+				uncompatibilityTableTwo.removeAll();
 				
 				String pathOfOldProject = pathOfOldProjectText.getText(); // "D:/ProjectOfHW/jEditor/jEditor0.4.1/src/org/jeditor/gui";
 				String pathOfNewProject = pathOfNewProjectText.getText();
@@ -118,48 +137,54 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 				List<UnCompatibilityMIModel> newUnCompatibilityMIModels = newInnerCompatibility.getunCompatibilityMIModels();
 
 				if (oldUnCompatibilityMIModels.size() == 0) {
-					System.out.println("版本1内部兼容性良好");
+					//System.out.println("版本1内部兼容性良好");
+					ResultOneText.setText("版本1内部兼容性良好");
 				}
 				
 				if (newUnCompatibilityMIModels.size() == 0) {
-					System.out.println("版本2内部兼容性良好");
+					//System.out.println("版本2内部兼容性良好");
+					ResultTwoText.setText("版本2内部兼容性良好");
 				}
 				
 				for (UnCompatibilityMIModel unCompatibilityMIModel : oldUnCompatibilityMIModels) {
 					//unCompatibilityMIModel.getMessage();
 					
-				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
-				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getPathOfFile(),
-				    		unCompatibilityMIModel.getFromPackageName(),unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
+				    final TableItem item = new TableItem(uncompatibilityTableOne, SWT.NONE);
+				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getFromPackageName(),
+				    		unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
 				    		unCompatibilityMIModel.getRealArguments()};
 				    item.setText(string);
 				}				
 					
 
 				if (oldUnCompatibilityMIModels.size()>0) {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"版本1不兼容的接口个数:",String.valueOf(oldUnCompatibilityMIModels.size())});
+					//TableItem lastItem = new TableItem(uncompatibilityTableOne, SWT.NONE);
+					//lastItem.setText(new String[] {"版本1不兼容的接口个数:",String.valueOf(oldUnCompatibilityMIModels.size())});
+					ResultOneText.setText("版本1不兼容的类型个数:"+String.valueOf(oldUnCompatibilityMIModels.size()));
 				}else {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"版本1程序内部兼容性良好"});
+					//TableItem lastItem = new TableItem(uncompatibilityTableOne, SWT.NONE);
+					//lastItem.setText(new String[] {"版本1程序内部兼容性良好"});
+					ResultOneText.setText("版本1内部兼容性良好");
 				}
 				
 				for (UnCompatibilityMIModel unCompatibilityMIModel : newUnCompatibilityMIModels) {
 					//unCompatibilityMIModel.getMessage();
 					
-				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
-				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getPathOfFile(),
-				    		unCompatibilityMIModel.getFromPackageName(),unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
+				    final TableItem item = new TableItem(uncompatibilityTableTwo, SWT.NONE);
+				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getFromPackageName(),
+				    		unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
 				    		unCompatibilityMIModel.getRealArguments()};
 				    item.setText(string);
 				}	
 				
 				if (newUnCompatibilityMIModels.size()>0) {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"版本2不兼容的接口个数:",String.valueOf(newUnCompatibilityMIModels.size())});
+					//TableItem lastItem = new TableItem(uncompatibilityTableOne, SWT.NONE);
+					//lastItem.setText(new String[] {"版本2不兼容的接口个数:",String.valueOf(newUnCompatibilityMIModels.size())});
+					ResultTwoText.setText("版本2不兼容的类型个数:"+String.valueOf(newUnCompatibilityMIModels.size()));
 				}else {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"版本2程序内部兼容性良好"});
+					//TableItem lastItem = new TableItem(uncompatibilityTableOne, SWT.NONE);
+					//lastItem.setText(new String[] {"版本2程序内部兼容性良好"});
+					ResultTwoText.setText("版本2内部兼容性良好");
 				}
 				
 			}
@@ -192,6 +217,14 @@ public class InnerCompatibilityMutiVersionComposite extends Composite {
 		});
 		button_1.setText("\u8DEF\u5F84...");
 		button_1.setBounds(500, 48, 53, 22);
+		
+		
+		
+		ResultOneText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		ResultOneText.setBounds(10, 74, 144, 23);
+		
+		ResultTwoText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		ResultTwoText.setBounds(10, 277, 144, 23);
 	}
 
 	@Override

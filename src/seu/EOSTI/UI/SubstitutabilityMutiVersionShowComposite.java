@@ -115,9 +115,9 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 				
 				
 				{				
-					System.out.println("可替换性指示图");
+					//System.out.println("可替换性指示图");
 					//BarChart changeabilityChart = new ChangeabilityBarChart("可替换性指示图");
-					SubstitutabilityLineChart changeabilityChart = new SubstitutabilityLineChart("可替换性指示图",projName);				
+					SubstitutabilityLineChart changeabilityChart = new SubstitutabilityLineChart("",projName);				
 					
 					
 					changeabilityChart.creatDataSet();		
@@ -199,11 +199,11 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 			
 			String textString = version1+" compare with " + version2;
 			
-			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.diffInProject(version1, version2);
+			HashMap<String, HashMap<String,List<String>>> diffInfluenceMap = changeabilityDiff.diffInProject(version1, version2);
 			
-			for (String pkgName : diffmap.keySet()) {
+			for (String pkgName : diffInfluenceMap.keySet()) {
 				
-				HashMap<String, List<String>> map = diffmap.get(pkgName);
+				HashMap<String, List<String>> map = diffInfluenceMap.get(pkgName);
 				if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
 					textString += "\npackage: " + pkgName;
 					
@@ -241,7 +241,7 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 				}							
 			}
 			
-			if (diffmap.size()==0) {
+			if (diffInfluenceMap.size()==0) {
 				textString += "\nNo effect";
 			}
 			
@@ -264,10 +264,18 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 			final SubstitutabilityDiff	changeabilityDiff = new SubstitutabilityDiff(projName);
 			String textString = version1+" compare with " + version2;
 			
+			HashMap<String, HashMap<String,List<String>>> diffInfluenceMap = changeabilityDiff.diffInProject(version1, version2);
 			HashMap<String, HashMap<String,List<String>>> diffmap = changeabilityDiff.moreDiffInProject(version1, version2);
+			
 			boolean noEffect = true;
 
 			for (String pkgName : diffmap.keySet()) {
+				
+				HashMap<String, List<String>> influenceMap = new HashMap<>();
+				if (diffInfluenceMap.containsKey(pkgName)) {
+					influenceMap = diffInfluenceMap.get(pkgName);
+				}
+				 
 				
 				HashMap<String, List<String>> map = diffmap.get(pkgName);
 				if (map.containsKey("+import")||map.containsKey("+export")||map.containsKey("-import")||map.containsKey("-export")) {
@@ -276,6 +284,15 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 					if (map.containsKey("+import")) {									
 						textString += "\n+import \t"+map.get("+import").size();
 						for (String string : map.get("+import")) {
+							
+							
+							if (influenceMap.containsKey("+import")) {
+								for (String influString : influenceMap.get("+import")) {
+									if (string.startsWith(influString)) {
+										string = "*"+string;
+									}
+								}
+							}
 							textString += "\nName:\t"+string;
 						}
 					}
@@ -283,6 +300,14 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 					if (map.containsKey("-import")) {									
 						textString += "\n-import \t"+map.get("-import").size();
 						for (String string : map.get("-import")) {
+							
+							if (influenceMap.containsKey("-import")) {
+								for (String influString : influenceMap.get("-import")) {
+									if (string.startsWith(influString)) {
+										string = "*"+string;
+									}
+								}
+							}
 							textString += "\nName:\t"+string;
 						}
 					}
@@ -290,6 +315,15 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 					if (map.containsKey("+export")) {									
 						textString += "\n+export \t"+map.get("+export").size();
 						for (String string : map.get("+export")) {
+							
+							if (influenceMap.containsKey("+export")) {
+								for (String influString : influenceMap.get("+export")) {
+									if (string.startsWith(influString)) {
+										string = "*"+string;
+									}
+								}
+							}
+							
 							textString += "\nName:\t"+string;
 						}
 					}
@@ -297,6 +331,14 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 					if (map.containsKey("-export")) {									
 						textString += "\n-export \t"+map.get("-export").size();
 						for (String string : map.get("-export")) {
+							
+							if (influenceMap.containsKey("-export")) {
+								for (String influString : influenceMap.get("-export")) {
+									if (string.startsWith(influString)) {
+										string = "*"+string;
+									}
+								}
+							}
 							textString += "\nName:\t"+string;
 						}
 					}
@@ -316,7 +358,7 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 	}
 	
 
-	
+	//设置字体颜色，抬头设为红色，包名设为蓝色，有影响的变更设置为黄色
 	private void textAddColor(StyledText styledText){
 		String text = styledText.getText();
 		String[] strings = text.split("\n");
@@ -325,8 +367,10 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 		
 			Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 			Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
+			Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
 		    /*StyleRange sr = new StyleRange(i, strings[i].length(), red, null);
 		    styledText.setStyleRange(sr);*/
+			
 			StyleRange range = styledText.getStyleRangeAtOffset(index);
 			if (strings[i].contains("compare with")) {
 				if (range == null) {
@@ -344,6 +388,17 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 				}
 				range.fontStyle = SWT.BOLD;
 				range.foreground = blue;
+				range.start = index;
+				range.length = strings[i].length();
+				styledText.setStyleRange(range);
+			}
+			
+			if (strings[i].startsWith("Name:\t*")) {
+				if (range == null) {
+					range = new StyleRange();
+				}
+				range.fontStyle = SWT.BOLD;
+				range.foreground = green;
 				range.start = index;
 				range.length = strings[i].length();
 				styledText.setStyleRange(range);

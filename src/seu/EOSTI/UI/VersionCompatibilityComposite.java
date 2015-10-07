@@ -77,6 +77,7 @@ public class VersionCompatibilityComposite extends Composite {
 		
 	}
 	String strings = new String();
+	private Text ResultText;
 
 	/**
 	 * Create the composite.
@@ -88,10 +89,10 @@ public class VersionCompatibilityComposite extends Composite {
 		
 		Label label = new Label(this, SWT.NONE);
 		label.setBounds(10, 10, 79, 17);
-		label.setText("\u8001\u7248\u672C\u8DEF\u5F84\uFF1A");
+		label.setText("\u9879\u76EE\u8DEF\u5F841\uFF1A");
 		
 		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("\u65B0\u7248\u672C\u8DEF\u5F84\uFF1A");
+		label_1.setText("\u9879\u76EE\u8DEF\u5F842\uFF1A");
 		label_1.setBounds(10, 62, 79, 17);
 		
 		oldComponentText = new Text(this, SWT.BORDER);
@@ -143,7 +144,7 @@ public class VersionCompatibilityComposite extends Composite {
 		button.setText("\u8DEF\u5F84...");
 		
 		changeTypeTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		changeTypeTable.setBounds(10, 85, 711, 441);
+		changeTypeTable.setBounds(10, 120, 711, 406);
 		changeTypeTable.setHeaderVisible(true);
 		changeTypeTable.setLinesVisible(true);
 
@@ -548,9 +549,10 @@ public class VersionCompatibilityComposite extends Composite {
 				});	
 				
 				if (unchangeCount+removedCount>0) {
-					TableItem lastItem = new TableItem(changeTypeTable, SWT.NONE);
+					//TableItem lastItem = new TableItem(changeTypeTable, SWT.NONE);
 					Double double1 = new Double(1.0*(unchangeCount+compatibilityCount)/(unchangeCount+removedCount+compatibilityCount));
-					lastItem.setText(new String[] {"新版本与旧版本相兼容的接口个数:"+(unchangeCount+compatibilityCount),"旧版本软件的接口数:"+(unchangeCount+removedCount+compatibilityCount),double1.toString()});
+					//lastItem.setText(new String[] {"新版本与旧版本相兼容的接口个数:"+(unchangeCount+compatibilityCount),"旧版本软件的接口数:"+(unchangeCount+removedCount+compatibilityCount),double1.toString()});
+					ResultText.setText("版本1与版本2的兼容性为\t"+double1.toString());
 				}
 				
 				System.out.println(newCount +"\t"+removedCount+"\t"+compatibilityCount+"\t"+unchangeCount);
@@ -559,6 +561,9 @@ public class VersionCompatibilityComposite extends Composite {
 		
 		CompatibilityBtn.setBounds(583, 10, 79, 69);
 		CompatibilityBtn.setText("\u5206\u6790");
+		
+		ResultText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		ResultText.setBounds(10, 85, 457, 23);
 	}
 
 	@Override

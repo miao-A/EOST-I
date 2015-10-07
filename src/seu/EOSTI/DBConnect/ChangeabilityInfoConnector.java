@@ -86,7 +86,7 @@ public class ChangeabilityInfoConnector extends DBConnector {
 				}
 				
 
-				double changeability = 100.0*ca/(ca+ce);
+				double changeability = 100.0*ce/(ca+ce);
 				DecimalFormat df = new DecimalFormat("0.00");				
 
 				

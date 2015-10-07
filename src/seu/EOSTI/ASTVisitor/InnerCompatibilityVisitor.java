@@ -57,7 +57,7 @@ public class InnerCompatibilityVisitor extends ASTVisitor{
 					if (packageList.contains(node.getPackage().getName().toString())) {
 						UnCompatibilityMIModel unCompatibilityMIModel = new UnCompatibilityMIModel(iProblem.getArguments()[0], 
 								iProblem.getArguments()[1], iProblem.getArguments()[2], iProblem.getArguments()[3],
-								node.getPackage().getName().toString(), String.valueOf(iProblem.getOriginatingFileName()));
+								node.getPackage().getName().toString(),String.valueOf(iProblem.getOriginatingFileName()));
 						unCompatibilityMIModels.add(unCompatibilityMIModel);
 					}					
 				}			

@@ -43,14 +43,12 @@ public class SubstitutabilityDiff {
 			ArrayList<String> exportlist = postProject.packageAffernetCouplingslist(packageName);
 
 //			ArrayList<String> exportlist = postProject.class_packageAffernetCouplingslist(packageName);
-//			System.out.println("ca:"+importlist.size());
 			for (String string : exportlist) {
 				exportlist.set(exportlist.indexOf(string), string+"&export");
 			}			
 			
 			ArrayList<String> importlist = postProject.packageEffernetCouplingslist(packageName);
 //			ArrayList<String> importlist = postProject.class_packageEffernetCouplingslist(packageName);
-//			System.out.println("ce:"+exportlist.size());
 			for (String string : importlist) {
 				importlist.set(importlist.indexOf(string), string+"&import");
 			}

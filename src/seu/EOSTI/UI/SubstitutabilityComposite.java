@@ -144,7 +144,7 @@ public class SubstitutabilityComposite extends Composite {
 				for (PackageNode node : packageNodeList) {
 					TreeItem item = new TreeItem(packageCouplingTree, SWT.NONE);
 					DecimalFormat df = new DecimalFormat("0.00");
-					item.setText(node.getName()+" Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
+					item.setText(node.getName()+" AC: " + node.getAfferents().size() + " EC: " + node.getEfferents().size()
 							+ " C: " + df.format(node.getChangeabilityRatio()));
 					ArrayList<String> list = new ArrayList<>(node.getEfferents());
 					list.addAll(node.getAfferents());

@@ -81,7 +81,7 @@ public class AnalysisJarFile {
         try {
             //通过jarFile 和JarEntry得到所有的类
             JarFile jar = new JarFile(jarFile);//
-            Enumeration e = jar.entries();
+            Enumeration<JarEntry> e = jar.entries();
             while (e.hasMoreElements()) {
                 JarEntry entry = (JarEntry) e.nextElement();
                 //entry.getMethod()
@@ -172,10 +172,15 @@ public class AnalysisJarFile {
                 }
             }
             return jarClassModels;
-        } catch (IOException e) {
+        } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
+            //e1.printStackTrace();
+        } catch (NullPointerException e2){
+        	//e2.printStackTrace();
+        } catch (Exception e) {
+			// TODO: handle exception
+        	//e.printStackTrace();
+		}
         return jarClassModels;
     }
 }

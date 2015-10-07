@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.ui.internal.dnd.SwtUtil;
 
@@ -68,7 +69,7 @@ public class IntergrationDialog extends Dialog {
 	private void createContents() throws IOException {
 		shlCiet = new Shell(getParent(), SWT.DIALOG_TRIM);
 		shlCiet.setSize(967, 641);
-		shlCiet.setText("CIE");
+		shlCiet.setText("IntegrabilityEvaluator");
 		shlCiet.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(shlCiet, SWT.NONE);
@@ -94,10 +95,14 @@ public class IntergrationDialog extends Dialog {
 		rightComposite.setLayout(rightCompositeSL);
 		
 		Button projectInfoButton = new Button(leftComposite, SWT.NONE);
+		
 		projectInfoButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = projectInfoComposite;
+				/*Color color = new Color(null, 240, 0, 0); 
+				projectInfoButton.setBackground(color);*/
+				
 				rightComposite.layout();
 			}
 		});

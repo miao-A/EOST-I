@@ -37,6 +37,8 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 	private Table jaruncompatibilityTable;
 	private Table table;
 	private Text pathOfNewProjectText;
+	private Text resultOneText;
+	private Text resultTwoText;
 
 	/**
 	 * Create the composite.
@@ -105,7 +107,7 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 		jaruncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
 		jaruncompatibilityTable.setLinesVisible(true);
 		jaruncompatibilityTable.setHeaderVisible(false);
-		jaruncompatibilityTable.setBounds(10, 213, 711, 301);
+		jaruncompatibilityTable.setBounds(10, 236, 711, 278);
 		
 		String[] tableHeader = {"---------------------------","---------------------------------------------------------------------------"};	
 		
@@ -147,7 +149,10 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 				
 				OuterCompatibility oldOuterCompatibility = new OuterCompatibility(pathOfOldProject, null);
 				OuterCompatibility newOuterCompatibility = new OuterCompatibility(pathOfNewProject, null);
-
+				
+				resultOneText.setText("");
+				resultTwoText.setText("");
+				
 				
 				if (jarPath != "") {
 					if (oldOuterCompatibility.jarCompatibility(jarPath, jarDependPath)) {						
@@ -155,14 +160,14 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 						String[] tableHeader = {"       ∞Ê±æ1ºÊ»›        ","        "+jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);
-						
-						System.out.println("ºÊ»›"+jarPath);
+						resultOneText.setText("∞Ê±æ1ºÊ»›");
+						//System.out.println("ºÊ»›"+jarPath);
 					}else {
-						System.out.println("≤ªºÊ»›"+jarPath);
+						//System.out.println("≤ªºÊ»›"+jarPath);
 						String[] tableHeader = {"        ∞Ê±æ1≤ªºÊ»›        ","        "+jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);
-												
+						resultOneText.setText("∞Ê±æ1≤ªºÊ»›");						
 						List<JarClassModel> lists = oldOuterCompatibility.getUncompatibilityClassModels();
 
 						for (JarClassModel model : lists) {
@@ -178,14 +183,14 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 						String[] tableHeader = {"        ∞Ê±æ2ºÊ»›        ","        "+jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);
-						
-						System.out.println("ºÊ»›"+jarPath);
+						resultTwoText.setText("∞Ê±æ2ºÊ»›");
+						//System.out.println("ºÊ»›"+jarPath);
 					}else {
-						System.out.println("≤ªºÊ»›"+jarPath);
+						//System.out.println("≤ªºÊ»›"+jarPath);
 						String[] tableHeader = {"        ∞Ê±æ2≤ªºÊ»›        ","        "+jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);						
-						
+						resultTwoText.setText("∞Ê±æ2≤ªºÊ»›");
 						List<JarClassModel> lists = newOuterCompatibility.getUncompatibilityClassModels();
 
 						for (JarClassModel model : lists) {
@@ -244,6 +249,12 @@ public class OuterCompatibilityMutiVersionComposite extends Composite {
 		});
 		button_2.setText("\u8DEF\u5F84...");
 		button_2.setBounds(488, 52, 53, 22);
+		
+		resultOneText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		resultOneText.setBounds(10, 207, 194, 23);
+		
+		resultTwoText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		resultTwoText.setBounds(238, 207, 207, 23);
 		
 		
 		

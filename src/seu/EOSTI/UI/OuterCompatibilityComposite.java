@@ -186,14 +186,14 @@ public class OuterCompatibilityComposite extends Composite {
 					if (outerCompatibility.jarCompatibility(jarPath, jarDependPath)) {
 						
 						
-						String[] tableHeader = {"        ºÊ»›        ","        "+jarPath+"         "};	
+						String[] tableHeader = {"ºÊ»›        ",jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);
 						
 						System.out.println("ºÊ»›"+jarPath);
 					}else {
 						System.out.println("≤ªºÊ»›"+jarPath);
-						String[] tableHeader = {"        ≤ªºÊ»›        ","        "+jarPath+"         "};	
+						String[] tableHeader = {"≤ªºÊ»›        ",jarPath+"         "};	
 						TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
 						item.setText(tableHeader);
 						/*TableItem item = new TableItem(jaruncompatibilityTable,SWT.NONE);
@@ -212,7 +212,7 @@ public class OuterCompatibilityComposite extends Composite {
 
 						for (JarClassModel model : lists) {
 							item = new TableItem(jaruncompatibilityTable,SWT.NONE);
-							String[] strings= {"Œª÷√",model.getFromClass(),};
+							String[] strings= {"≤ªºÊ»›µƒ¿‡       ",model.getFromClass(),};
 							item.setText(strings);
 						}
 						

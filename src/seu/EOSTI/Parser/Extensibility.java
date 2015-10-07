@@ -1,15 +1,12 @@
 package seu.EOSTI.Parser;
 
-import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
+
 
 import seu.EOSTI.ASTVisitor.ExtensibilityRequestor;
-import seu.EOSTI.DBConnect.ExtensibilityConnector;
 import seu.EOSTI.DBConnect.ExtensibilityInfoConnector;
 
 public class Extensibility {
@@ -43,6 +40,7 @@ public class Extensibility {
 			}
 			
 			String[] sourceFilePaths = filelist.subList(i, toIndex).toArray(new String[toIndex - i]);
+			
 			parser.createASTs(sourceFilePaths,  null, new String[0], extensibilityRequestor, null);
 			
 		}
@@ -60,7 +58,8 @@ public class Extensibility {
 	    	dbConnector.setExtensibilityInfo(string);
 		}
 
-	}
+	}	
+
 
 
 }

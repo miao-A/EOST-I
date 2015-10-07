@@ -132,7 +132,7 @@ public class InnerCompatibility {
 		parser.setEnvironment(jarpathEntries, null, null, true);
 		
 		parser.createASTs(sourceFilePaths,  null, new String[0], componentRequertor, null);
-		System.out.println("comparing... ...");
+		//System.out.println("comparing... ...");
 		return componentRequertor.getTypeModels();
 	}		
 	

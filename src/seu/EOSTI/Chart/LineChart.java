@@ -123,16 +123,20 @@ public abstract class LineChart{
 		
 		for (int i = 0; i < dataset.getRowCount(); i++) {
 			Comparable rowKey = dataset.getRowKey(i);
-			boolean flag = true;
+			boolean flag1 = true;//是否都为1
+			boolean flag0 = true;//是否都为0
 			for (int j = 0; j < dataset.getColumnCount(); j++) {
 				Number number = dataset.getValue(rowKey, dataset.getColumnKey(j));
 				if (number != null) {
+					if(number.doubleValue() != 100){
+						flag1 = false;
+					}
 					if(number.doubleValue() != 0){
-						flag = false;
-					}					
+						flag0 = false;
+					}
 				}				
 			}
-			if(flag){				
+			if(flag1||flag0){				
 				dataset.removeRow(i);
 				i--;
 			}			

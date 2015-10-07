@@ -61,7 +61,7 @@ public class ProjectParser {
 		parser();
 		runExtensiblityDectector();
 		parser(); 
-		runChangeabilityDector();		
+		runChangeabilityDector();	
 	}
 	
 	private void runExtensiblityDectector(){

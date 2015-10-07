@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 
 public class UnCompatibilityMIModel {
 	private String fromPackageName;
+	private String fromClassName;
 	private String methodName;
 	private String defaultArguments;
 	private String realArguments;
@@ -24,6 +25,7 @@ public class UnCompatibilityMIModel {
 		this.setRealArguments(realArgumentList);
 		this.setInPackageName(inPackageName);
 		this.setPathOfFile(pathOfFile);	
+		this.setFromClassName(extractNameFromJavaFilePath(pathOfFile));
 	}
 
 	public String getFromPackageName() {
@@ -91,6 +93,32 @@ public class UnCompatibilityMIModel {
 		System.out.println(pathOfFile);
 		System.out.println("-------------------------------------------------");
 	}
+	
+	public String extractNameFromJavaFilePath(String pathOfSourceFile) {
+		// input: F:\jEditor0.2\editor\Animal.java
+		// output: Animal
+		String javaFileName = "";
+		String temp[] = pathOfSourceFile.trim().split("\\\\");
+		if (temp.length > 0) {
+			String fullName = temp[temp.length - 1].trim();
+			if (fullName.length() > ".java".length()) {
+				int lastIndexOf = fullName.lastIndexOf(".java");
+				if (lastIndexOf > 0) {
+					javaFileName = fullName.substring(0, lastIndexOf);
+				}
+			}
+		}
+		return javaFileName;
+	}
+
+	public String getFromClassName() {
+		return fromClassName;
+	}
+
+	public void setFromClassName(String fromClassName) {
+		this.fromClassName = fromClassName;
+	}
+
 	
 	
 	

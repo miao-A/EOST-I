@@ -45,6 +45,7 @@ public class InnerCompatibilityComposite extends Composite {
 	private TableEditor editor = null;
 	
 	String strings = new String();
+	private Text ResultText;
 
 	/**
 	 * Create the composite.
@@ -111,7 +112,7 @@ public class InnerCompatibilityComposite extends Composite {
 		button.setText("\u8DEF\u5F84...");
 		
 		uncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
-		uncompatibilityTable.setBounds(10, 85, 711, 441);
+		uncompatibilityTable.setBounds(10, 120, 711, 406);
 		uncompatibilityTable.setHeaderVisible(true);
 		uncompatibilityTable.setLinesVisible(true);
 
@@ -120,7 +121,7 @@ public class InnerCompatibilityComposite extends Composite {
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		String[] tableHeader = {"        包名        ","        位置         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
+		String[] tableHeader = {"        包名        ","        类名         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
 			TableColumn tableColumn = new TableColumn(uncompatibilityTable, SWT.NONE);
@@ -144,7 +145,7 @@ public class InnerCompatibilityComposite extends Composite {
 				List<UnCompatibilityMIModel> unCompatibilityMIModels = innerCompatibility.getunCompatibilityMIModels();					
 
 				if (unCompatibilityMIModels.size() == 0) {
-					System.out.println("构件在当前程序内兼容");
+					System.out.println("该包在项目中兼容");
 				}
 				
 				
@@ -153,7 +154,7 @@ public class InnerCompatibilityComposite extends Composite {
 					//unCompatibilityMIModel.getMessage();
 					
 				    final TableItem item = new TableItem(uncompatibilityTable, SWT.NONE);
-				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getPathOfFile(),
+				    String string[] = {unCompatibilityMIModel.getInPackageName(),unCompatibilityMIModel.getFromClassName(),
 				    		unCompatibilityMIModel.getFromPackageName(),unCompatibilityMIModel.getMethodName(),unCompatibilityMIModel.getDefaultArguments(),
 				    		unCompatibilityMIModel.getRealArguments()};
 				    item.setText(string);
@@ -161,11 +162,13 @@ public class InnerCompatibilityComposite extends Composite {
 					
 
 				if (unCompatibilityMIModels.size()>0) {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});
+					/*TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
+					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});*/
+					ResultText.setText("不兼容的方法个数:"+String.valueOf(unCompatibilityMIModels.size()));
 				}else {
-					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
-					lastItem.setText(new String[] {"该包在项目中兼容"});
+/*					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
+					lastItem.setText(new String[] {"该包在项目中兼容"});*/
+					ResultText.setText("该包在项目中兼容");
 				}
 				
 			}
@@ -173,6 +176,9 @@ public class InnerCompatibilityComposite extends Composite {
 		
 		CompatibilityBtn.setBounds(583, 10, 79, 69);
 		CompatibilityBtn.setText("\u5206\u6790");
+		
+		ResultText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+		ResultText.setBounds(10, 91, 200, 23);
 	}
 
 	@Override

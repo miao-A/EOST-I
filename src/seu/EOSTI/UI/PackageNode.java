@@ -20,13 +20,13 @@ public class PackageNode {
 	
 	public void setAfferents(ArrayList<String> aList) {
 		for (String string : aList) {
-			afferentList.add("ca: "+string);
+			afferentList.add("AC: "+string);
 		}
 	}
 	
 	public void setEfferents(ArrayList<String> eList) {
 		for (String string : eList) {
-			efferentList.add("ce: "+ string);
+			efferentList.add("EC: "+ string);
 		}
 	}
 	
@@ -53,13 +53,13 @@ public class PackageNode {
 	}	
 	
 	public double getChangeabilityRatio(){
-		return 1.0*getAfferents().size()/(getAfferents().size() + getEfferents().size());
+		return 1.0*getEfferents().size()/(getAfferents().size() + getEfferents().size());
 	}
 	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof PackageNode) {
-			if (this.getName().equals("ca: "+((PackageNode) o).getName())||this.getName().equals("ce: "+((PackageNode) o).getName())) {
+			if (this.getName().equals("AC: "+((PackageNode) o).getName())||this.getName().equals("EC: "+((PackageNode) o).getName())) {
 			return true;
 			}
 		}
