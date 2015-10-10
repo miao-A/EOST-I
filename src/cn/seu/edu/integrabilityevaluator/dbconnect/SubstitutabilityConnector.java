@@ -80,8 +80,196 @@ public class SubstitutabilityConnector extends DBConnector{
 		return list; 
 
 	}
-	//分析耦合度在class级别
-	public ArrayList<String> getClassName(String projectName, String version){
+	
+	
+	//**********************包耦合关系获取方法*************************//
+	
+	//传出耦合计数
+	public int packageEfferentCouplingsCount(String packageName){
+		int ce = 0;
+		try {
+			Statement stmt = connect.createStatement();
+
+			// / efferent  couplings 被该包依赖的外部包数目
+			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and pkgname = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+
+			ResultSet rs;
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				ce = rs.getInt("result");
+			}	
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+			ce = -1;
+		}		
+		return ce;
+	}
+	
+	
+	
+	public ArrayList<String> packageEffernetCouplingslist(String packageName){
+
+		ArrayList<String> rStrings = new ArrayList<String>();
+		
+		try {
+			ResultSet rs;
+			Statement stmt = connect.createStatement();
+			String cestr = "Select  distinct importPkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  pkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				String str = rs.getString("result");
+				rStrings.add(str);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+		}		
+		return rStrings;
+	}
+	//传入耦合计数
+		public int packageAfferentCouplingsCount(String packageName){
+			int ca = 0;
+			try {
+				Statement stmt = connect.createStatement();
+
+				// / afferent  couplings 该包依赖的外部包数目
+				String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  importPkgName = '"
+						+ packageName
+						+ "' and verID = '"
+						+ version
+						+ "' and projName = '" + projectName + "'";
+
+
+				ResultSet rs;
+				rs = stmt.executeQuery(castr);
+				while (rs.next()) {
+					ca = rs.getInt("result");
+				}	
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("failed to run changeability query!");
+				ca = -1;
+			}		
+			return ca;
+		}
+		
+		
+		public ArrayList<String> packageAffernetCouplingslist(String packageName){
+
+			ArrayList<String> rStrings = new ArrayList<String>();
+			
+			try {
+				ResultSet rs;
+				Statement stmt = connect.createStatement();
+				String castr = "Select  distinct pkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  importPkgName = '"
+						+ packageName
+						+ "' and verID = '"
+						+ version
+						+ "' and projName = '" + projectName + "'";
+				rs = stmt.executeQuery(castr);
+				while (rs.next()) {
+					String str = rs.getString("result");
+					rStrings.add(str);
+				}
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("failed to run changeability query!");
+			}		
+			return rStrings;
+		}
+		
+	/*public ArrayList<String> packageChangeabilityInfo(String packageName){
+		
+		ArrayList<String> rStrings = new ArrayList<String>();
+		try {
+			Statement stmt = connect.createStatement();
+
+			// / efferent  couplings 被该包依赖的外部包数目
+			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+
+			rStrings.add(packageName);
+
+			ResultSet rs;
+			int ce = 0;
+			int ca = 0;
+
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				ce = rs.getInt("result");
+				rStrings.add("ce: " + ce);
+			}
+
+			cestr = "Select  distinct importPkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(cestr);
+			while (rs.next()) {
+				String str = rs.getString("result");
+				rStrings.add(str);
+			}
+
+			String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".t_classcouplinginfo where importPkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+
+
+			rs = stmt.executeQuery(castr);
+			while (rs.next()) {
+				ca = rs.getInt("result");
+				rStrings.add("ca: " + ca);
+			}
+
+			castr = "Select  distinct pkgName as result FROM " + dBname + ".t_classcouplinginfo where importPkgName = '"
+					+ packageName
+					+ "' and verID = '"
+					+ version
+					+ "' and projName = '" + projectName + "'";
+			rs = stmt.executeQuery(castr);
+			while (rs.next()) {
+				String str = rs.getString("result");
+				rStrings.add(str);
+			}
+
+			double changeability = 1.0*ce/(ca+ce);
+			DecimalFormat df = new DecimalFormat("0.00");
+			rStrings.add("changeability:"+df.format(changeability));
+
+			System.out.println("-------------------------------------------------------------");
+			for (String string : rStrings) {
+				System.out.println(string);
+			}
+			System.out.println("-------------------------------------------------------------");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("failed to run changeability query!");
+		}
+		
+		
+		return rStrings;
+	}
+*/
+	
+	//*******************类耦合关系获取方法*********************************//
+	public ArrayList<String> getClassName(){
 		ArrayList<String> list = new ArrayList<String>();
 		try {
 
@@ -92,7 +280,7 @@ public class SubstitutabilityConnector extends DBConnector{
 					+ projectName + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				String str = rs.getString("pkgname") + "$" + rs.getString("classname");
+				String str = rs.getString("pkgname") + "#" + rs.getString("classname");
 				list.add(str);
 				System.out.println(rs.getString("pkgname")+"$"+rs.getString("classname"));
 				}	
@@ -104,7 +292,7 @@ public class SubstitutabilityConnector extends DBConnector{
 		return list;
 	}
 	
-	public ArrayList<String> ClassChangeabilityInfo(String packageName,String className){
+	/*public ArrayList<String> ClassChangeabilityInfo(String packageName,String className){
 		
 		ArrayList<String> rStrings = new ArrayList<String>();
 		try {
@@ -187,65 +375,14 @@ public class SubstitutabilityConnector extends DBConnector{
 		}	
 		
 		return rStrings;
-	}	
+	}	*/
 	
 	
 
-		
-	//传出耦合计数
-	public int packageEfferentCouplingsCount(String packageName){
-		int ce = 0;
-		try {
-			Statement stmt = connect.createStatement();
+	
+	public ArrayList<String> classEffernetCouplingslist(String className){
 
-			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and pkgname = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-
-			ResultSet rs;
-			rs = stmt.executeQuery(cestr);
-			while (rs.next()) {
-				ce = rs.getInt("result");
-			}	
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-			ce = -1;
-		}		
-		return ce;
-	}
-	
-	
-	
-	public ArrayList<String> packageEffernetCouplingslist(String packageName){
-
-		ArrayList<String> rStrings = new ArrayList<String>();
-		
-		try {
-			ResultSet rs;
-			Statement stmt = connect.createStatement();
-			String cestr = "Select  distinct importPkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  pkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-			rs = stmt.executeQuery(cestr);
-			while (rs.next()) {
-				String str = rs.getString("result");
-				rStrings.add(str);
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-		}		
-		return rStrings;
-	}
-	
-	public ArrayList<String> class_packageEffernetCouplingslist(String packageName){
+		String[] pkgclassName = className.split("#");
 
 		ArrayList<String> rStrings = new ArrayList<String>();
 		
@@ -253,7 +390,9 @@ public class SubstitutabilityConnector extends DBConnector{
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
 			String cestr = "Select distinct importpkgName, importClassName  FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
-					+ packageName
+					+ pkgclassName[0]
+					+ "' and className = '"
+					+ pkgclassName[1]
 					+ "' and verID = '"
 					+ version
 					+ "' and projName = '" + projectName + "'";
@@ -266,101 +405,23 @@ public class SubstitutabilityConnector extends DBConnector{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
+			System.out.println("failed to run class efferent substitutability query!");
 		}		
-		return rStrings;
+		return rStrings;		
 	}
 	
-	
-	public ArrayList<String> classImportpkg(String packageName){
+	public ArrayList<String> classAffernetCouplingslist(String className){
 
+		String[] pkgclassName = className.split("#");
 		ArrayList<String> rStrings = new ArrayList<String>();
 		
 		try {
 			ResultSet rs;
 			Statement stmt = connect.createStatement();
-			String cestr = "Select   distinct importpkgName, importClassName,classname  FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-			rs = stmt.executeQuery(cestr);
-			while (rs.next()) {
-				String str = rs.getString("classname")+"+";
-				str += rs.getString("importpkgName");
-				str += "." +  rs.getString("importclassname");
-				rStrings.add(str);				
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-		}		
-		return rStrings;
-	}
-	
-	//传入耦合计数
-	public int packageAfferentCouplingsCount(String packageName){
-		int ca = 0;
-		try {
-			Statement stmt = connect.createStatement();
-
-			// / afferent  couplings 该包依赖的外部包数目
-			String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  importPkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-
-
-			ResultSet rs;
-			rs = stmt.executeQuery(castr);
-			while (rs.next()) {
-				ca = rs.getInt("result");
-			}	
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-			ca = -1;
-		}		
-		return ca;
-	}
-	
-	
-	public ArrayList<String> packageAffernetCouplingslist(String packageName){
-
-		ArrayList<String> rStrings = new ArrayList<String>();
-		
-		try {
-			ResultSet rs;
-			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct pkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgname != importpkgname and  importPkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-			rs = stmt.executeQuery(castr);
-			while (rs.next()) {
-				String str = rs.getString("result");
-				rStrings.add(str);
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-		}		
-		return rStrings;
-	}
-	
-	public ArrayList<String> class_packageAffernetCouplingslist(String packageName){
-
-		ArrayList<String> rStrings = new ArrayList<String>();
-		
-		try {
-			ResultSet rs;
-			Statement stmt = connect.createStatement();
-			String castr = "Select  distinct pkgName, className FROM " + dBname + ".t_classcouplinginfo where importPkgName = '"
-					+ packageName
+			String castr = "Select  distinct pkgName, className FROM " + dBname + ".t_classcouplinginfo where importpkgName = '"
+					+ pkgclassName[0]
+					+ "' and importClassName = '"
+					+ pkgclassName[1]
 					+ "' and verID = '"
 					+ version
 					+ "' and projName = '" + projectName + "'";
@@ -373,90 +434,8 @@ public class SubstitutabilityConnector extends DBConnector{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
+			System.out.println("failed to run class afferent substitutability query!");
 		}		
 		return rStrings;
 	}
-	
-	
-	
-	public ArrayList<String> packageChangeabilityInfo(String packageName){
-		
-		ArrayList<String> rStrings = new ArrayList<String>();
-		try {
-			Statement stmt = connect.createStatement();
-
-			// / efferent  couplings 被该包依赖的外部包数目
-			String cestr = "Select  count(distinct importPkgName) as result FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-
-			rStrings.add(packageName);
-
-			ResultSet rs;
-			int ce = 0;
-			int ca = 0;
-
-			rs = stmt.executeQuery(cestr);
-			while (rs.next()) {
-				ce = rs.getInt("result");
-				rStrings.add("ce: " + ce);
-			}
-
-			cestr = "Select  distinct importPkgName as result FROM " + dBname + ".t_classcouplinginfo where pkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-			rs = stmt.executeQuery(cestr);
-			while (rs.next()) {
-				String str = rs.getString("result");
-				rStrings.add(str);
-			}
-
-			String castr = "Select  count(distinct pkgName) as result FROM " + dBname + ".t_classcouplinginfo where importPkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-
-
-			rs = stmt.executeQuery(castr);
-			while (rs.next()) {
-				ca = rs.getInt("result");
-				rStrings.add("ca: " + ca);
-			}
-
-			castr = "Select  distinct pkgName as result FROM " + dBname + ".t_classcouplinginfo where importPkgName = '"
-					+ packageName
-					+ "' and verID = '"
-					+ version
-					+ "' and projName = '" + projectName + "'";
-			rs = stmt.executeQuery(castr);
-			while (rs.next()) {
-				String str = rs.getString("result");
-				rStrings.add(str);
-			}
-
-			double changeability = 1.0*ce/(ca+ce);
-			DecimalFormat df = new DecimalFormat("0.00");
-			rStrings.add("changeability:"+df.format(changeability));
-
-			System.out.println("-------------------------------------------------------------");
-			for (String string : rStrings) {
-				System.out.println(string);
-			}
-			System.out.println("-------------------------------------------------------------");
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("failed to run changeability query!");
-		}
-		
-		
-		return rStrings;
-	}
-
-
 }
