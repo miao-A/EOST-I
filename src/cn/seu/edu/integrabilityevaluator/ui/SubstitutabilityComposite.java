@@ -12,13 +12,16 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.SWT;
 
 
+
 import cn.seu.edu.integrabilityevaluator.dbconnect.ClassChangeabilityConnector;
 import cn.seu.edu.integrabilityevaluator.dbconnect.ProjectConnector;
+import cn.seu.edu.integrabilityevaluator.dbconnect.SubstitutabilityConnector;
 
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import com.ibm.icu.text.DecimalFormat;
 
 public class SubstitutabilityComposite extends Composite {
@@ -85,8 +88,8 @@ public class SubstitutabilityComposite extends Composite {
 				///Ê÷µÄ²ã¼¶ÏÔÊ¾
 				packageCouplingTree.removeAll();
 				
-//				ChangeabilityConnector dbConnector = new ChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
-				ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
+				//ClassChangeabilityConnector dbConnector = new ClassChangeabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
+				SubstitutabilityConnector dbConnector = new SubstitutabilityConnector(projectSelectCombo.getItem(index1),versionCombo.getItem(index2));
 				final ArrayList<PackageNode> packageNodeList = new ArrayList<PackageNode>();
 				ArrayList<String> packageList = dbConnector.getpackageName();
 						//dbConnector.getpackageName();
@@ -97,49 +100,6 @@ public class SubstitutabilityComposite extends Composite {
 					packageNodeList.add(packageNode);		
 				}
 				
-				/*for (PackageNode node : packageNodeList) {
-					TreeItem item = new TreeItem(packageEfferentTree, SWT.NONE);
-					DecimalFormat df = new DecimalFormat("0.00");
-					item.setText(node.getName()+" Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
-							+ " C: " + df.format(node.getChangeabilityRatio()) );
-					ArrayList<String> list = node.getEfferents();
-					for (String string : list) {
-						TreeItem treeItem = new TreeItem(item, SWT.NONE);				
-						treeItem.setText(string);
-						if (packageNodeList.contains(new PackageNode(string))) {
-							int index = packageNodeList.indexOf(new PackageNode(string));
-							PackageNode pNode = packageNodeList.get(index);
-							ArrayList<String> nextList = pNode.getEfferents();
-							for (String string2 : nextList) {
-								TreeItem nextItem = new TreeItem(treeItem, SWT.NONE);				
-								nextItem.setText(string2);
-							}
-							
-						}
-					}			
-				}
-				
-				for (PackageNode node : packageNodeList) {
-					TreeItem item = new TreeItem(packageAfferentTree, SWT.NONE);
-					DecimalFormat df = new DecimalFormat("0.00");
-					item.setText(node.getName() + " Ca: " + node.getAfferents().size() + " Ce: " + node.getEfferents().size()
-							+ " C: " + df.format(node.getChangeabilityRatio()));
-					ArrayList<String> list = node.getAfferents();
-					for (String string : list) {
-						TreeItem treeItem = new TreeItem(item, SWT.NONE);				
-						treeItem.setText(string);
-						if (packageNodeList.contains(new PackageNode(string))) {
-							int index = packageNodeList.indexOf(new PackageNode(string));
-							PackageNode pNode = packageNodeList.get(index);
-							ArrayList<String> nextList = pNode.getAfferents();
-							for (String string2 : nextList) {
-								TreeItem nextItem = new TreeItem(treeItem, SWT.NONE);				
-								nextItem.setText(string2);
-							}
-							
-						}
-					}			
-				}*/
 				
 				for (PackageNode node : packageNodeList) {
 					TreeItem item = new TreeItem(packageCouplingTree, SWT.NONE);

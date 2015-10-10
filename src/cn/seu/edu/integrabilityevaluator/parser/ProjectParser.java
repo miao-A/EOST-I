@@ -68,8 +68,12 @@ public class ProjectParser {
 		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);		
 	}
 	
-	private void runChangeabilityDector(){
+	public  void runChangeabilityDector(){
 		Substitutability changeability = new Substitutability(parser, pathOfProject,projectName,version);
+	}
+	
+	public void runSubstitutabilityOfClassDector(){
+		SubstitutabilityOfClass substitutabilityOfClass = new SubstitutabilityOfClass(parser, pathOfProject, projectName, version);
 	}
 	
 	public void runOuterCompatibilityDectector(){
@@ -99,6 +103,8 @@ public class ProjectParser {
 		Extensibility extensibility = new Extensibility(parser, pathOfProject,projectName,version);
 	
 	}
+	
+	
 	
 	public void getChangeabilityInfo(){		
 	

@@ -7,18 +7,21 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTParser;
 
 import cn.seu.edu.integrabilityevaluator.astvisitor.ChangeabilityOfClassRequestor;
+import cn.seu.edu.integrabilityevaluator.astvisitor.SubstitutabilityRequestor;
 import cn.seu.edu.integrabilityevaluator.dbconnect.ChangeabilityInfoConnector;
+import cn.seu.edu.integrabilityevaluator.dbconnect.SubstitutabilityConnector;
+import cn.seu.edu.integrabilityevaluator.dbconnect.SubstitutabilityInfoConnector;
 
 
-public class Substitutability {
+public class SubstitutabilityOfClass {
 
 	private String projectName;
 	private String version;	
 	
-	public Substitutability(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
+	public SubstitutabilityOfClass(ASTParser parser, String pathOfProject,String projectNameString,String versionString){
 		
 //		ChangeabilityRequestor changeabilityRequestor = new ChangeabilityRequestor(projectNameString,versionString);
-		ChangeabilityOfClassRequestor changeabilityRequestor = new ChangeabilityOfClassRequestor(projectNameString,versionString);
+		SubstitutabilityRequestor substitutabilityRequestor = new SubstitutabilityRequestor(projectNameString,versionString);
 		ReadFile readFile = new ReadFile(pathOfProject);
 		List<String> filelist = readFile.readJavaFiles();
 		
@@ -32,16 +35,16 @@ public class Substitutability {
 			}
 			
 			String[] sourceFilePaths = filelist.subList(i, toIndex).toArray(new String[toIndex - i]);
-			parser.createASTs(sourceFilePaths,  null, new String[0], changeabilityRequestor, null);
+			parser.createASTs(sourceFilePaths,  null, new String[0], substitutabilityRequestor, null);
 			
 		}
 		
-		
-		ChangeabilityInfoConnector dbConnector = new ChangeabilityInfoConnector(projectNameString,versionString);
+		SubstitutabilityInfoConnector dbConnector = new SubstitutabilityInfoConnector(projectNameString, versionString);
+		//ChangeabilityInfoConnector dbConnector = new ChangeabilityInfoConnector(projectNameString,versionString);
 		ArrayList<String> packageNameList= dbConnector.getpackageName();
 			// 添加三行数据  		        
 	    for (String string : packageNameList) {
-	    	dbConnector.setChangeabilityInfo(string);
+	    	dbConnector.setSubtitutabilityInfo(string);
 		}
 	}
 	

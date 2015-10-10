@@ -132,7 +132,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 					chartComposite = new ChartComposite(tabFolder, SWT.NONE, chart, true);
 					extenTabItem.setControl(chartComposite);
 					chartComposite.setVisible(true);
-					chartComposite.redraw();
+					//chartComposite.redraw();
 					
 				}
 				
@@ -166,8 +166,7 @@ public class ExtensiMutiVerionShowComposite extends Composite {
 					extenTabItem.setControl(chartComposite);
 					chartComposite.setVisible(true);
 					
-					
-					System.out.println("proj");
+
 				}
 				
 			}

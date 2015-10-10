@@ -118,8 +118,7 @@ public class SubstitutabilityMutiVersionShowComposite extends Composite {
 					//System.out.println("可替换性指示图");
 					//BarChart changeabilityChart = new ChangeabilityBarChart("可替换性指示图");
 					SubstitutabilityLineChart changeabilityChart = new SubstitutabilityLineChart("",projName);				
-					
-					
+										
 					changeabilityChart.creatDataSet();		
 					JFreeChart chart = null;
 					try {

@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/jfreechart-1.0.19-experimental.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/jfreechart-1.0.19-swt.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse/dropins/lib/org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.eclipse.jdt.core_3.9.2.v20140114-1555.jar" sourcepath="D:/eclipse/plugins/org.eclipse.jdt.core.source_3.9.2.v20140114-1555.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

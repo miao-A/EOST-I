@@ -10,8 +10,7 @@ import java.util.ArrayList;
 public class ChangeabilityConnector extends DBConnector{
 
 	private String projectName;
-	private String version;
-	
+	private String version;	
 	private Connection connect = null;
 	
 	public ChangeabilityConnector(String projectName, String version){

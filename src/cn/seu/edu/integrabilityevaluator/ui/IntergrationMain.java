@@ -45,11 +45,16 @@ import cn.seu.edu.integrabilityevaluator.parser.ReadFile;
 public class IntergrationMain {
 		
 	public static void main(String args[]) {
+			
 		
-		String projectPath = "D:/workspace/Hello";
-		String projectName = "ss";
-		String version = "ss";
-		
+		String projectPath = "D:\\ProjectOfHW\\junit\\junit3.6";
+		String projectName = "junit";
+		String version = "3.6";
+				
+		ProjectParser projectParser = new ProjectParser(projectPath, projectName, version);
+		projectParser.parser();
+
+		projectParser.runSubstitutabilityOfClassDector();
 		/*String projectPath = "D:\\ProjectOfHW\\jEditor\\jEditor0.2";
 		String pathOfOne = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\app";*/
 //		String pathOfTwo = "D:\\ProjectOfHW\\jEditor\\jEditor0.2\\src\\org\\jeditor\\diff";
@@ -57,7 +62,7 @@ public class IntergrationMain {
 /*		ProjectParser projectParser = new ProjectParser(projectPath,projectName,version);
 		projectParser.parser();
 		projectParser.runOuterCompatibilityDectector();*/
-		OuterCompatibility outerCompatibility = new OuterCompatibility(projectPath,version);
+		/*OuterCompatibility outerCompatibility = new OuterCompatibility(projectPath,version);
 		if (outerCompatibility.jdkCompatibility("1.4")) {			
 			System.out.println("ºÊ»›");
 		}else{
@@ -66,7 +71,7 @@ public class IntergrationMain {
 			}
 			System.out.println("≤ªºÊ»›");
 		}
-		
+		*/
     
     	
     	/*List<JarClassModel> list = null;

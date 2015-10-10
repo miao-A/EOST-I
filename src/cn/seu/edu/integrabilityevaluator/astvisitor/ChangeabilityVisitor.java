@@ -1,4 +1,4 @@
-package cn.seu.edu.integrabilityevaluator.astvisitor;
+/*package cn.seu.edu.integrabilityevaluator.astvisitor;
 
 
 import java.util.ArrayList;
@@ -116,3 +116,4 @@ public class ChangeabilityVisitor extends ASTVisitor{
 		importPackageStrings.clear();
 	}
 }
+*/
