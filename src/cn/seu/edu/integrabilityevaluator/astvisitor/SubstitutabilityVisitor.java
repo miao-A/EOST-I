@@ -67,12 +67,15 @@ public class SubstitutabilityVisitor extends ASTVisitor{
 		}
 		String fullString = binding.getQualifiedName();		
 		String importpackageName = binding.getPackage().getName();
-		String importClassName = fullString.substring(importpackageName.length()+1);
-		if (importClassName.contains(".")) {
-			importClassName = importClassName.substring(0, importClassName.indexOf('.'));
+		if (fullString.contains(importpackageName)) {
+			String importClassName = fullString.substring(importpackageName.length()+1);
+			if (importClassName.contains(".")) {
+				importClassName = importClassName.substring(0, importClassName.indexOf('.'));
+			}
+			
+			importStrings.add(importpackageName+"$"+importClassName);
 		}
 		
-		importStrings.add(importpackageName+"$"+importClassName);
 		
 		return true;
 	}

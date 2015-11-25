@@ -55,16 +55,16 @@ public class InnerCompatibilityComposite extends Composite {
 	public InnerCompatibilityComposite(Composite parent, int style) {
 		super(parent, style);
 		
-		Label label = new Label(this, SWT.NONE);
-		label.setBounds(10, 13, 103, 17);
-		label.setText("\u9879\u76EE\u8DEF\u5F84\uFF1A");
+		Label lblProjectPath = new Label(this, SWT.NONE);
+		lblProjectPath.setBounds(10, 13, 103, 17);
+		lblProjectPath.setText("Project path:");
 		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("\u9879\u76EE\u4E2D\u5305\u8DEF\u5F84\uFF1A");
-		label_1.setBounds(10, 62, 103, 17);
+		Label lblPackagePathOf = new Label(this, SWT.NONE);
+		lblPackagePathOf.setText("Package path of project:");
+		lblPackagePathOf.setBounds(10, 62, 160, 17);
 		
 		pathOfProjectText = new Text(this, SWT.BORDER);
-		pathOfProjectText.setBounds(119, 10, 375, 22);
+		pathOfProjectText.setBounds(176, 10, 318, 22);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -75,7 +75,8 @@ public class InnerCompatibilityComposite extends Composite {
 				Shell shell = new Shell(display);
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
-				folderDialog.setText("请选择项目文件");	
+				//folderDialog.setText("请选择项目文件");
+				folderDialog.setText("Please select project file");
 				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2");//"D:/ProjectOfHW/junit/junit3.4"
 				folderDialog.open();
 				
@@ -86,13 +87,13 @@ public class InnerCompatibilityComposite extends Composite {
 			
 		});
 		btnNewButton.setBounds(500, 10, 53, 22);
-		btnNewButton.setText("\u8DEF\u5F84...");
+		btnNewButton.setText("Path...");
 		
 		componentOfProjectText = new Text(this, SWT.BORDER);
-		componentOfProjectText.setBounds(119, 57, 375, 22);
+		componentOfProjectText.setBounds(176, 57, 318, 22);
 		
-		Button button = new Button(this, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
+		Button btnPath = new Button(this, SWT.NONE);
+		btnPath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
@@ -100,7 +101,8 @@ public class InnerCompatibilityComposite extends Composite {
 				Shell shell = new Shell(display);
 				DirectoryDialog folderDialog = new DirectoryDialog(shell);
 				
-				folderDialog.setText("请选择项目文件");	
+				//folderDialog.setText("请选择项目文件");	
+				folderDialog.setText("Please select project file");
 				folderDialog.setFilterPath("D:/ProjectOfHW/jEditor/jEditor0.2/src/org/jeditor/app");
 				folderDialog.open();
 				
@@ -108,8 +110,8 @@ public class InnerCompatibilityComposite extends Composite {
 				
 			}
 		});
-		button.setBounds(500, 57, 53, 22);
-		button.setText("\u8DEF\u5F84...");
+		btnPath.setBounds(500, 57, 53, 22);
+		btnPath.setText("Path...");
 		
 		uncompatibilityTable = new Table(this, SWT.BORDER | SWT.FULL_SELECTION);
 		uncompatibilityTable.setBounds(10, 120, 711, 406);
@@ -121,7 +123,8 @@ public class InnerCompatibilityComposite extends Composite {
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		String[] tableHeader = {"        包名.类名         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
+		//String[] tableHeader = {"        包名.类名         ", "       不兼容方法所在类        ","        不兼容方法名        ","    应使用类型    ","       实际使用类型         "};		
+		String[] tableHeader = {"        Package.Class         ", "       Incompatible class        ","        Incompatible method        ","    required signature    ","       Actually use signature         "};	
 		for (int i = 0; i < tableHeader.length; i++)  
 	    {  					
 			TableColumn tableColumn = new TableColumn(uncompatibilityTable, SWT.NONE);
@@ -144,9 +147,9 @@ public class InnerCompatibilityComposite extends Composite {
 				InnerCompatibility innerCompatibility = new InnerCompatibility(pathOfProject, componentOfProject);
 				List<UnCompatibilityMIModel> unCompatibilityMIModels = innerCompatibility.getunCompatibilityMIModels();					
 
-				if (unCompatibilityMIModels.size() == 0) {
+				/*if (unCompatibilityMIModels.size() == 0) {
 					System.out.println("该包在项目中兼容");
-				}
+				}*/
 				
 				
 				
@@ -164,18 +167,19 @@ public class InnerCompatibilityComposite extends Composite {
 				if (unCompatibilityMIModels.size()>0) {
 					/*TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
 					lastItem.setText(new String[] {"不兼容的接口个数:",String.valueOf(unCompatibilityMIModels.size())});*/
-					ResultText.setText("不兼容的方法个数:"+String.valueOf(unCompatibilityMIModels.size()));
+					//ResultText.setText("不兼容的方法个数:"+String.valueOf(unCompatibilityMIModels.size()));
+					ResultText.setText("Number of incompatible methods:"+String.valueOf(unCompatibilityMIModels.size()));
 				}else {
 /*					TableItem lastItem = new TableItem(uncompatibilityTable, SWT.NONE);
 					lastItem.setText(new String[] {"该包在项目中兼容"});*/
-					ResultText.setText("该包在项目中兼容");
+					ResultText.setText("Compatible");
 				}
 				
 			}
 		});
 		
 		CompatibilityBtn.setBounds(583, 10, 79, 69);
-		CompatibilityBtn.setText("\u5206\u6790");
+		CompatibilityBtn.setText("Analysis");
 		
 		ResultText = new Text(this, SWT.BORDER | SWT.READ_ONLY);
 		ResultText.setBounds(10, 91, 200, 23);

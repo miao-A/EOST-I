@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.ui.internal.dnd.SwtUtil;
 
-public class IntergrationDialog extends Dialog {
+public class IntegrationDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shlCiet;
@@ -39,7 +39,7 @@ public class IntergrationDialog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public IntergrationDialog(Shell parent, int style) {
+	public IntegrationDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("SWT Dialog");
 	}
@@ -70,9 +70,15 @@ public class IntergrationDialog extends Dialog {
 		shlCiet = new Shell(getParent(), SWT.DIALOG_TRIM);
 		shlCiet.setSize(967, 641);
 		shlCiet.setText("IntegrabilityEvaluator");
-		shlCiet.setLayout(new FillLayout(SWT.HORIZONTAL));
+		shlCiet.setLayout(new FormLayout());	
 		
-		Composite composite = new Composite(shlCiet, SWT.NONE);
+		/*Composite composite = new Composite(shlCiet, SWT.NONE);
+		composite.setLayout(new FormLayout());*/
+		
+		IntegrationComposite intergrationComposite = new IntegrationComposite(shlCiet , SWT.NONE);
+		/*intergrationComposite.setLayout(new FormLayout());
+		*/
+		/*Composite composite = new Composite(shlCiet, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		
 		Composite leftComposite = new Composite(composite, SWT.NONE);
@@ -100,8 +106,8 @@ public class IntergrationDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				rightCompositeSL.topControl = projectInfoComposite;
-				/*Color color = new Color(null, 240, 0, 0); 
-				projectInfoButton.setBackground(color);*/
+				Color color = new Color(null, 240, 0, 0); 
+				projectInfoButton.setBackground(color);
 				
 				rightComposite.layout();
 			}
@@ -186,7 +192,7 @@ public class IntergrationDialog extends Dialog {
 		fd_compatibilityMutibutton.right = new FormAttachment(leftComposite, 0, SWT.RIGHT);
 		fd_compatibilityMutibutton.top = new FormAttachment(leftComposite, 1);
 		fd_compatibilityMutibutton.left = new FormAttachment(leftComposite, 0, SWT.LEFT);
-		compatibilityMutibutton.setLayoutData(fd_compatibilityMutibutton);
+		compatibilityMutibutton.setLayoutData(fd_compatibilityMutibutton);*/
 
 	}
 	
@@ -195,7 +201,7 @@ public class IntergrationDialog extends Dialog {
 		try {
 			Display display = Display.getDefault();
 			Shell shell = new Shell(display);
-			IntergrationDialog inst = new IntergrationDialog(shell, SWT.NULL);
+			IntegrationDialog inst = new IntegrationDialog(shell, SWT.NULL);
 			inst.open();
 		} catch (Exception e) {
 			e.printStackTrace();

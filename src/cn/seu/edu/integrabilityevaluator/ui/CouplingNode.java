@@ -2,13 +2,13 @@ package cn.seu.edu.integrabilityevaluator.ui;
 
 import java.util.ArrayList;
 
-public class PackageNode {
+public class CouplingNode {
 
 	private String name;
 	private ArrayList<String> afferentList;
 	private ArrayList<String> efferentList;
 	
-	public PackageNode(String name){
+	public CouplingNode(String name){
 		this.name = name;
 		afferentList = new ArrayList<String>();
 		efferentList = new ArrayList<String>();
@@ -58,8 +58,8 @@ public class PackageNode {
 	
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof PackageNode) {
-			if (this.getName().equals("AC: "+((PackageNode) o).getName())||this.getName().equals("EC: "+((PackageNode) o).getName())) {
+		if (o instanceof CouplingNode) {
+			if (this.getName().equals("AC: "+((CouplingNode) o).getName())||this.getName().equals("EC: "+((CouplingNode) o).getName())) {
 			return true;
 			}
 		}

@@ -42,7 +42,7 @@ import cn.seu.edu.integrabilityevaluator.parser.ReadFile;
 
 
 
-public class IntergrationMain {
+public class IntegrationMain {
 		
 	public static void main(String args[]) {
 			
